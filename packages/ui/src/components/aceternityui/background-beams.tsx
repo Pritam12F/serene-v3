@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@workspace/ui/lib/utils.js";
+import { cn } from "../../lib/utils.js";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useRef, useState, useEffect } from "react";
 
