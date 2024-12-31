@@ -6,7 +6,10 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:studio": "cd ./packages/db && npx drizzle-kit studio",
+    "db:push": "cd ./packages/db && npx drizzle-kit push",
+    "db:gen": "cd ./packages/db && pnpm drizzle-kit generate"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
