@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@workspace/ui/lib/utils.ts";
+import { cn } from "@workspace/ui/lib/utils";
 import { motion, Variants } from "framer-motion";
 
 interface WordPullUpProps {

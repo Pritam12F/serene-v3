@@ -1,4 +1,4 @@
-import { cn } from "@workspace/ui/lib/utils.ts";
+import { cn } from "@workspace/ui/lib/utils";
 import React, { CSSProperties } from "react";
 
 export interface ShimmerButtonProps
