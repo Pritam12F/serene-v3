@@ -15,7 +15,6 @@
     "@workspace/db": "workspace:*",
     "@workspace/ui": "workspace:*",
     "bcryptjs": "^2.4.3",
-    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
     "framer-motion": "^11.15.0",
     "lucide-react": "0.456.0",
