@@ -2,7 +2,7 @@ import WordPullUp from "@workspace/ui/components/magicui/word-pullup";
 import { Background } from "./background-collision";
 import { Footer } from "./footer";
 import { cn } from "@workspace/ui/lib/utils";
-import OnScroll from "./onscroll";
+import { OnScroll } from "./onscroll";
 
 export const Landing = () => {
   return (

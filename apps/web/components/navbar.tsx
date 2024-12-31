@@ -4,15 +4,15 @@ import { Button } from "@workspace/ui/components/button";
 import { Hamburger } from "./dropdown-menu";
 import { useRouter } from "next/navigation";
 
+const LOGO_URL =
+  "https://utfs.io/f/zYgyXAHp4Gqaf2hCqruQ1HXEmhsY837fCjdADxtkuvMeFGy6";
+
 export const Navbar = () => {
   const router = useRouter();
   return (
     <nav className="flex bg-gray9-400 p-2 justify-between items-center sticky top-0 z-50 backdrop-filter backdrop-blur-lg bg-opacity-85">
       <div className="w-12 h-12 mx-2">
-        <img
-          src="https://utfs.io/f/zYgyXAHp4GqaIOJeNqYlHNifQ0K8qutmoycTaFvJrLeG9D4g"
-          className="rounded-md"
-        />
+        <img src={LOGO_URL} className="rounded-md" />
       </div>
       <div className="hidden md:block">
         <Button

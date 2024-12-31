@@ -22,10 +22,8 @@ export const users = pgTable("users", {
 // Images Table
 export const images = pgTable("images", {
   id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
   url: text("url").notNull(),
-  userId: uuid("user_id")
-    .notNull()
-    .references(() => users.id), // FK to users
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -52,19 +50,6 @@ export const contentImages = pgTable("content_images", {
 });
 
 // Relations
-
-// Users to Images
-export const userToImage = relations(users, ({ many }) => ({
-  images: many(images),
-}));
-
-// Images to Users
-export const imageToUser = relations(images, ({ one }) => ({
-  user: one(users, {
-    fields: [images.userId],
-    references: [users.id],
-  }),
-}));
 
 // Users to Posts
 export const userToPosts = relations(users, ({ many }) => ({
