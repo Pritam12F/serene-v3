@@ -4,7 +4,7 @@ import "dotenv/config";
 
 import * as schema from "./schema";
 
-const sql = neon(process.env.DATABASE_URL!);
+const sql = neon(process.env.NEXT_PUBLIC_DATABASE_URL!);
 const db = drizzle(sql, { schema });
 
 export default db;

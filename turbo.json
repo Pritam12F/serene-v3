@@ -16,7 +16,8 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": ["UPLOADTHING_TOKEN", "DATABASE_URL"]
     }
   }
 }
