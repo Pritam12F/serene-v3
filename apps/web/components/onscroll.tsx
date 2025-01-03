@@ -17,6 +17,6 @@ export async function OnScroll() {
     });
   } catch (error) {
     console.error("Failed to fetch images:", error);
-    return null;
+    return;
   }
 }
