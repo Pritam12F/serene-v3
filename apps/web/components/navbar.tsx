@@ -4,9 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
-const LOGO_URL =
-  "https://utfs.io/f/zYgyXAHp4Gqaf2hCqruQ1HXEmhsY837fCjdADxtkuvMeFGy6";
-
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -17,10 +14,8 @@ export function Navbar() {
           <div className="flex-shrink-0 flex items-center">
             <Link href="/">
               <img
-                width="50"
-                height="50"
-                src="https://img.icons8.com/external-others-inmotus-design/67/external-S-alphabet-others-inmotus-design-25.png"
-                alt="external-S-alphabet-others-inmotus-design-25"
+                src="./image2.jpg"
+                className="h-12 w-12 rounded-sm opacity-90"
               />
             </Link>
           </div>
@@ -56,7 +51,7 @@ export function Navbar() {
       </div>
 
       <div
-        className={`sm:hidden absolute top-16 left-0 w-full bg-white shadow-lg rounded-b-lg overflow-hidden transition-all duration-300 ease-in-out ${
+        className={`sm:hidden absolute top-16 left-0 w-full bg-white shadow-lg rounded-b-lg overflow-hidden transition-[max-height,opacity] duration-500 ease-in-out ${
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >

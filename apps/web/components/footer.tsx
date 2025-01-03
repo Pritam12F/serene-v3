@@ -5,11 +5,7 @@ import { Button } from "@workspace/ui/components/button";
 export const Footer = () => {
   return (
     <div className="flex py-3 w-full justify-between bg-neutral-100 dark:bg-gray9-400">
-      <img
-        src="https://img.icons8.com/external-others-inmotus-design/67/external-S-alphabet-others-inmotus-design-25.png"
-        alt="external-S-alphabet-others-inmotus-design-25"
-        className="w-14 h-14 mx-6 my-2"
-      />
+      <img src="./image2.jpg" className="h-16 w-h-16 rounded-sm mx-4" />
       <div className="flex px-4 min-[430px]:space-x-8 min-[500px]:space-x-16 sm:space-x-32 sm:mx-5 md:space-x-48 lg:space-x-72 lg:mx-20">
         <div className="flex flex-col">
           <h3 className="font-semibold ml-4">Useful links</h3>
