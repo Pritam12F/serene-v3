@@ -42,15 +42,19 @@ export function Navbar() {
         </Link>
       </nav>
       <div className="flex items-center space-x-4">
-        <Button
-          variant="ghost"
-          className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-        >
-          Log in
-        </Button>
-        <Button className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
-          Sign up
-        </Button>
+        <Link href="/signin">
+          <Button
+            variant="ghost"
+            className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+          >
+            Log in
+          </Button>
+        </Link>
+        <Link href="/signup">
+          <Button className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+            Sign up
+          </Button>
+        </Link>
       </div>
     </header>
   );
