@@ -1,11 +1,15 @@
+import { Footer } from "@/components/footer";
 import { Landing } from "@/components/landing";
 import { Navbar } from "@/components/navbar";
 
 export default function Page() {
   return (
-    <main>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <Navbar />
-      <Landing />
-    </main>
+      <main>
+        <Landing />
+      </main>
+      <Footer />
+    </div>
   );
 }

@@ -5,7 +5,23 @@ import { Button } from "@workspace/ui/components/button";
 export const Footer = () => {
   return (
     <div className="flex py-3 w-full justify-between bg-neutral-100 dark:bg-gray9-400">
-      <img src="./image2.jpg" className="h-16 w-h-16 rounded-sm mx-4" />
+      <div className="flex flex-col space-y-7">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-10 w-10 mx-8 my-4 text-blue-600 dark:text-blue-400"
+        >
+          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+        </svg>
+        <p className="font-semibold text-sm text-gray-600 mx-6 dark:text-gray-400">
+          © 2025 Serene. All rights reserved.
+        </p>
+      </div>
       <div className="flex px-4 min-[430px]:space-x-8 min-[500px]:space-x-16 sm:space-x-32 sm:mx-5 md:space-x-48 lg:space-x-72 lg:mx-20">
         <div className="flex flex-col">
           <h3 className="font-semibold ml-4">Useful links</h3>
