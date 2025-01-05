@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="grid grid-cols-18 sm:grid-cols-12">
-          <div className="ml-5 col-span-9 sm:mx-5 sm:col-span-5 md:col-span-6 lg:col-span-6">
+          <div className="ml-4 col-span-9 sm:mx-5 sm:col-span-5 md:col-span-6 lg:col-span-6">
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +25,7 @@ export default function Footer() {
               </span>
             </Link>
           </div>
-          <div className="ml-5 sm:ml-0 mt-3 sm:mt-0 col-span-9 sm:col-span-4 md:col-span-3 lg:col-span-4">
+          <div className="ml-5 sm:ml-0 mt-3 sm:-mt-1 col-span-9 sm:col-span-4 md:col-span-3 lg:col-span-4">
             <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-4">
               Legal
             </h3>
@@ -48,7 +48,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          <div className="mt-6 ml-5 sm:ml-10 sm:mt-0 col-span-3 mr-10 sm:col-span-3 md:col-span-3 lg:col-span-2">
+          <div className="mt-6 ml-5 sm:ml-10 sm:-mt-1 col-span-3 mr-10 sm:col-span-3 md:col-span-3 lg:col-span-2">
             <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-4">
               Follow Us
             </h3>
