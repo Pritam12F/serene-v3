@@ -25,7 +25,7 @@ export default function Footer() {
               </span>
             </Link>
           </div>
-          <div className="ml-5 sm:ml-0 mt-3 sm:-mt-1 col-span-9 sm:col-span-4 md:col-span-3 lg:col-span-4">
+          <div className="ml-5 sm:-ml-3 mt-3 sm:-mt-1 col-span-9 sm:col-span-4 md:col-span-3 lg:col-span-4">
             <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-4">
               Legal
             </h3>

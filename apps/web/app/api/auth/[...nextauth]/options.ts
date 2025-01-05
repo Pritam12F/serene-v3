@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { users } from "../../../../../../packages/db/src/schema";
+import { users } from "@workspace/db/schema";
 import { v4 as uuidv4 } from "uuid";
 import db from "@workspace/db";
 
