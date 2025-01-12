@@ -15,7 +15,7 @@ export default function CTA() {
         <Button
           size="lg"
           variant="secondary"
-          className="bg-white text-blue-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700"
+          className="bg-white text-blue-600 duration-300 hover:bg-gray-100 dark:bg-slate-900 dark:text-gray3-400 dark:hover:text-gray1-400"
         >
           Join now
         </Button>

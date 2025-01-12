@@ -21,7 +21,7 @@ export default function Hero() {
         <div className="flex justify-center space-x-4">
           <Button
             size="lg"
-            className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+            className="bg-blue-600 text-white duration-300 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
           >
             Watch Demo
           </Button>
@@ -33,7 +33,7 @@ export default function Hero() {
           alt="Serene app interface"
           width={800}
           height={600}
-          className="rounded-lg shadow-2xl border border-gray-200 z-20 dark:border-gray-700"
+          className="rounded-lg shadow-2xl duration-150 hover:scale-105 border border-gray-200 z-20 dark:border-gray-700"
         />
       </div>
       <Ripple />

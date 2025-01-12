@@ -2,9 +2,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import "@workspace/ui/globals.css";
 import { Providers } from "@/components/providers";
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "./api/uploadthing/core";
 import type { Metadata } from "next";
 
 const fontSans = Geist({
@@ -32,18 +29,7 @@ export default function RootLayout({
       <body
         className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
       >
-        <Providers>
-          <NextSSRPlugin
-            /**
-             * The `extractRouterConfig` will extract **only** the route configs
-             * from the router to prevent additional information from being
-             * leaked to the client. The data passed to the client is the same
-             * as if you were to fetch `/api/uploadthing` directly.
-             */
-            routerConfig={extractRouterConfig(ourFileRouter)}
-          />
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -3,7 +3,7 @@ import { FaDiscord, FaGithub, FaTwitter } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+    <footer className="bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="grid grid-cols-18 sm:grid-cols-12">
           <div className="ml-4 col-span-9 sm:mx-5 sm:col-span-5 md:col-span-6 lg:col-span-6">
@@ -33,7 +33,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                  className="text-gray-600 dark:text-gray-400 duration-300 hover:text-blue-600 dark:hover:text-blue-500"
                 >
                   Privacy Policy
                 </Link>
@@ -41,7 +41,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                  className="text-gray-600 dark:text-gray-400 duration-300 hover:text-blue-600 dark:hover:text-blue-500"
                 >
                   Terms & Conditions
                 </Link>
@@ -55,21 +55,21 @@ export default function Footer() {
             <div className="flex space-x-4">
               <Link
                 href="#"
-                className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+                className="text-gray-600 duration-300 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500"
               >
                 <FaDiscord className="w-6 h-6" />
                 <span className="sr-only">Discord</span>
               </Link>
               <Link
                 href="https://github.com/Pritam12F/"
-                className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+                className="text-gray-600 duration-300 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500"
               >
                 <FaGithub className="w-6 h-6" />
                 <span className="sr-only">GitHub</span>
               </Link>
               <Link
                 href="https://x.com/pritam121f"
-                className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+                className="text-gray-600 duration-300 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500"
               >
                 <FaTwitter className="w-6 h-6" />
                 <span className="sr-only">Twitter</span>
