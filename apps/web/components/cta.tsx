@@ -5,7 +5,7 @@ export default function CTA() {
     <section className="py-20 px-4 md:px-6 lg:px-8 text-center relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600 opacity-90 dark:from-blue-800 dark:to-purple-800"></div>
       <div className="relative z-10">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+        <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-white">
           Ready to bring serenity to your workflow?
         </h2>
         <p className="text-xl mb-8 max-w-2xl mx-auto text-blue-100">
