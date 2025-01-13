@@ -1,26 +1,42 @@
-import { Button } from "@workspace/ui/components/button";
+"use client";
+import { TypewriterEffectSmooth } from "@workspace/ui/components/aceternityui/typewriter-effect";
 
-export default function CTA() {
+export function TypewriterEffect() {
+  const words = [
+    {
+      text: "Ready",
+    },
+    {
+      text: "to",
+    },
+    {
+      text: "bring",
+    },
+    {
+      text: "serenity",
+      className: "text-blue-500 dark:text-blue-500",
+    },
+    {
+      text: "to",
+    },
+    {
+      text: "your",
+    },
+    {
+      text: "workflow?",
+    },
+  ];
   return (
-    <section className="py-20 px-4 md:px-6 lg:px-8 text-center relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600 opacity-90 dark:from-blue-800 dark:to-purple-800"></div>
-      <div className="relative z-10">
-        <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-white">
-          Ready to bring serenity to your workflow?
-        </h2>
-        <p className="text-xl mb-8 max-w-2xl mx-auto text-blue-100">
-          Join thousands of users who have transformed their productivity with
-          Serene.
-        </p>
-        <Button
-          size="lg"
-          variant="secondary"
-          className="bg-white text-blue-600 duration-300 hover:bg-gray-100 dark:bg-slate-900 dark:text-gray3-400 dark:hover:text-gray1-400"
-        >
+    <div className="flex flex-col border-none shadow-none bg-white dark:bg-gray-950 items-center justify-center h-[30rem]  ">
+      <p className="text-neutral-600 dark:text-neutral-200 text-xs sm:text-base  ">
+        Join thousands of users who use Serene
+      </p>
+      <TypewriterEffectSmooth words={words} />
+      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-4">
+        <button className="w-40 h-10 rounded-xl bg-slate-900 dark:bg-gray-50 dark:text-black font-semibold dark:hover:bg-white hover:shadow-lg hover:bg-black duration-200 border dark:border-white border-transparent text-white text-sm">
           Join now
-        </Button>
+        </button>
       </div>
-      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-    </section>
+    </div>
   );
 }

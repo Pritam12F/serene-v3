@@ -25,7 +25,7 @@ export const SereneLogo = () => {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="h-6 w-6 text-blue-600 dark:text-blue-400"
+        className="h-6 w-6 text-blue-600 dark:text-blue-600"
       >
         <path d="M21 12a9 9 0 1 1-6.219-8.56" />
       </svg>
@@ -45,7 +45,7 @@ export default function App() {
   ];
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen}>
+    <Navbar onMenuOpenChange={setIsMenuOpen} className="font-mono">
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -56,7 +56,7 @@ export default function App() {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-7" justify="center">
+      <NavbarContent className="hidden sm:flex gap-8" justify="center">
         <NavbarItem>
           <Link color="foreground" href="#">
             Features
@@ -67,7 +67,7 @@ export default function App() {
             Pricing
           </Link>
         </NavbarItem>
-        <NavbarItem>
+        <NavbarItem className="mx-2">
           <Link color="foreground" href="#">
             Blog
           </Link>
@@ -96,7 +96,7 @@ export default function App() {
       </NavbarContent>
       <NavbarMenu>
         {menuItems.map(({ name, href }, index) => (
-          <NavbarMenuItem key={`${name}-${index}`}>
+          <NavbarMenuItem key={`${name}-${index}`} className="font-mono">
             <Link
               className="w-full"
               color={

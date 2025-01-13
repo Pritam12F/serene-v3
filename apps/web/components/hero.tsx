@@ -12,7 +12,7 @@ export default function Hero() {
       <div className="relative z-10">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-4 bg-clip-text py-4 text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
           Your thoughts, organized{" "}
-          <span className="text-blue-600 dark:text-blue-400">serenely</span>
+          <span className="text-blue-600 dark:text-blue-600">serenely</span>
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
           Serene is the all-in-one workspace for your notes, tasks, and ideas.
@@ -21,7 +21,7 @@ export default function Hero() {
         <div className="flex justify-center space-x-4">
           <Button
             size="lg"
-            className="bg-blue-600 text-white duration-300 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+            className="bg-blue-600 text-white duration-300 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
           >
             Watch Demo
           </Button>
