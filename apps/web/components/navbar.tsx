@@ -10,8 +10,8 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Link,
-  Button,
 } from "@nextui-org/react";
+import { Button } from "@workspace/ui/components/button";
 import ThemeSwitcherButton from "./theme-switcher";
 
 export const SereneLogo = () => {
@@ -84,13 +84,11 @@ export default function App() {
         </NavbarItem>
         <NavbarItem>
           <Button
-            as={Link}
             color="default"
-            href="/signup"
-            variant="flat"
-            className="hidden rounded-md bg-blue-600 text-gray-200 hover:bg-blue-700 md:inline-flex"
+            variant="default"
+            className="hidden rounded-md bg-gradient-to-b from-blue-400 via-blue-500 to-blue-800 text-gray-100 hover:from-blue-400 hover:via-blue-600 hover:to-blue-800 hover:text-white md:inline-flex"
           >
-            Sign Up
+            Sign up
           </Button>
         </NavbarItem>
       </NavbarContent>

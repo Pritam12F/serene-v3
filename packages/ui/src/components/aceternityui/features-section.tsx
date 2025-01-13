@@ -10,7 +10,7 @@ import {
 } from "@tabler/icons-react";
 import { cn } from "@workspace/ui/lib/utils";
 
-export function FeaturesSectionDemo() {
+export function FeaturesSection() {
   const features = [
     {
       title: "Intuitive Note-Taking",
