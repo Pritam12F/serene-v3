@@ -83,13 +83,15 @@ export default function App() {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Button
-            color="default"
-            variant="default"
-            className="hidden rounded-md bg-gradient-to-b from-blue-400 via-blue-500 to-blue-800 text-gray-100 hover:from-blue-400 hover:via-blue-600 hover:to-blue-800 hover:text-white md:inline-flex"
-          >
-            Sign up
-          </Button>
+          <Link href="/signup">
+            <Button
+              color="default"
+              variant="default"
+              className="hidden rounded-md bg-gradient-to-b from-blue-400 via-blue-500 to-blue-800 text-gray-100 hover:from-blue-400 hover:via-blue-600 hover:to-blue-800 hover:text-white dark:hover:text-white duration-300 md:inline-flex"
+            >
+              Sign up
+            </Button>
+          </Link>
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>

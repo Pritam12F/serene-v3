@@ -27,7 +27,7 @@ export function TypewriterEffect() {
     },
   ];
   return (
-    <div className="flex flex-col border-none shadow-none bg-white dark:bg-gray-950 items-center justify-center h-[30rem]  ">
+    <div className="flex flex-col border-none shadow-none bg-white dark:bg-gray-950 items-center justify-center h-[30rem]">
       <p className="text-neutral-600 dark:text-neutral-200 text-xs sm:text-base  ">
         Join thousands of users who use Serene
       </p>
