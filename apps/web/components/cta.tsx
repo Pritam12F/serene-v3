@@ -1,4 +1,3 @@
-"use client";
 import { TypewriterEffectSmooth } from "@workspace/ui/components/aceternityui/typewriter-effect";
 
 export function TypewriterEffect() {

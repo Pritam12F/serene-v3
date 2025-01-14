@@ -1,14 +1,19 @@
-import Footer from "@/components/footer";
 import { Landing } from "@/components/landing";
-import Navbar from "@/components/navbar";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-export default function Page() {
+export default async function Page() {
+  const { userId } = await auth();
+
+  if (userId) {
+    redirect("/documents");
+  }
+
   return (
     <>
       <main>
         <Landing />
       </main>
-      <Footer />
     </>
   );
 }

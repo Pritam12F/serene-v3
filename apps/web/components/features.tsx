@@ -1,66 +1,71 @@
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
-import { CheckCircle, PenTool, Zap } from "lucide-react";
+  IconAdjustmentsBolt,
+  IconCloud,
+  IconEaseInOut,
+  IconEdit,
+  IconHelp,
+  IconHierarchy,
+  IconSearch,
+  IconTerminal2,
+} from "@tabler/icons-react";
+import { Feature } from "@workspace/ui/components/aceternityui/feature";
 
-const features = [
-  {
-    title: "Intuitive Note-Taking",
-    description:
-      "Capture your thoughts effortlessly with our clean and distraction-free interface.",
-    icon: PenTool,
-  },
-  {
-    title: "Smart Organization",
-    description:
-      "Automatically categorize and link your notes for easy retrieval and connection of ideas.",
-    icon: CheckCircle,
-  },
-  {
-    title: "Lightning-Fast Search",
-    description:
-      "Find exactly what you need in seconds with our powerful search capabilities.",
-    icon: Zap,
-  },
-];
+export function FeaturesSection() {
+  const features = [
+    {
+      title: "Intuitive Note-Taking",
+      description:
+        "Capture your thoughts effortlessly with our clean and distraction-free interface.",
+      icon: <IconEdit />,
+    },
+    {
+      title: "Smart Organization",
+      description:
+        "Automatically categorize and link your notes for easy retrieval and connection of ideas.",
+      icon: <IconHierarchy />,
+    },
+    {
+      title: "Lightning-Fast Search",
+      description:
+        "Find exactly what you need in seconds with our powerful search capabilities.",
+      icon: <IconSearch />,
+    },
+    {
+      title: "Ease of Use",
+      description:
+        "It's as easy as using an Apple, and as expensive as buying one.",
+      icon: <IconEaseInOut />,
+    },
+    {
+      title: "100% Uptime Guarantee",
+      description: "We just cannot be taken down by anyone.",
+      icon: <IconCloud />,
+    },
+    {
+      title: "24/7 Customer Support",
+      description:
+        "We are available 100% of the time. At least our AI agents are.",
+      icon: <IconHelp />,
+    },
+    {
+      title: "Money-Back Guarantee",
+      description:
+        "If you don’t like EveryAI, we will convince you to like us.",
+      icon: <IconAdjustmentsBolt />,
+    },
+    {
+      title: "Built for Developers",
+      description:
+        "Built for engineers, developers, dreamers, thinkers, and doers.",
+      icon: <IconTerminal2 />,
+    },
+  ];
 
-export default function Features() {
   return (
-    <section
-      id="features"
-      className="py-20 px-4 md:px-6 lg:px-8 bg-white dark:bg-gray-950"
-    >
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-semibold text-center mb-12 text-gray-800 dark:text-gray-200">
-          Why Choose Serene?
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <Card
-              key={index}
-              className="bg-gray-50 dark:bg-gray-700 border-none shadow-lg hover:shadow-xl transition-shadow duration-300"
-            >
-              <CardHeader className="text-center">
-                <div className="mx-auto bg-blue-100 dark:bg-blue-900 rounded-full p-3 w-16 h-16 flex items-center justify-center mb-4">
-                  <feature.icon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                </div>
-                <CardTitle className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                  {feature.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <CardDescription className="text-gray-600 dark:text-gray-300">
-                  {feature.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
+    <div className="grid grid-cols-1 dark:bg-gray-950 md:grid-cols-2 lg:grid-cols-4  relative z-10 py-10 max-w-7xl mx-auto">
+      {features.map((feature, index) => (
+        <Feature key={feature.title} {...feature} index={index} />
+      ))}
+    </div>
   );
 }

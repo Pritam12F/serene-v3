@@ -5,6 +5,7 @@ import { Providers } from "@/components/providers";
 import type { Metadata } from "next";
 import Navbar from "@/components/navbar";
 import { SignedOut } from "@clerk/nextjs";
+import Footer from "@/components/footer";
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -36,6 +37,9 @@ export default function RootLayout({
             <Navbar />
           </SignedOut>
           {children}
+          <SignedOut>
+            <Footer />
+          </SignedOut>
         </Providers>
       </body>
     </html>
