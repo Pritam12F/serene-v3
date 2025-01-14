@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@workspace/ui/globals.css";
 import { Providers } from "@/components/providers";
 import type { Metadata } from "next";
+import Navbar from "@/components/navbar";
+import { SignedOut } from "@clerk/nextjs";
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -27,9 +29,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
+        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <SignedOut>
+            <Navbar />
+          </SignedOut>
+          {children}
+        </Providers>
       </body>
     </html>
   );
