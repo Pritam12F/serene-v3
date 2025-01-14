@@ -40,8 +40,8 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const menuItems = [
-    { name: "Log in", href: "/signin" },
-    { name: "Sign up", href: "/signup" },
+    { name: "Log in", href: "/sign-in" },
+    { name: "Sign up", href: "/sign-up" },
   ];
 
   return (
@@ -78,12 +78,12 @@ export default function App() {
           <ThemeSwitcherButton />
         </NavbarItem>
         <NavbarItem>
-          <Link href="/signin" className="hidden md:block">
+          <Link href="/sign-in" className="hidden md:block">
             Login
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="/signup">
+          <Link href="/sign-up">
             <Button
               color="default"
               variant="default"
