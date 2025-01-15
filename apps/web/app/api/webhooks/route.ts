@@ -52,24 +52,27 @@ export async function POST(req: Request) {
 
   const { id, image_url, email_addresses, first_name, last_name } =
     evt.data as any;
+  const { type } = evt;
   const email = email_addresses[0].email_address;
 
-  try {
-    await db.insert(users).values({
-      id: uuidv4(),
-      clerkId: id,
-      name: `${first_name} ${last_name}`,
-      email,
-      profilePic: image_url,
-    });
-  } catch (err) {
-    console.error("Error occured:", err);
-    return new Response(
-      "Error: Couldn't add user to database or it already exists",
-      {
-        status: 400,
-      }
-    );
+  if (type === "user.created") {
+    try {
+      await db.insert(users).values({
+        id: uuidv4(),
+        clerkId: id,
+        name: `${first_name} ${last_name}`,
+        email,
+        profilePic: image_url,
+      });
+    } catch (err) {
+      console.error("Error occured:", err);
+      return new Response(
+        "Error: Couldn't add user to database or it already exists",
+        {
+          status: 400,
+        }
+      );
+    }
   }
 
   return new Response("Webhook received", { status: 200 });
