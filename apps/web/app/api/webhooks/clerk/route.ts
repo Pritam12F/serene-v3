@@ -4,6 +4,38 @@ import { WebhookEvent } from "@clerk/nextjs/server";
 import db from "@workspace/db";
 import { users } from "@workspace/db/schema";
 import { v4 as uuidv4 } from "uuid";
+import { eq } from "drizzle-orm";
+
+enum WebhookEventType {
+  UserCreated = "user.created",
+  UserUpdated = "user.updated",
+  UserDeleted = "user.deleted",
+}
+
+async function handleUserCreated(data: any) {
+  await db.insert(users).values({
+    id: uuidv4(),
+    clerkId: data.id,
+    name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
+    email: data.email_addresses[0].email_address,
+    profilePic: data.image_url,
+  });
+}
+
+async function handleUserUpdated(data: any) {
+  await db
+    .update(users)
+    .set({
+      name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
+      email: data.email_addresses[0].email_address,
+      profilePic: data.image_url,
+    })
+    .where(eq(users.clerkId, data.id));
+}
+
+async function handleUserDeleted(data: any) {
+  await db.delete(users).where(eq(users.clerkId, data.id));
+}
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET;
@@ -50,30 +82,25 @@ export async function POST(req: Request) {
     });
   }
 
-  const { id, image_url, email_addresses, first_name, last_name } =
-    evt.data as any;
-  const { type } = evt;
-  const email = email_addresses[0].email_address;
+  const { type, data } = evt;
 
-  if (type === "user.created") {
-    try {
-      await db.insert(users).values({
-        id: uuidv4(),
-        clerkId: id,
-        name: `${first_name} ${last_name}`,
-        email,
-        profilePic: image_url,
-      });
-    } catch (err) {
-      console.error("Error occured:", err);
-      return new Response(
-        "Error: Couldn't add user to database or it already exists",
-        {
-          status: 400,
-        }
-      );
+  try {
+    switch (type) {
+      case WebhookEventType.UserCreated:
+        await handleUserCreated(data);
+        break;
+      case WebhookEventType.UserUpdated:
+        await handleUserUpdated(data);
+        break;
+      case WebhookEventType.UserDeleted:
+        await handleUserDeleted(data);
+        break;
+      default:
+        return new Response("Unhandled event type", { status: 400 });
     }
+  } catch (err: any) {
+    return new Response(`Error: ${err.message}`, { status: 500 });
   }
 
-  return new Response("Webhook received", { status: 200 });
+  return new Response("Webhook processed successfully", { status: 200 });
 }
