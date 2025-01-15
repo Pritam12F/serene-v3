@@ -1,6 +1,9 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
+import db from "@workspace/db";
+import { users } from "@workspace/db/schema";
+import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET;
@@ -47,12 +50,27 @@ export async function POST(req: Request) {
     });
   }
 
-  // Do something with payload
-  // For this guide, log payload to console
-  const { id } = evt.data;
-  const eventType = evt.type;
-  console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
-  console.log("Webhook payload:", body);
+  const { id, image_url, email_addresses, first_name, last_name } =
+    evt.data as any;
+  const email = email_addresses[0].email_address;
+
+  try {
+    await db.insert(users).values({
+      id: uuidv4(),
+      clerkId: id,
+      name: `${first_name} ${last_name}`,
+      email,
+      profilePic: image_url,
+    });
+  } catch (err) {
+    console.error("Error occured:", err);
+    return new Response(
+      "Error: Couldn't add user to database or it already exists",
+      {
+        status: 400,
+      }
+    );
+  }
 
   return new Response("Webhook received", { status: 200 });
 }

@@ -17,7 +17,6 @@ export const users = pgTable("users", {
   profilePic: text("profile_pic"),
   email: text("email").unique().notNull(),
   phone: integer("phone").unique(),
-  password: text("password").notNull(),
 });
 
 // Images Table

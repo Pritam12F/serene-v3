@@ -29,6 +29,13 @@
       "when": 1736935164348,
       "tag": "0003_faithful_leader",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1736944375656,
+      "tag": "0004_ordinary_power_man",
+      "breakpoints": true
     }
   ]
 }
