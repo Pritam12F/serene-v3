@@ -13,7 +13,7 @@ enum WebhookEventType {
 }
 
 async function handleUserCreated(data: any) {
-  await db.insert(users).values({
+  return await db.insert(users).values({
     id: uuidv4(),
     clerkId: data.id,
     name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
@@ -23,7 +23,7 @@ async function handleUserCreated(data: any) {
 }
 
 async function handleUserUpdated(data: any) {
-  await db
+  return await db
     .update(users)
     .set({
       name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
@@ -34,7 +34,7 @@ async function handleUserUpdated(data: any) {
 }
 
 async function handleUserDeleted(data: any) {
-  await db.delete(users).where(eq(users.clerkId, data.id));
+  return await db.delete(users).where(eq(users.clerkId, data.id));
 }
 
 export async function POST(req: Request) {
@@ -98,8 +98,10 @@ export async function POST(req: Request) {
       default:
         return new Response("Unhandled event type", { status: 400 });
     }
-  } catch (err: any) {
-    return new Response(`Error: ${err.message}`, { status: 500 });
+  } catch {
+    return new Response("Error: Error modifying user entry", {
+      status: 500,
+    });
   }
 
   return new Response("Webhook processed successfully", { status: 200 });
