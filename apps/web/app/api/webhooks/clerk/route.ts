@@ -30,7 +30,7 @@ async function handleUserUpdated(data: any) {
       email: data.email_addresses[0].email_address,
       profilePic: data.image_url,
     })
-    .where(eq(users.clerkId, "user_2rfmunLTsfr9MNPOY9cqQJCf1Cu"));
+    .where(eq(users.clerkId, data.id));
 }
 
 async function handleUserDeleted(data: any) {
