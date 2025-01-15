@@ -12,6 +12,7 @@ import {
 // Users Table
 export const users = pgTable("users", {
   id: uuid("id").primaryKey(),
+  clerkId: varchar("clerk_id", { length: 256 }).notNull(),
   name: text("name").notNull(),
   profilePic: text("profile_pic"),
   email: text("email").unique().notNull(),
@@ -35,7 +36,8 @@ export const posts = pgTable("posts", {
   content: text("content").notNull(),
   userId: uuid("user_id")
     .notNull()
-    .references(() => users.id), // FK to users
+    .references(() => users.id),
+  parentId: integer("parent_id"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -56,23 +58,25 @@ export const userToPosts = relations(users, ({ many }) => ({
   posts: many(posts),
 }));
 
-// Posts to Users
-export const postToUser = relations(posts, ({ one }) => ({
-  user: one(users, {
-    fields: [posts.userId],
-    references: [users.id],
-  }),
-}));
-
-// Posts to Content Images
-export const postToContentImages = relations(posts, ({ many }) => ({
-  images: many(contentImages),
-}));
-
 // Content Images to Posts
 export const contentImageToPost = relations(contentImages, ({ one }) => ({
   post: one(posts, {
     fields: [contentImages.postId],
     references: [posts.id],
   }),
+}));
+
+export const postsRelations = relations(posts, ({ one, many }) => ({
+  parentPost: one(posts, {
+    fields: [posts.parentId],
+    references: [posts.id],
+  }),
+  childrenPosts: many(posts),
+  // Posts to users
+  user: one(users, {
+    fields: [posts.userId],
+    references: [users.id],
+  }),
+  // Post to images
+  images: many(contentImages),
 }));

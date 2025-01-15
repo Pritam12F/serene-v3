@@ -15,6 +15,20 @@
       "when": 1735645069631,
       "tag": "0001_friendly_kabuki",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1736934288149,
+      "tag": "0002_marvelous_menace",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1736935164348,
+      "tag": "0003_faithful_leader",
+      "breakpoints": true
     }
   ]
 }
