@@ -1,4 +1,5 @@
 import { relations } from "drizzle-orm";
+import { AnyPgColumn } from "drizzle-orm/pg-core";
 import {
   integer,
   pgTable,
@@ -24,6 +25,9 @@ export const images = pgTable("images", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
   url: text("url").notNull(),
+  postId: integer("post_id")
+    .notNull()
+    .references(() => posts.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -35,47 +39,41 @@ export const posts = pgTable("posts", {
   content: text("content").notNull(),
   userId: uuid("user_id")
     .notNull()
-    .references(() => users.id),
-  parentId: integer("parent_id"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-// Content Images Table
-export const contentImages = pgTable("content_images", {
-  id: serial("id").primaryKey(),
-  url: text("url").notNull(),
-  postId: integer("post_id")
-    .notNull()
-    .references(() => posts.id), // FK to posts
+    .references(() => users.id, { onDelete: "cascade" }),
+  parentId: integer("parent_id").references((): AnyPgColumn => posts.id, {
+    onDelete: "cascade",
+  }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Relations
 
 // Users to Posts
-export const userToPosts = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many }) => ({
   posts: many(posts),
 }));
 
-// Content Images to Posts
-export const contentImageToPost = relations(contentImages, ({ one }) => ({
+// Images to Posts
+export const imagesRelations = relations(images, ({ one }) => ({
   post: one(posts, {
-    fields: [contentImages.postId],
+    fields: [images.postId],
     references: [posts.id],
   }),
 }));
 
+// Posts Relations
 export const postsRelations = relations(posts, ({ one, many }) => ({
-  parentPost: one(posts, {
+  // Post parent/child relationships
+  parent: one(posts, {
     fields: [posts.parentId],
     references: [posts.id],
   }),
-  childrenPosts: many(posts),
+  children: many(posts),
   // Posts to users
   user: one(users, {
     fields: [posts.userId],
     references: [users.id],
   }),
-  // Post to images
-  images: many(contentImages),
+  // Posts to images
+  images: many(images),
 }));

@@ -36,6 +36,27 @@
       "when": 1736944375656,
       "tag": "0004_ordinary_power_man",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1737007422402,
+      "tag": "0005_secret_vulcan",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1737008052997,
+      "tag": "0006_worthless_madame_hydra",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1737016499866,
+      "tag": "0007_absurd_the_santerians",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,27 @@
+[x] Create types for the database schema in a new package
+
+
+[ ] Create zod schemas for database package
+
+
+[ ] Build the sidebar
+
+
+[ ] Make sidebar responsive
+
+
+[ ] Add sidebar functionality:
+
+    [ ] Create post
+
+    [ ] Edit post
+
+    [ ] Delete post
+
+    [ ] Create children post
+
+
+[ ] Add a rich text editor like tip tap
+
+
+[ ] Add zod validation to the API routes
