@@ -1,26 +1,36 @@
 import { images, posts, users } from "@workspace/db/schema";
 import { type InferSelectModel, type InferInsertModel } from "drizzle-orm";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-export type SelectUser =
+export type SelectUserType =
   | (InferSelectModel<typeof users> & {
-      posts?: SelectPost[];
+      posts?: SelectPostType[];
     })
   | undefined;
-export type InsertUser = InferInsertModel<typeof users>;
+export type InsertUserType = InferInsertModel<typeof users>;
 
-export type SelectPost =
+export type SelectPostType =
   | (InferSelectModel<typeof posts> & {
-      images?: SelectImage[];
-      user?: SelectUser;
-      parent?: SelectPost;
-      children?: SelectPost[];
+      images?: SelectImageType[];
+      user?: SelectUserType;
+      parent?: SelectPostType;
+      children?: SelectPostType[];
     })
   | undefined;
-export type InsertPost = InferInsertModel<typeof posts>;
+export type InsertPostType = InferInsertModel<typeof posts>;
 
-export type SelectImage =
+export type SelectImageType =
   | (InferSelectModel<typeof images> & {
-      post?: SelectPost;
+      post?: SelectPostType;
     })
   | undefined;
-export type InsertImage = InferInsertModel<typeof images>;
+export type InsertImageType = InferInsertModel<typeof images>;
+
+export const SelectUserSchema = createSelectSchema(users).extend({});
+export const InsertUserSchema = createInsertSchema(users).extend({});
+
+export const SelectPostSchema = createSelectSchema(posts).extend({});
+export const InsertPostSchema = createInsertSchema(posts).extend({});
+
+export const SelectImageSchema = createSelectSchema(images).extend({});
+export const InsertImageSchema = createInsertSchema(images).extend({});
