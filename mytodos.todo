@@ -1,7 +1,7 @@
 [x] Create types for the database schema in a new package
 
 
-[ ] Create zod schemas for database package
+[x] Create zod schemas for database package
 
 
 [ ] Build the sidebar
