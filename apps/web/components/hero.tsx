@@ -4,7 +4,7 @@ import { Ripple } from "@workspace/ui/components/magicui/ripple";
 
 export default function Hero() {
   return (
-    <section className="py-20 px-4 md:px-6 lg:px-8 text-center relative overflow-hidden">
+    <section className="py-20 px-4 md:px-6 lg:px-8 text-center bg-gradient-to-b from-gray-900 to-gray-950 relative overflow-hidden">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-purple-100 opacity-30 dark:from-blue-900 dark:to-purple-900 dark:opacity-20"></div>
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
