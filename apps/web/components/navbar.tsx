@@ -45,7 +45,7 @@ export default function App() {
   ];
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} className="font-mono">
+    <Navbar onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -87,7 +87,7 @@ export default function App() {
             <Button
               color="default"
               variant="default"
-              className="hidden rounded-md bg-gradient-to-b from-blue-400 via-blue-500 to-blue-800 text-gray-100 hover:from-blue-400 hover:via-blue-600 hover:to-blue-800 hover:text-white dark:hover:text-white duration-300 md:inline-flex"
+              className="hidden rounded-md bg-gradient-to-b from-blue-400 via-blue-500 to-blue-800 text-gray-100 hover:text-white dark:hover:text-white duration-300 md:inline-flex"
             >
               Sign up
             </Button>
@@ -96,7 +96,7 @@ export default function App() {
       </NavbarContent>
       <NavbarMenu>
         {menuItems.map(({ name, href }, index) => (
-          <NavbarMenuItem key={`${name}-${index}`} className="font-mono">
+          <NavbarMenuItem key={`${name}-${index}`}>
             <Link
               className="w-full"
               color={

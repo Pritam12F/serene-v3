@@ -14,9 +14,8 @@ export default function Hero() {
           Your thoughts, organized{" "}
           <span className="text-blue-600 dark:text-blue-600">serenely</span>
         </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+        <p className="text-xl text-gray-700 dark:text-gray-200 mb-8 max-w-2xl mx-auto">
           Serene is the all-in-one workspace for your notes, tasks, and ideas.
-          Bring clarity to your thoughts and calmness to your workflow.
         </p>
         <div className="flex justify-center space-x-4">
           <Button
@@ -29,7 +28,7 @@ export default function Hero() {
       </div>
       <div className="mt-12 flex justify-center relative">
         <Image
-          src="/image1.webp"
+          src="/image1.jpg"
           alt="Serene app interface"
           width={800}
           height={600}
