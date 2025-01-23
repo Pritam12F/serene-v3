@@ -6,7 +6,7 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["UPLOADTHING_TOKEN", "DATABASE_URL"]
+      "env": ["UPLOADTHING_TOKEN", "DATABASE_URL", "SIGNING_SECRET"]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -17,7 +17,7 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "env": ["UPLOADTHING_TOKEN", "DATABASE_URL"]
+      "env": ["UPLOADTHING_TOKEN", "DATABASE_URL", "SIGNING_SECRET"]
     }
   }
 }

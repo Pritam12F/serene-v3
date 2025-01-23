@@ -1,8 +1,6 @@
+import { AppNavbar } from "@/components/app-navbar";
 import { AppSidebar } from "@/components/app-sidebar";
-import {
-  SidebarProvider,
-  SidebarTrigger,
-} from "@workspace/ui/components/sidebar";
+import { SidebarProvider } from "@workspace/ui/components/sidebar";
 
 export default function LoggedInLayout({
   children,
@@ -12,8 +10,8 @@ export default function LoggedInLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="flex">
-        <SidebarTrigger />
+      <main className="w-full">
+        <AppNavbar />
         {children}
       </main>
     </SidebarProvider>
