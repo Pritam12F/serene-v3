@@ -1,7 +1,10 @@
+import { SidebarTrigger } from "@workspace/ui/components/sidebar";
+
 export function AppNavbar() {
   return (
-    <div className="w-full bg-slate-950 sticky top-0">
-      <div></div>
+    <div className="w-full flex bg-slate-950 sticky top-0">
+      <SidebarTrigger size="icon" />
+      <div>Hi there</div>
       <div></div>
     </div>
   );

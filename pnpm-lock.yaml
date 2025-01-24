@@ -29,6 +29,9 @@ importers:
       '@clerk/nextjs':
         specifier: ^6.9.10
         version: 6.9.10(next@15.1.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@clerk/themes':
+        specifier: ^2.2.12
+        version: 2.2.12
       '@nextui-org/react':
         specifier: ^2.6.11
         version: 2.6.11(@types/react@18.3.0)(framer-motion@11.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(tailwindcss@3.4.16(ts-node@10.9.2(@types/node@20.17.10)(typescript@5.7.2)))
@@ -332,8 +335,16 @@ packages:
       react-dom:
         optional: true
 
+  '@clerk/themes@2.2.12':
+    resolution: {integrity: sha512-2KLihkWClEUc5ZkIzNU9cTcpWtzxAm2GZRCSI0KUKZA/0V6glhmnxSSk+AQXzO9GpbyQm+UDIOQQSvQ10hnnFQ==}
+    engines: {node: '>=18.17.0'}
+
   '@clerk/types@4.40.2':
     resolution: {integrity: sha512-Jkt8YiqtFSRvCsN+8/MR2V0Cl83xtuqZVuV6ygQ6VJeSbmmFP0q5CSowlJ8mon2bELrlUnWH011dhAjELmvXqg==}
+    engines: {node: '>=18.17.0'}
+
+  '@clerk/types@4.44.0':
+    resolution: {integrity: sha512-L9UNS21sQ7OAgXKUWSMaZWayI/qmVM4DGvGCAlL0tpzbzdFU1nkxRaMOT3FkmWKSahIq4BI+vJHfMC1ki9uuGg==}
     engines: {node: '>=18.17.0'}
 
   '@cspotcode/source-map-support@0.8.1':
@@ -4949,7 +4960,16 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
+  '@clerk/themes@2.2.12':
+    dependencies:
+      '@clerk/types': 4.44.0
+      tslib: 2.4.1
+
   '@clerk/types@4.40.2':
+    dependencies:
+      csstype: 3.1.1
+
+  '@clerk/types@4.44.0':
     dependencies:
       csstype: 3.1.1
 

@@ -5,6 +5,7 @@ export async function seedInitialData(userId: string) {
   await db.insert(posts).values({
     userId,
     name: "Getting started",
+    content: "Hi there",
   });
 
   await db.insert(posts).values({

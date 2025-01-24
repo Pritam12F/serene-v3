@@ -1,4 +1,5 @@
 import { relations } from "drizzle-orm";
+import { jsonb } from "drizzle-orm/pg-core";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 import {
   integer,
@@ -34,9 +35,8 @@ export const images = pgTable("images", {
 // Posts Table
 export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),
-  url: text("url").notNull(),
   name: varchar("name", { length: 255 }),
-  content: text("content").notNull(),
+  content: jsonb("content").notNull(),
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
