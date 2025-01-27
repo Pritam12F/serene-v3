@@ -6,7 +6,6 @@
     "paths": {
       "@workspace/ui/*": ["./src/*"]
     },
-    "moduleResolution": "node"
   },
   "include": ["."],
   "exclude": ["node_modules", "dist"]
