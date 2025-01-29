@@ -10,10 +10,7 @@ export default function LoggedInLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="w-full">
-        <AppNavbar />
-        {children}
-      </main>
+      {children}
     </SidebarProvider>
   );
 }

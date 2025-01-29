@@ -10,10 +10,8 @@ export default async function Page() {
   }
 
   return (
-    <>
-      <main>
-        <Landing />
-      </main>
-    </>
+    <main>
+      <Landing />
+    </main>
   );
 }
