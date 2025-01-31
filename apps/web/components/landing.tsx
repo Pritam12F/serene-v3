@@ -7,9 +7,7 @@ export const Landing = () => {
   return (
     <>
       <Hero />
-      <div className="bg-white dark:bg-gray-950">
-        <FeaturesSection />
-      </div>
+      <FeaturesSection />
       <MarqueeSection />
       <TypewriterEffect />
     </>

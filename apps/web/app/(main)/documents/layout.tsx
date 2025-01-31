@@ -1,4 +1,3 @@
-import { AppNavbar } from "@/components/app-navbar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@workspace/ui/components/sidebar";
 
