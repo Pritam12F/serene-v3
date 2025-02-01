@@ -36,6 +36,10 @@ export function NavFavorites({
 }) {
   const { isMobile } = useSidebar();
 
+  if (favorites.length === 0) {
+    return null;
+  }
+
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Favorites</SidebarGroupLabel>
