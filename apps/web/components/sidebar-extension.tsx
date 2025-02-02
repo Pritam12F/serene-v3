@@ -1,6 +1,5 @@
 "use client";
 
-import { UserButton } from "@clerk/nextjs";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,15 +10,17 @@ import {
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { NavActions } from "./nav-actions";
-import { Editor } from "./editor";
+import dynamic from "next/dynamic";
 
 export const SidebarExtension = ({
   children,
   documents = [{ name: "Project Management & Task Tracking", href: "#" }],
 }: {
   children?: React.ReactNode;
-  documents: { name: string; href: string }[];
+  documents?: { name: string; href: string }[];
 }) => {
+  const Editor = dynamic(() => import("./editor"), { ssr: false });
+
   return (
     <SidebarInset className="bg-whiten dark:bg-[#1f1f1f]">
       <header className="flex h-14 shrink-0 items-center gap-2">
@@ -31,7 +32,7 @@ export const SidebarExtension = ({
               {documents.map(({ name, href }, index) => {
                 if (index === documents.length - 1) {
                   return (
-                    <BreadcrumbItem>
+                    <BreadcrumbItem key={index}>
                       <BreadcrumbPage className="line-clamp-1">
                         {name}
                       </BreadcrumbPage>
@@ -40,7 +41,7 @@ export const SidebarExtension = ({
                 }
 
                 return (
-                  <BreadcrumbItem>
+                  <BreadcrumbItem key={index}>
                     <BreadcrumbLink className="line-clamp-1" href={href}>
                       {name}
                     </BreadcrumbLink>

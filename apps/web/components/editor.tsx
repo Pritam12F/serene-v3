@@ -1,6 +1,6 @@
 "use client";
 
-import { BlockNoteView, Theme } from "@blocknote/mantine";
+import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
 import React from "react";
 import TextareaAutosize from "react-textarea-autosize";
@@ -14,7 +14,7 @@ interface EditorProps {
   initialContent?: string;
 }
 
-export const Editor = ({ onChange, editable }: EditorProps) => {
+const Editor = ({ onChange, editable }: EditorProps) => {
   const appTheme = useTheme();
   const currenTheme = appTheme.theme === "system" ? "system" : appTheme.theme;
 
@@ -35,3 +35,5 @@ export const Editor = ({ onChange, editable }: EditorProps) => {
     </div>
   );
 };
+
+export default Editor;
