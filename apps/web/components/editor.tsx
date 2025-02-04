@@ -21,9 +21,9 @@ const Editor = ({ onChange, editable }: EditorProps) => {
   const editor = useCreateBlockNote();
 
   return (
-    <div className="overflow-hidden max-w-[1500px] flex flex-1 flex-col gap-4 px-4 py-10">
+    <div className="overflow-x-hidden max-w-[1500px] flex flex-1 flex-col gap-4 px-4 py-10">
       <TextareaAutosize
-        className="w-full mx-12 appearance-none focus:outline-none overflow-hidden resize-none bg-transparent text-5xl"
+        className="w-full mx-12 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
         placeholder="Untitled"
       />
       <BlockNoteView
