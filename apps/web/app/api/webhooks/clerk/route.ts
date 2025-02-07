@@ -14,8 +14,6 @@ enum WebhookEventType {
 }
 
 async function handleUserCreated(data: any) {
-  await createInitialPosts(data.id as string);
-
   await db.insert(users).values({
     id: uuidv4(),
     clerkId: data.id,
@@ -23,6 +21,7 @@ async function handleUserCreated(data: any) {
     email: data.email_addresses[0].email_address,
     profilePic: data.image_url,
   });
+  await createInitialPosts(data.id as string);
 }
 
 async function handleUserUpdated(data: any) {
