@@ -14,14 +14,15 @@ enum WebhookEventType {
 }
 
 async function handleUserCreated(data: any) {
+  const userId = uuidv4();
   await db.insert(users).values({
-    id: uuidv4(),
+    id: userId,
     clerkId: data.id,
     name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
     email: data.email_addresses[0].email_address,
     profilePic: data.image_url,
   });
-  await createInitialPosts(data.id as string);
+  await createInitialPosts(userId);
 }
 
 async function handleUserUpdated(data: any) {
