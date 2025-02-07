@@ -607,17 +607,20 @@ export async function createInitialPosts(userId: string) {
     name: "Quick Note",
     userId,
     content: quickNote,
+    emoji: "📝",
   });
 
   await db.insert(posts).values({
     name: "Personal Home",
     userId,
     content: personalHome,
+    emoji: "🏠",
   });
 
   await db.insert(posts).values({
     name: "Reading List",
     userId,
     content: readingList,
+    emoji: "📚",
   });
 }

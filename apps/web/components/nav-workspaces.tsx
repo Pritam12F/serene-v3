@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronRight, MoreHorizontal, Plus } from "lucide-react";
 
 import {
@@ -17,25 +19,27 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@workspace/ui/components/sidebar";
+import { useUser } from "@clerk/nextjs";
+import useSWR from "swr";
+import db from "@workspace/db";
+import { posts } from "@workspace/db/schema";
+import { eq } from "drizzle-orm";
 
-export function NavWorkspaces({
-  workspaces,
-}: {
-  workspaces: {
-    name: string;
-    emoji: React.ReactNode;
-    pages: {
-      name: string;
-      emoji: React.ReactNode;
-    }[];
-  }[];
-}) {
+export function NavWorkspaces() {
+  const user = useUser();
+  const { data } = useSWR(`${user.user?.id}/workspaces`, async () => {
+    return await db.query.posts.findMany({
+      where: eq(posts.userId, user.user?.id!),
+      with: { children: true },
+    });
+  });
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Workspaces</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
-          {workspaces.map((workspace) => (
+          {data?.map((workspace) => (
             <Collapsible key={workspace.name}>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
@@ -57,7 +61,7 @@ export function NavWorkspaces({
                 </SidebarMenuAction>
                 <CollapsibleContent>
                   <SidebarMenuSub>
-                    {workspace.pages.map((page) => (
+                    {workspace.children.map((page) => (
                       <SidebarMenuSubItem key={page.name}>
                         <SidebarMenuSubButton asChild>
                           <a href="#">

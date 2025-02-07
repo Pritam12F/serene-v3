@@ -20,7 +20,8 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./schema": "./src/schema.ts"
+    "./schema": "./src/schema.ts",
+    "./seed": "./src/seed.ts"
   },
   "type": "module"
 }

@@ -37,6 +37,7 @@ export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }),
   content: jsonb("content").notNull(),
+  emoji: text("emoji"),
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
