@@ -30,11 +30,11 @@ async function handleUserUpdated(data: any) {
       email: data.email_addresses[0].email_address,
       profilePic: data.image_url,
     })
-    .where(eq(users.clerkId, data.id));
+    .where(eq(users.id, data.id));
 }
 
 async function handleUserDeleted(data: any) {
-  return await db.delete(users).where(eq(users.clerkId, data.id));
+  return await db.delete(users).where(eq(users.id, data.id));
 }
 
 export async function POST(req: Request) {
