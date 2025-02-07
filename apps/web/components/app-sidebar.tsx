@@ -225,7 +225,7 @@ export async function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavFavorites favorites={data.favorites} />
-        <NavWorkspaces workspaces={data.workspaces} />
+        <NavWorkspaces />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarRail />
