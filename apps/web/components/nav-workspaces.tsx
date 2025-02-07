@@ -24,6 +24,7 @@ import useSWR from "swr";
 import db from "@workspace/db";
 import { posts } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
+import { useEffect } from "react";
 
 export function NavWorkspaces() {
   const user = useUser();
@@ -33,6 +34,10 @@ export function NavWorkspaces() {
       with: { children: true },
     });
   });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <SidebarGroup>
