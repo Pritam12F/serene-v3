@@ -24,22 +24,18 @@ import useSWR from "swr";
 import db from "@workspace/db";
 import { posts } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
-import { useEffect } from "react";
 
 export function NavWorkspaces() {
   const user = useUser();
-  const { data } = useSWR(`${user.user?.id}/workspaces`, async () => {
-    return await db.query.posts.findMany({
-      where: eq(posts.userId, user.user?.id!),
-      with: { children: true },
-    });
-  });
-
-  useEffect(() => {
-    console.log(posts.userId);
-    console.log(user.user?.id);
-    console.log(data);
-  }, [data]);
+  const { data } = useSWR(
+    user.isLoaded ? `${user.user?.id}/workspaces` : null,
+    async () => {
+      return await db.query.posts.findMany({
+        where: eq(posts.userId, user.user?.id!),
+        with: { children: true },
+      });
+    }
+  );
 
   return (
     <SidebarGroup>
@@ -91,6 +87,14 @@ export function NavWorkspaces() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
+      <button
+        onClick={() => {
+          console.log(posts.userId);
+          console.log(data);
+        }}
+      >
+        Click me
+      </button>
     </SidebarGroup>
   );
 }
