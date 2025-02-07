@@ -36,6 +36,8 @@ export function NavWorkspaces() {
   });
 
   useEffect(() => {
+    console.log(posts.userId);
+    console.log(user.user?.id);
     console.log(data);
   }, [data]);
 

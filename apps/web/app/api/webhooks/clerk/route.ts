@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import db from "@workspace/db";
 import { users } from "@workspace/db/schema";
-import { v4 as uuidv4 } from "uuid";
 import { eq } from "drizzle-orm";
 import { createInitialPosts } from "@workspace/db/seed";
 
@@ -14,15 +13,13 @@ enum WebhookEventType {
 }
 
 async function handleUserCreated(data: any) {
-  const userId = uuidv4();
   await db.insert(users).values({
-    id: userId,
-    clerkId: data.id,
+    id: data.id,
     name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
     email: data.email_addresses[0].email_address,
     profilePic: data.image_url,
   });
-  await createInitialPosts(userId);
+  await createInitialPosts(data.id);
 }
 
 async function handleUserUpdated(data: any) {
