@@ -5,6 +5,7 @@ import db from "@workspace/db";
 import { users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import { createInitialPosts } from "@workspace/db/seed";
+import { v4 as uuid } from "uuid";
 
 enum WebhookEventType {
   UserCreated = "user.created",
@@ -13,13 +14,16 @@ enum WebhookEventType {
 }
 
 async function handleUserCreated(data: any) {
-  await db.insert(users).values({
-    id: data.id,
+  const userId = uuid();
+
+  const user = await db.insert(users).values({
+    id: userId,
+    clerkId: data.id,
     name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
     email: data.email_addresses[0].email_address,
     profilePic: data.image_url,
   });
-  await createInitialPosts(data.id);
+  await createInitialPosts(userId);
 }
 
 async function handleUserUpdated(data: any) {
