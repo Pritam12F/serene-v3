@@ -27,16 +27,26 @@ import { eq } from "drizzle-orm";
 
 export function NavWorkspaces() {
   const user = useUser();
-  const { data } = useSWR(
-    `${user.user?.id}/workspaces`,
-    async () => {
-      const userFetched = await db.query.users.findFirst({where: eq(users.clerkId, user.user?.id!)})
-      return await db.query.posts.findMany({
-        where: eq(posts.userId, userFetched?.id!),
-        with: { children: true },
-      });
-    }
-  );
+  const user_id = user.user?.id!;
+  const { data } = useSWR(`${user_id}/workspaces`, async () => {
+    console.log(user_id);
+    const userFetched = await db.query.users.findFirst({
+      where: eq(users.clerkId, user_id),
+    });
+    console.log(userFetched);
+
+    console.log("Hi there 1");
+    const postsFetched = await db.query.posts.findMany({
+      where: eq(posts.userId, userFetched?.id!),
+      with: { children: true },
+    });
+
+    console.log("Hi there 2");
+
+    console.log(postsFetched);
+
+    return postsFetched;
+  });
 
   return (
     <SidebarGroup>

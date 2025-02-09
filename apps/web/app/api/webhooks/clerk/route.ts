@@ -102,7 +102,7 @@ export async function POST(req: Request) {
       default:
         return new Response("Unhandled event type", { status: 400 });
     }
-  } catch(err) {
+  } catch (err) {
     return new Response(`Error: ${err}`, {
       status: 500,
     });
