@@ -22,7 +22,7 @@ import {
 import { useUser } from "@clerk/nextjs";
 import useSWR from "swr";
 import db from "@workspace/db";
-import { posts } from "@workspace/db/schema";
+import { posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 
 export function NavWorkspaces() {
@@ -30,8 +30,9 @@ export function NavWorkspaces() {
   const { data } = useSWR(
     `${user.user?.id}/workspaces`,
     async () => {
+      const userFetched = await db.query.users.findFirst({where: eq(users.clerkId, user.user?.id!)})
       return await db.query.posts.findMany({
-        where: eq(posts.userId, user.user?.id!),
+        where: eq(posts.userId, userFetched?.id!),
         with: { children: true },
       });
     }
