@@ -13,7 +13,7 @@ import {
 
 // Users Table
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey(),
+  id: varchar("id", {length: 256}).primaryKey(),
   name: text("name").notNull(),
   profilePic: text("profile_pic"),
   email: text("email").unique().notNull(),

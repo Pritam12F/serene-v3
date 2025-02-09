@@ -14,7 +14,7 @@ enum WebhookEventType {
 
 async function handleUserCreated(data: any) {
   await db.insert(users).values({
-    id: "test-user",
+    id: data.id,
     name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
     email: data.email_addresses[0].email_address,
     profilePic: data.image_url,
