@@ -36,13 +36,13 @@ export function NavWorkspaces() {
     console.log(userFetched);
 
     console.log("Hi there 1");
+    console.log("Hi there 2");
+
     const postsFetched = await db.query.posts.findMany({
       where: eq(posts.userId, userFetched?.id!),
       with: { children: true },
     });
-
-    console.log("Hi there 2");
-
+    console.log("Hi there 3");
     console.log(postsFetched);
 
     return postsFetched;
