@@ -28,7 +28,7 @@ import { eq } from "drizzle-orm";
 export function NavWorkspaces() {
   const user = useUser();
   const { data } = useSWR(
-    user.isLoaded ? `${user.user?.id}/workspaces` : null,
+    `${user.user?.id}/workspaces`,
     async () => {
       return await db.query.posts.findMany({
         where: eq(posts.userId, user.user?.id!),
