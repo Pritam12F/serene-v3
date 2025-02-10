@@ -5,20 +5,14 @@ import {
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
 import { SidebarMenuAction } from "@workspace/ui/components/sidebar";
-import { MoreHorizontal, Plus } from "lucide-react";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@workspace/ui/components/dialog";
+import { CircleX, Edit, MoreHorizontal, Plus } from "lucide-react";
 import { Separator } from "@workspace/ui/components/separator";
-import { Button } from "@workspace/ui/components/button";
+import { ResponsiveDialog } from "./responsive-dialog";
+import { useState } from "react";
 
 export const SidebarActions = ({ title }: { title: string }) => {
+  const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
+
   return (
     <>
       <SidebarMenuAction showOnHover className="mx-8">
@@ -32,29 +26,34 @@ export const SidebarActions = ({ title }: { title: string }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start">
           <DropdownMenuItem asChild className="cursor-pointer">
-            <span>Edit Project</span>
+            <span className="space-x-1">
+              <Edit />
+              Edit Project
+            </span>
           </DropdownMenuItem>
           <Separator />
-          <DropdownMenuItem asChild className="cursor-pointer bg-red-500">
-            <Dialog>
-              <DialogTrigger className="text-sm px-2 py-1">
-                <span>Delete Project</span>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Are you absolutely sure?</DialogTitle>
-                  <DialogDescription>
-                    {`You are about to delete ${title}`}
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button variant="destructive">Delete</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+          <DropdownMenuItem
+            asChild
+            className="cursor-pointer"
+            onClick={() => {
+              setIsDeleteOpen(true);
+            }}
+          >
+            <span className="space-x-1">
+              <CircleX className="text-red-400" />
+              Delete Project
+            </span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <ResponsiveDialog
+        title="Delete dialog"
+        description="Are you sure you want to delete this?"
+        isOpen={isDeleteOpen}
+        setIsOpen={setIsDeleteOpen}
+        action="Delete"
+        documentName={title}
+      />
     </>
   );
 };

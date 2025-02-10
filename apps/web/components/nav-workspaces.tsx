@@ -27,7 +27,7 @@ import { SidebarActions } from "./sidebar-actions";
 
 export function NavWorkspaces() {
   const user = useUser();
-  const user_id = user.user?.id!;
+  const user_id = user.user?.id ?? "";
   const { data } = useSWR(`${user_id}/workspaces`, async () => {
     const userFetched = await db.query.users.findFirst({
       where: eq(users.clerkId, user_id),
@@ -35,7 +35,7 @@ export function NavWorkspaces() {
 
     try {
       const postsFetched = await db.query.posts.findMany({
-        where: eq(posts.userId, "93e32865-ca76-410d-b4b2-5fed1c3d3c2e"),
+        where: eq(posts.userId, userFetched?.id ?? ""),
         with: { children: true, parent: true },
       });
 
