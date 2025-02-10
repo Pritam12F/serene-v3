@@ -141,6 +141,27 @@
       "when": 1739103563974,
       "tag": "0019_greedy_eternals",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1739117948016,
+      "tag": "0020_funny_maddog",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1739158603366,
+      "tag": "0021_icy_mephisto",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1739158820686,
+      "tag": "0022_orange_night_thrasher",
+      "breakpoints": true
     }
   ]
 }

@@ -29,23 +29,20 @@ export function NavWorkspaces() {
   const user = useUser();
   const user_id = user.user?.id!;
   const { data } = useSWR(`${user_id}/workspaces`, async () => {
-    console.log(user_id);
     const userFetched = await db.query.users.findFirst({
       where: eq(users.clerkId, user_id),
     });
-    console.log(userFetched);
 
-    console.log("Hi there 1");
-    console.log("Hi there 2");
+    try {
+      const postsFetched = await db.query.posts.findMany({
+        where: eq(posts.userId, userFetched?.id!),
+        with: { children: true, parent: true },
+      });
 
-    const postsFetched = await db.query.posts.findMany({
-      where: eq(posts.userId, userFetched?.id!),
-      with: { children: true },
-    });
-    console.log("Hi there 3");
-    console.log(postsFetched);
-
-    return postsFetched;
+      return postsFetched;
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   return (

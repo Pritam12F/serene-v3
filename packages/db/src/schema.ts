@@ -14,7 +14,7 @@ import {
 // Users Table
 export const users = pgTable("users", {
   id: uuid("id").primaryKey(),
-  clerkId: varchar("clerk_id", {length: 256}).notNull(),
+  clerkId: varchar("clerk_id", { length: 300 }).notNull(),
   name: text("name").notNull(),
   profilePic: text("profile_pic"),
   email: text("email").unique().notNull(),
@@ -64,12 +64,16 @@ export const imagesRelations = relations(images, ({ one }) => ({
 
 // Posts Relations
 export const postsRelations = relations(posts, ({ one, many }) => ({
-  // Post parent/child relationships
+  // Post parent relationship
   parent: one(posts, {
     fields: [posts.parentId],
     references: [posts.id],
+    relationName: "self_post_relation",
   }),
-  children: many(posts),
+  // Post children relationship
+  children: many(posts, {
+    relationName: "self_post_relation",
+  }),
   // Posts to users
   user: one(users, {
     fields: [posts.userId],
