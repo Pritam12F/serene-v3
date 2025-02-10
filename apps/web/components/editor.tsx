@@ -15,8 +15,7 @@ interface EditorProps {
 }
 
 const Editor = ({ onChange, editable }: EditorProps) => {
-  const appTheme = useTheme();
-  const currenTheme = appTheme.theme === "system" ? "system" : appTheme.theme;
+  const { resolvedTheme } = useTheme();
 
   const editor = useCreateBlockNote();
 
@@ -30,7 +29,7 @@ const Editor = ({ onChange, editable }: EditorProps) => {
         editor={editor}
         onChange={onChange}
         editable={editable}
-        theme={currenTheme === "dark" ? "dark" : "light"}
+        theme={resolvedTheme === "dark" ? "dark" : "light"}
       />
     </div>
   );

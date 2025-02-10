@@ -95,14 +95,6 @@ export function NavWorkspaces() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
-      <button
-        onClick={() => {
-          console.log(posts.userId);
-          console.log(data);
-        }}
-      >
-        Click me
-      </button>
     </SidebarGroup>
   );
 }
