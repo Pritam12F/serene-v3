@@ -16,7 +16,7 @@ enum WebhookEventType {
 async function handleUserCreated(data: any) {
   const userId = uuid();
 
-  const user = await db.insert(users).values({
+  await db.insert(users).values({
     id: userId,
     clerkId: data.id,
     name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
@@ -34,11 +34,11 @@ async function handleUserUpdated(data: any) {
       email: data.email_addresses[0].email_address,
       profilePic: data.image_url,
     })
-    .where(eq(users.id, data.id));
+    .where(eq(users.clerkId, data.id));
 }
 
 async function handleUserDeleted(data: any) {
-  return await db.delete(users).where(eq(users.id, data.id));
+  return await db.delete(users).where(eq(users.clerkId, data.id));
 }
 
 export async function POST(req: Request) {
