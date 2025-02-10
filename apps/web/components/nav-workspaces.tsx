@@ -1,7 +1,6 @@
 "use client";
 
-import { ChevronRight, MoreHorizontal, Plus } from "lucide-react";
-
+import { ChevronRight } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -24,6 +23,7 @@ import useSWR from "swr";
 import db from "@workspace/db";
 import { posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
+import { SidebarActions } from "./sidebar-actions";
 
 export function NavWorkspaces() {
   const user = useUser();
@@ -35,7 +35,7 @@ export function NavWorkspaces() {
 
     try {
       const postsFetched = await db.query.posts.findMany({
-        where: eq(posts.userId, userFetched?.id!),
+        where: eq(posts.userId, "93e32865-ca76-410d-b4b2-5fed1c3d3c2e"),
         with: { children: true, parent: true },
       });
 
@@ -67,9 +67,7 @@ export function NavWorkspaces() {
                     <ChevronRight />
                   </SidebarMenuAction>
                 </CollapsibleTrigger>
-                <SidebarMenuAction showOnHover>
-                  <Plus />
-                </SidebarMenuAction>
+                <SidebarActions title={workspace.name ?? ""} />
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     {workspace.children.map((page) => (
@@ -87,12 +85,6 @@ export function NavWorkspaces() {
               </SidebarMenuItem>
             </Collapsible>
           ))}
-          <SidebarMenuItem>
-            <SidebarMenuButton className="text-sidebar-foreground/70">
-              <MoreHorizontal />
-              <span>More</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
