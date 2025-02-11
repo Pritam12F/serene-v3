@@ -6,7 +6,7 @@ import {
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar";
 
-export function NavMain({
+export function SidebarMain({
   items,
 }: {
   items: {

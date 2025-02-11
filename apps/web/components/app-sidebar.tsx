@@ -12,18 +12,17 @@ import {
   Sparkles,
   Trash2,
 } from "lucide-react";
-
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarRail,
 } from "@workspace/ui/components/sidebar";
-import { NavMain } from "./nav-main";
-import { NavFavorites } from "./nav-favorites";
-import { NavWorkspaces } from "./nav-workspaces";
-import { NavSecondary } from "./nav-secondary";
-import { NavUser } from "./nav-user";
+import { SidebarMain } from "./sidebar-main";
+import { SidebarFavorites } from "./sidebar-favorites";
+import { SidebarWorkspaces } from "./sidebar-workspaces";
+import { SidebarSecondary } from "./sidebar-secondary";
+import { SidebarUser } from "./sidebar-user";
 import { currentUser } from "@clerk/nextjs/server";
 
 const data = {
@@ -212,7 +211,7 @@ export async function AppSidebar({
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
-        <NavUser
+        <SidebarUser
           user={{
             name: user?.fullName ?? "Anonymous",
             email:
@@ -221,12 +220,12 @@ export async function AppSidebar({
             avatar: user?.imageUrl ?? "",
           }}
         />
-        <NavMain items={data.navMain} />
+        <SidebarMain items={data.navMain} />
       </SidebarHeader>
       <SidebarContent>
-        <NavFavorites favorites={data.favorites} />
-        <NavWorkspaces />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <SidebarFavorites favorites={data.favorites} />
+        <SidebarWorkspaces />
+        <SidebarSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

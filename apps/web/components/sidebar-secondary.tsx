@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar";
 
-export function NavSecondary({
+export function SidebarSecondary({
   items,
   ...props
 }: {

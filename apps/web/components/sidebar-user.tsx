@@ -30,7 +30,7 @@ import {
   useSidebar,
 } from "@workspace/ui/components/sidebar";
 
-export function NavUser({
+export function SidebarUser({
   user,
 }: {
   user: {

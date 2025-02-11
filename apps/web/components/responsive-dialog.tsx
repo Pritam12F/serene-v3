@@ -10,9 +10,9 @@ import {
   DialogTitle,
 } from "@workspace/ui/components/dialog";
 import { eq } from "drizzle-orm";
-import { Dispatch, SetStateAction, useContext } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
-import { WorkspaceContext } from "./workspace-context";
+import useStore from "@workspace/store";
 
 export const ResponsiveDialog = ({
   isOpen,
@@ -29,14 +29,15 @@ export const ResponsiveDialog = ({
   description?: string;
   action: string;
 }) => {
-  const context = useContext(WorkspaceContext);
-
+  const { mutator } = useStore();
   const handleDelete = async () => {
     try {
       await db.delete(posts).where(eq(posts.id, documentId));
       setIsOpen(false);
-      context?.mutate();
-      toast("Article has been deleted");
+      mutator?.();
+      toast("Article has been deleted", {
+        action: { label: "Close", onClick: () => {} },
+      });
     } catch (err) {
       setIsOpen(false);
       toast("Failed to delete article");

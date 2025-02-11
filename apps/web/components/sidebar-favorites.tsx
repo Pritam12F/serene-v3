@@ -25,7 +25,7 @@ import {
   useSidebar,
 } from "@workspace/ui/components/sidebar";
 
-export function NavFavorites({
+export function SidebarFavorites({
   favorites,
 }: {
   favorites: {
