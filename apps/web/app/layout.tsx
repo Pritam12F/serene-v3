@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/navbar";
 import { SignedOut } from "@clerk/nextjs";
 import Footer from "@/components/footer";
+import { Toaster } from "@workspace/ui/components/sonner";
 
 const fontInter = Inter({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function RootLayout({
           <SignedOut>
             <Footer />
           </SignedOut>
+          <Toaster />
         </Providers>
       </body>
     </html>

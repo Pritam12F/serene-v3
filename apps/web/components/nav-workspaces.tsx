@@ -24,11 +24,12 @@ import db from "@workspace/db";
 import { posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import { SidebarActions } from "./sidebar-actions";
+import { WorkspaceProvider } from "./workspace-context";
 
 export function NavWorkspaces() {
   const user = useUser();
   const user_id = user.user?.id ?? "";
-  const { data } = useSWR(`${user_id}/workspaces`, async () => {
+  const { data, mutate } = useSWR(`${user_id}/workspaces`, async () => {
     const userFetched = await db.query.users.findFirst({
       where: eq(users.clerkId, user_id),
     });
@@ -46,47 +47,49 @@ export function NavWorkspaces() {
   });
 
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Workspaces</SidebarGroupLabel>
-      <SidebarGroupContent>
-        <SidebarMenu>
-          {data?.map((workspace) => (
-            <Collapsible key={workspace.name}>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="#">
-                    <span>{workspace.emoji}</span>
-                    <span>{workspace.name}</span>
-                  </a>
-                </SidebarMenuButton>
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuAction
-                    className="left-2 bg-sidebar-accent text-sidebar-accent-foreground data-[state=open]:rotate-90"
-                    showOnHover
-                  >
-                    <ChevronRight />
-                  </SidebarMenuAction>
-                </CollapsibleTrigger>
-                <SidebarActions title={workspace.name ?? ""} />
-                <CollapsibleContent>
-                  <SidebarMenuSub>
-                    {workspace.children.map((page) => (
-                      <SidebarMenuSubItem key={page.name}>
-                        <SidebarMenuSubButton asChild>
-                          <a href="#">
-                            <span>{page.emoji}</span>
-                            <span>{page.name}</span>
-                          </a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                </CollapsibleContent>
-              </SidebarMenuItem>
-            </Collapsible>
-          ))}
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
+    <WorkspaceProvider mutate={mutate}>
+      <SidebarGroup>
+        <SidebarGroupLabel>Workspaces</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            {data?.map((workspace) => (
+              <Collapsible key={workspace.name}>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <a href="#">
+                      <span>{workspace.emoji}</span>
+                      <span>{workspace.name}</span>
+                    </a>
+                  </SidebarMenuButton>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuAction
+                      className="left-2 bg-sidebar-accent text-sidebar-accent-foreground data-[state=open]:rotate-90"
+                      showOnHover
+                    >
+                      <ChevronRight />
+                    </SidebarMenuAction>
+                  </CollapsibleTrigger>
+                  <SidebarActions documentId={workspace.id} />
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {workspace.children.map((page) => (
+                        <SidebarMenuSubItem key={page.name}>
+                          <SidebarMenuSubButton asChild>
+                            <a href="#">
+                              <span>{page.emoji}</span>
+                              <span>{page.name}</span>
+                            </a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
+            ))}
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </WorkspaceProvider>
   );
 }

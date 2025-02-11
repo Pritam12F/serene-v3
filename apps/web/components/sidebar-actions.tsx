@@ -10,7 +10,7 @@ import { Separator } from "@workspace/ui/components/separator";
 import { ResponsiveDialog } from "./responsive-dialog";
 import { useState } from "react";
 
-export const SidebarActions = ({ title }: { title: string }) => {
+export const SidebarActions = ({ documentId }: { documentId: number }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 
   return (
@@ -52,7 +52,7 @@ export const SidebarActions = ({ title }: { title: string }) => {
         isOpen={isDeleteOpen}
         setIsOpen={setIsDeleteOpen}
         action="Delete"
-        documentName={title}
+        documentId={documentId}
       />
     </>
   );

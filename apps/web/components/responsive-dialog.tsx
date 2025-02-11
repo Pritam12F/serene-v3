@@ -1,3 +1,5 @@
+import db from "@workspace/db";
+import { posts } from "@workspace/db/schema";
 import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
@@ -7,23 +9,40 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@workspace/ui/components/dialog";
-import { Dispatch, SetStateAction } from "react";
+import { eq } from "drizzle-orm";
+import { Dispatch, SetStateAction, useContext } from "react";
+import { toast } from "sonner";
+import { WorkspaceContext } from "./workspace-context";
 
 export const ResponsiveDialog = ({
   isOpen,
   setIsOpen,
-  documentName,
+  documentId,
   title,
   description,
   action,
 }: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  documentName?: string;
+  documentId: number;
   title: string;
   description?: string;
   action: string;
 }) => {
+  const context = useContext(WorkspaceContext);
+
+  const handleDelete = async () => {
+    try {
+      await db.delete(posts).where(eq(posts.id, documentId));
+      setIsOpen(false);
+      context?.mutate();
+      toast("Article has been deleted");
+    } catch (err) {
+      setIsOpen(false);
+      toast("Failed to delete article");
+      console.error(err);
+    }
+  };
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
@@ -32,7 +51,9 @@ export const ResponsiveDialog = ({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="destructive">{action}</Button>
+          <Button variant="destructive" onClick={handleDelete}>
+            {action}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
