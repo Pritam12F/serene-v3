@@ -36,7 +36,7 @@ export default function RootLayout({
           <SignedOut>
             <Footer />
           </SignedOut>
-          <Toaster />
+          <Toaster closeButton />
         </Providers>
       </body>
     </html>

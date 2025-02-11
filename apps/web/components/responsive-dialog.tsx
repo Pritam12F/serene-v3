@@ -35,9 +35,7 @@ export const ResponsiveDialog = ({
       await db.delete(posts).where(eq(posts.id, documentId));
       setIsOpen(false);
       mutator?.();
-      toast("Article has been deleted", {
-        action: { label: "Close", onClick: () => {} },
-      });
+      toast("Article has been deleted");
     } catch (err) {
       setIsOpen(false);
       toast("Failed to delete article");
