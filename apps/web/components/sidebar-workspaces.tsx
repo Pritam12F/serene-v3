@@ -1,31 +1,19 @@
 "use client";
 
-import { ChevronRight } from "lucide-react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@workspace/ui/components/collapsible";
-import {
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-} from "@workspace/ui/components/sidebar";
 import { useUser } from "@clerk/nextjs";
 import useSWR from "swr";
 import db from "@workspace/db";
 import { posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
-import { SidebarActions } from "./sidebar-actions";
 import useStore from "@workspace/store";
 import { useEffect } from "react";
+import { Workspace } from "./workspace";
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+} from "@workspace/ui/components/sidebar";
 
 export function SidebarWorkspaces() {
   const { mutator, changeMutator } = useStore();
@@ -62,40 +50,8 @@ export function SidebarWorkspaces() {
       <SidebarGroupLabel>Workspaces</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
-          {data?.map((workspace) => (
-            <Collapsible key={workspace.name}>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="#">
-                    <span>{workspace.emoji}</span>
-                    <span>{workspace.name}</span>
-                  </a>
-                </SidebarMenuButton>
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuAction
-                    className="left-2 bg-sidebar-accent text-sidebar-accent-foreground data-[state=open]:rotate-90"
-                    showOnHover
-                  >
-                    <ChevronRight />
-                  </SidebarMenuAction>
-                </CollapsibleTrigger>
-                <SidebarActions documentId={workspace.id} />
-                <CollapsibleContent>
-                  <SidebarMenuSub>
-                    {workspace.children.map((page) => (
-                      <SidebarMenuSubItem key={page.name}>
-                        <SidebarMenuSubButton asChild>
-                          <a href="#">
-                            <span>{page.emoji}</span>
-                            <span>{page.name}</span>
-                          </a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                </CollapsibleContent>
-              </SidebarMenuItem>
-            </Collapsible>
+          {data?.map((workspace, idx) => (
+            <Workspace data={workspace} key={idx} />
           ))}
         </SidebarMenu>
       </SidebarGroupContent>

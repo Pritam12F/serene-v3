@@ -9,8 +9,9 @@ import { CircleX, Edit, MoreHorizontal, Plus } from "lucide-react";
 import { Separator } from "@workspace/ui/components/separator";
 import { ResponsiveDialog } from "./responsive-dialog";
 import { useState } from "react";
+import { Button } from "@workspace/ui/components/button";
 
-export const SidebarActions = ({ documentId }: { documentId: number }) => {
+export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 
   return (
@@ -24,12 +25,15 @@ export const SidebarActions = ({ documentId }: { documentId: number }) => {
             <MoreHorizontal />
           </SidebarMenuAction>
         </DropdownMenuTrigger>
-        <DropdownMenuContent side="right" align="start">
+        <DropdownMenuContent side="bottom" align="end">
           <DropdownMenuItem asChild className="cursor-pointer">
-            <span className="space-x-1">
-              <Edit />
-              Edit Project
-            </span>
+            <Button
+              variant="ghost"
+              className="w-full focus-visible:ring-0 px-2 justify-normal"
+            >
+              <Edit className="h-4 w-4" />
+              Rename
+            </Button>
           </DropdownMenuItem>
           <Separator />
           <DropdownMenuItem
@@ -39,10 +43,13 @@ export const SidebarActions = ({ documentId }: { documentId: number }) => {
               setIsDeleteOpen(true);
             }}
           >
-            <span className="space-x-1">
-              <CircleX className="text-red-400" />
+            <Button
+              variant="ghost"
+              className="w-full focus-visible:ring-0 justify-normal"
+            >
+              <CircleX className="text-red-400 h-5 w-5" />
               Delete Project
-            </span>
+            </Button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
