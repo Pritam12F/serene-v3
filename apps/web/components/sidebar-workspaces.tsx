@@ -24,10 +24,11 @@ export function SidebarWorkspaces() {
     const userFetched = await db.query.users.findFirst({
       where: eq(users.clerkId, user_id),
     });
+    console.log(userFetched);
 
     try {
       const postsFetched = await db.query.posts.findMany({
-        where: eq(posts.userId, userFetched?.id ?? ""),
+        where: eq(posts.userId, userFetched!.id!),
         with: { children: true, parent: true },
       });
 

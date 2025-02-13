@@ -1,4 +1,3 @@
-import { type SelectPostType } from "@workspace/common";
 import {
   Collapsible,
   CollapsibleContent,
@@ -8,16 +7,39 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@workspace/ui/components/sidebar";
 import { ChevronRight } from "lucide-react";
 import { WorkspaceActions } from "./workspace-actions";
 
 interface WorkspaceProps {
   isActive?: boolean;
-  data: SelectPostType;
+  data: {
+    id: number;
+    name: string | null;
+    content: unknown;
+    emoji: string | null;
+    userId: string;
+    parentId: number | null;
+    createdAt: Date | null;
+    parent: {
+      id: number;
+      name: string | null;
+      content: unknown;
+      emoji: string | null;
+      userId: string;
+      parentId: number | null;
+      createdAt: Date | null;
+    } | null;
+    children: {
+      id: number;
+      name: string | null;
+      content: unknown;
+      emoji: string | null;
+      userId: string;
+      parentId: number | null;
+      createdAt: Date | null;
+    }[];
+  };
 }
 
 export const Workspace = ({ isActive = false, data }: WorkspaceProps) => {
@@ -38,34 +60,28 @@ export const Workspace = ({ isActive = false, data }: WorkspaceProps) => {
             <ChevronRight />
           </SidebarMenuAction>
         </CollapsibleTrigger>
-        <WorkspaceActions documentId={data.id} />
+        <WorkspaceActions documentId={data?.id} />
         <CollapsibleContent>
-          {data?.children && <SubWorkspace />}
+          {data?.children && <Workspace data={data} />}
         </CollapsibleContent>
       </SidebarMenuItem>
     </Collapsible>
   );
 };
 
-export const SubWorkspace = ({
-  isActive = false,
-  data: any,
-}: {
-  isActive: boolean;
-  data: any;
-}) => {
-  return (
-    <SidebarMenuSub>
-      {workspace.pages.map((page) => (
-        <SidebarMenuSubItem key={page.name}>
-          <SidebarMenuSubButton asChild>
-            <a href="#">
-              <span>{page.emoji}</span>
-              <span>{page.name}</span>
-            </a>
-          </SidebarMenuSubButton>
-        </SidebarMenuSubItem>
-      ))}
-    </SidebarMenuSub>
-  );
-};
+// export const SubWorkspace = ({ isActive = false, data }: WorkspaceProps) => {
+//   return (
+//     <SidebarMenuSub>
+//       {data?.map((page) => (
+//         <SidebarMenuSubItem key={page.name}>
+//           <SidebarMenuSubButton asChild>
+//             <a href="#">
+//               <span>{page.emoji}</span>
+//               <span>{page.name}</span>
+//             </a>
+//           </SidebarMenuSubButton>
+//         </SidebarMenuSubItem>
+//       ))}
+//     </SidebarMenuSub>
+//   );
+// };
