@@ -8,6 +8,9 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@workspace/ui/components/sidebar";
 import { ChevronRight } from "lucide-react";
 import { WorkspaceActions } from "./workspace-actions";
@@ -36,8 +39,33 @@ export const Workspace = ({ isActive = false, data }: WorkspaceProps) => {
           </SidebarMenuAction>
         </CollapsibleTrigger>
         <WorkspaceActions documentId={data.id} />
-        <CollapsibleContent></CollapsibleContent>
+        <CollapsibleContent>
+          {data?.children && <SubWorkspace />}
+        </CollapsibleContent>
       </SidebarMenuItem>
     </Collapsible>
+  );
+};
+
+export const SubWorkspace = ({
+  isActive = false,
+  data: any,
+}: {
+  isActive: boolean;
+  data: any;
+}) => {
+  return (
+    <SidebarMenuSub>
+      {workspace.pages.map((page) => (
+        <SidebarMenuSubItem key={page.name}>
+          <SidebarMenuSubButton asChild>
+            <a href="#">
+              <span>{page.emoji}</span>
+              <span>{page.name}</span>
+            </a>
+          </SidebarMenuSubButton>
+        </SidebarMenuSubItem>
+      ))}
+    </SidebarMenuSub>
   );
 };
