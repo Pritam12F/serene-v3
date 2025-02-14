@@ -11,21 +11,27 @@ import {
 import { ChevronRight } from "lucide-react";
 import { WorkspaceActions } from "./workspace-actions";
 import { type SelectPostType } from "@workspace/common";
+import Link from "next/link";
 
 interface WorkspaceProps {
   isActive?: boolean;
   data: SelectPostType;
+  level?: number;
 }
 
-export const Workspace = ({ isActive = false, data }: WorkspaceProps) => {
+export const Workspace = ({
+  isActive = false,
+  data,
+  level = 0,
+}: WorkspaceProps) => {
   return (
     <Collapsible>
-      <SidebarMenuItem>
+      <SidebarMenuItem style={{ marginLeft: `${level * 5}px` }}>
         <SidebarMenuButton asChild>
-          <a href="#">
-            <span>{data?.emoji}</span>
+          <Link className="ml-7" href="#">
+            {data?.emoji && <span>{data?.emoji}</span>}
             <span>{data?.name}</span>
-          </a>
+          </Link>
         </SidebarMenuButton>
         <CollapsibleTrigger asChild>
           <SidebarMenuAction
@@ -39,7 +45,7 @@ export const Workspace = ({ isActive = false, data }: WorkspaceProps) => {
         <CollapsibleContent>
           {data?.children &&
             data.children.map((post) => (
-              <Workspace data={post} key={post?.id} />
+              <Workspace data={post} key={post?.id} level={level + 1} />
             ))}
         </CollapsibleContent>
       </SidebarMenuItem>

@@ -17,7 +17,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip";
-// @ts-expect-error something wrong with the import
 import { useIsMobile } from "@workspace/ui/hooks/use-mobile";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";

@@ -65,6 +65,9 @@ importers:
       '@workspace/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      array-to-tree:
+        specifier: ^3.3.2
+        version: 3.3.2
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
@@ -3010,6 +3013,10 @@ packages:
     resolution: {integrity: sha512-itaWrbYbqpGXkGhZPGUulwnhVf5Hpy1xiCFsGqyIGglbBxmG5vSjxQen3/WGOjPpNEv1RtBLKxbmVXm8HpJStQ==}
     engines: {node: '>= 0.4'}
 
+  array-to-tree@3.3.2:
+    resolution: {integrity: sha512-EmWeZgl7Kkb9eeaBi9GZq4X4wyxpW2UC8YsmSShx1cX19n7H1R59CszyC5+nERYgpCQi9EBSDgCZ9fWUyXCHyQ==}
+    engines: {node: '>=4'}
+
   array-union@2.1.0:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
     engines: {node: '>=8'}
@@ -4271,6 +4278,9 @@ packages:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
     deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
 
+  lodash.keyby@4.6.0:
+    resolution: {integrity: sha512-PRe4Cn20oJM2Sn6ljcZMeKgyhTHpzvzFmdsp9rK+6K0eJs6Tws0MqgGFpfX/o2HjcoQcBny1Eik9W7BnVTzjIQ==}
+
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
@@ -4544,6 +4554,9 @@ packages:
 
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
+
+  nested-property@0.0.7:
+    resolution: {integrity: sha512-XamePAu09Y95kcimkF+CXDf69Iov+qaM+GyXCw5Ysoa8Q5r7RgehRn99bkxyYHpXs3ZcZdm7QyjRV52nYpNw5Q==}
 
   netmask@2.0.2:
     resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
@@ -10159,6 +10172,11 @@ snapshots:
       get-intrinsic: 1.2.6
       is-string: 1.1.0
 
+  array-to-tree@3.3.2:
+    dependencies:
+      lodash.keyby: 4.6.0
+      nested-property: 0.0.7
+
   array-union@2.1.0: {}
 
   array.prototype.findlast@1.2.5:
@@ -11653,6 +11671,8 @@ snapshots:
 
   lodash.get@4.4.2: {}
 
+  lodash.keyby@4.6.0: {}
+
   lodash.merge@4.6.2: {}
 
   lodash@4.17.21: {}
@@ -12086,6 +12106,8 @@ snapshots:
   natural-compare@1.4.0: {}
 
   neo-async@2.6.2: {}
+
+  nested-property@0.0.7: {}
 
   netmask@2.0.2: {}
 
