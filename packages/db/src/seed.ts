@@ -1,5 +1,5 @@
-import db from ".";
-import { posts } from "./schema";
+import db from "@workspace/db";
+import { posts } from "@workspace/db/schema";
 
 enum ContentType {
   Paragraph = "paragraph",

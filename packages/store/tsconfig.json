@@ -1,7 +1,11 @@
 {
   "extends": "@workspace/typescript-config/base.json",
   "compilerOptions": {
-    "module": "ES6",
-    "moduleResolution": "node"
-  }
+    "baseUrl": ".",
+    "paths": {
+      "@workspace/store/*": ["./src/*"]
+    }
+  },
+  "include": ["."],
+  "exclude": ["node_modules", "dist"]
 }

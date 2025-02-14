@@ -6,7 +6,7 @@ import db from "@workspace/db";
 import { posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import useStore from "@workspace/store";
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Workspace } from "./workspace";
 import {
   SidebarGroup,
@@ -14,6 +14,7 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
 } from "@workspace/ui/components/sidebar";
+import { type SelectPostType } from "@workspace/common";
 
 export function SidebarWorkspaces() {
   const { mutator, changeMutator } = useStore();
@@ -28,7 +29,7 @@ export function SidebarWorkspaces() {
 
     try {
       const postsFetched = await db.query.posts.findMany({
-        where: eq(posts.userId, userFetched!.id!),
+        where: eq(posts.userId, "6c742cc4-6266-4761-adcb-15e21e2e4e6f"),
         with: { children: true, parent: true },
       });
 
@@ -37,6 +38,10 @@ export function SidebarWorkspaces() {
       console.error(err);
     }
   });
+  const arrangePosts = useCallback((data) => {}, [data]);
+  const declutered = useMemo(() => {
+    return 1;
+  }, [data]);
 
   useEffect(() => {
     if (mutator) {
