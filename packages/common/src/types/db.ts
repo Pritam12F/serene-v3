@@ -15,7 +15,7 @@ export type SelectManyUserType = (typeof users.$inferSelect & {
 export type InsertUserType = typeof users.$inferInsert;
 export type InsertManyUserType = (typeof users.$inferInsert)[];
 
-// 2. User Types
+// 2. Post Types
 export type SelectPostType =
   | (typeof posts.$inferSelect & {
       parent?: SelectPostType | null;

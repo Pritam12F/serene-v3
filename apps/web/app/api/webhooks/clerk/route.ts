@@ -1,6 +1,10 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
-import { WebhookEvent } from "@clerk/nextjs/server";
+import {
+  DeletedObjectJSON,
+  UserJSON,
+  WebhookEvent,
+} from "@clerk/nextjs/server";
 import db from "@workspace/db";
 import { users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
@@ -13,32 +17,32 @@ enum WebhookEventType {
   UserDeleted = "user.deleted",
 }
 
-async function handleUserCreated(data: any) {
+async function handleUserCreated(data: UserJSON) {
   const userId = uuid();
 
   await db.insert(users).values({
     id: userId,
     clerkId: data.id,
     name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
-    email: data.email_addresses[0].email_address,
+    email: data.email_addresses[0]!.email_address,
     profilePic: data.image_url,
   });
   await createInitialPosts(userId);
 }
 
-async function handleUserUpdated(data: any) {
+async function handleUserUpdated(data: UserJSON) {
   return await db
     .update(users)
     .set({
       name: `${data.first_name}${data.last_name ? " " + data.last_name : ""}`,
-      email: data.email_addresses[0].email_address,
+      email: data.email_addresses[0]!.email_address,
       profilePic: data.image_url,
     })
     .where(eq(users.clerkId, data.id));
 }
 
-async function handleUserDeleted(data: any) {
-  return await db.delete(users).where(eq(users.clerkId, data.id));
+async function handleUserDeleted(data: DeletedObjectJSON) {
+  return await db.delete(users).where(eq(users.clerkId, data.id!));
 }
 
 export async function POST(req: Request) {

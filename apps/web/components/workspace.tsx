@@ -10,7 +10,7 @@ import {
 } from "@workspace/ui/components/sidebar";
 import { ChevronRight } from "lucide-react";
 import { WorkspaceActions } from "./workspace-actions";
-import { type SelectPostType } from "@workspace/common";
+import { type SelectPostType } from "@workspace/common/types/db";
 import Link from "next/link";
 
 interface WorkspaceProps {

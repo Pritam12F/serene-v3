@@ -5,7 +5,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { neobrutalism } from "@clerk/themes";
 
@@ -16,7 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         baseTheme: neobrutalism,
       }}
     >
-      <NextUIProvider>
+      <HeroUIProvider>
         <NextThemesProvider
           attribute="class"
           defaultTheme="system"
@@ -35,7 +35,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           />
           {children}
         </NextThemesProvider>
-      </NextUIProvider>
+      </HeroUIProvider>
     </ClerkProvider>
   );
 }

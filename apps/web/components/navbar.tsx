@@ -10,7 +10,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Link,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Button } from "@workspace/ui/components/button";
 import ThemeSwitcherButton from "./theme-switcher";
 

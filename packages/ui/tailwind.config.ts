@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import { withUt } from "uploadthing/tw";
-import { nextui } from "@nextui-org/react";
+import { heroui } from "@heroui/react";
 
 export default withUt({
   darkMode: ["class"],
@@ -11,7 +11,7 @@ export default withUt({
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "../../packages/ui/src/**/*.{ts,tsx}",
-    "../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   prefix: "",
   theme: {
@@ -213,5 +213,5 @@ export default withUt({
       },
     },
   },
-  plugins: [tailwindcssAnimate, nextui()],
+  plugins: [tailwindcssAnimate, heroui()],
 }) satisfies Config;
