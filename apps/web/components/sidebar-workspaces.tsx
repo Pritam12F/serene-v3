@@ -6,7 +6,7 @@ import db from "@workspace/db";
 import { posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import useStore from "@workspace/store";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Workspace } from "./workspace";
 import {
   SidebarGroup,
@@ -17,7 +17,7 @@ import {
 import arrayToTree from "array-to-tree";
 
 export function SidebarWorkspaces() {
-  const { mutator, changeMutator } = useStore();
+  const { mutator, changeMutator, activeRenameId, workspaceRefs } = useStore();
 
   const user = useUser();
   const user_id = user.user?.id ?? "";
@@ -25,7 +25,6 @@ export function SidebarWorkspaces() {
     const userFetched = await db.query.users.findFirst({
       where: eq(users.clerkId, user_id),
     });
-    console.log(userFetched);
 
     try {
       const postsFetched = await db.query.posts.findMany({

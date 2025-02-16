@@ -10,9 +10,11 @@ import { Separator } from "@workspace/ui/components/separator";
 import { ResponsiveDialog } from "./responsive-dialog";
 import { useState } from "react";
 import { Button } from "@workspace/ui/components/button";
+import useStore from "@workspace/store";
 
 export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
+  const { changeActiveRenameId } = useStore();
 
   return (
     <>
@@ -30,6 +32,9 @@ export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
             <Button
               variant="ghost"
               className="w-full focus-visible:ring-0 px-2 justify-normal"
+              onClick={() => {
+                changeActiveRenameId(documentId);
+              }}
             >
               <Edit className="h-4 w-4" />
               Rename
