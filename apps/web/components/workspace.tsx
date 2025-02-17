@@ -14,7 +14,8 @@ import { WorkspaceActions } from "./workspace-actions";
 import { type SelectPostType } from "@workspace/common/types/db";
 import Link from "next/link";
 import useStore from "@workspace/store";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { Input } from "@workspace/ui/components/input";
 
 interface WorkspaceProps {
   isActive?: boolean;
@@ -27,26 +28,22 @@ export const Workspace = ({
   data,
   level = 0,
 }: WorkspaceProps) => {
-  const { activeRenameId, registerWorkspaceRefs } = useStore();
+  const { activeRenameId } = useStore();
   const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    registerWorkspaceRefs(ref.current);
-  }, []);
 
   return (
     <Collapsible id={data?.id as unknown as string} ref={ref}>
       {data?.id !== activeRenameId && data?.id !== undefined ? (
         <SidebarMenuItem style={{ marginLeft: `${level * 5}px` }}>
-          <SidebarMenuButton asChild>
-            <Link className="ml-7" href="#">
-              {data?.emoji && <span>{data?.emoji}</span>}
+          <SidebarMenuButton className="hover:bg-transparent" asChild>
+            <Link className="ml-7" href={"#"}>
+              {data.emoji ? <span>{data.emoji}</span> : <span>📝</span>}
               <span>{data?.name}</span>
             </Link>
           </SidebarMenuButton>
           <CollapsibleTrigger asChild>
             <SidebarMenuAction
-              className="left-2 bg-sidebar-accent text-sidebar-accent-foreground data-[state=open]:rotate-90"
+              className="left-2 bg-transparent text-sidebar-accent-foreground data-[state=open]:rotate-90 hover:bg-transparent"
               showOnHover
             >
               <ChevronRight />
@@ -61,7 +58,10 @@ export const Workspace = ({
           </CollapsibleContent>
         </SidebarMenuItem>
       ) : (
-        <SidebarInput />
+        <Input
+          className="scale-85 h-10 border-none border-gray-500 focus:border-none focus:outline-none focus:ring-0 shadow-[0_0_15px_10px] shadow-blue-500/50"
+          placeholder="Rename..."
+        />
       )}
     </Collapsible>
   );

@@ -6,7 +6,7 @@ import db from "@workspace/db";
 import { posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import useStore from "@workspace/store";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Workspace } from "./workspace";
 import {
   SidebarGroup,
@@ -15,9 +15,12 @@ import {
   SidebarMenu,
 } from "@workspace/ui/components/sidebar";
 import arrayToTree from "array-to-tree";
+import useClickOutside from "@/hooks/use-on-click-outside";
 
 export function SidebarWorkspaces() {
-  const { mutator, changeMutator, activeRenameId, workspaceRefs } = useStore();
+  const { mutator, changeMutator, activeRenameId, changeActiveRenameId } =
+    useStore();
+  const workspaceRef = useRef(null);
 
   const user = useUser();
   const user_id = user.user?.id ?? "";
@@ -28,12 +31,18 @@ export function SidebarWorkspaces() {
 
     try {
       const postsFetched = await db.query.posts.findMany({
-        where: eq(posts.userId, userFetched!.id),
+        where: eq(posts.userId, "90e3a6b5-a369-489c-9b5e-0ac25871d180"),
       });
 
       return arrayToTree(postsFetched, { parentProperty: "parentId" });
     } catch (err) {
       console.error(err);
+    }
+  });
+
+  useClickOutside(workspaceRef, () => {
+    if (activeRenameId) {
+      changeActiveRenameId(null);
     }
   });
 
@@ -49,7 +58,7 @@ export function SidebarWorkspaces() {
     <SidebarGroup>
       <SidebarGroupLabel>Workspaces</SidebarGroupLabel>
       <SidebarGroupContent>
-        <SidebarMenu>
+        <SidebarMenu ref={workspaceRef}>
           {data?.map((workspace, idx) => (
             <Workspace data={workspace} key={idx} />
           ))}
