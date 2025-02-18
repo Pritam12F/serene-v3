@@ -6,9 +6,5 @@ export default async function Documents({
   params: Promise<{ slug: string[] | undefined }>;
 }) {
   const { slug } = await params;
-  return (
-    <div className="h-screen w-full">
-      <SidebarExtension />
-    </div>
-  );
+  return <SidebarExtension />;
 }

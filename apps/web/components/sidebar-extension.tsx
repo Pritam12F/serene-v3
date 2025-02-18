@@ -22,7 +22,7 @@ export const SidebarExtension = ({
   const Editor = dynamic(() => import("./editor"), { ssr: false });
 
   return (
-    <SidebarInset className="bg-white overflow-y-hidden dark:bg-[#1f1f1f]">
+    <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-[#1f1f1f]">
       <header className="flex h-14 shrink-0 items-center gap-2">
         <div className="flex flex-1 items-center gap-2 px-3">
           <SidebarTrigger />
