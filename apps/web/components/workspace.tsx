@@ -33,36 +33,60 @@ export const Workspace = ({
 
   return (
     <Collapsible id={data?.id as unknown as string} ref={ref}>
-      {data?.id !== activeRenameId && data?.id !== undefined ? (
-        <SidebarMenuItem style={{ marginLeft: `${level * 5}px` }}>
-          <SidebarMenuButton className="hover:bg-transparent" asChild>
-            <Link className="ml-7" href={"#"}>
-              {data.emoji ? <span>{data.emoji}</span> : <span>📝</span>}
-              <span>{data?.name}</span>
-            </Link>
-          </SidebarMenuButton>
-          <CollapsibleTrigger asChild>
-            <SidebarMenuAction
-              className="left-2 bg-transparent text-sidebar-accent-foreground data-[state=open]:rotate-90 hover:bg-transparent"
-              showOnHover
-            >
-              <ChevronRight />
-            </SidebarMenuAction>
-          </CollapsibleTrigger>
-          <WorkspaceActions documentId={data!.id} />
-          <CollapsibleContent>
-            {data?.children &&
-              data.children.map((post) => (
-                <Workspace data={post} key={post?.id} level={level + 1} />
-              ))}
-          </CollapsibleContent>
-        </SidebarMenuItem>
-      ) : (
-        <Input
-          className="scale-85 h-10 border-none border-gray-500 focus:border-none focus:outline-none focus:ring-0 shadow-[0_0_15px_10px] shadow-blue-500/50"
-          placeholder="Rename..."
-        />
-      )}
+      {/* Container for smooth transition */}
+      <div
+        className="relative h-8 transition-all"
+        style={{ marginLeft: `${level * 5}px` }}
+      >
+        {/* Menu Item - always rendered but conditionally shown */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-300 ${
+            data?.id === activeRenameId
+              ? "opacity-0 pointer-events-none"
+              : "opacity-100"
+          }`}
+        >
+          <SidebarMenuItem>
+            <SidebarMenuButton className="hover:bg-transparent" asChild>
+              <Link className="ml-7" href={"#"}>
+                {data?.emoji ? <span>{data.emoji}</span> : <span>📝</span>}
+                <span>{data?.name}</span>
+              </Link>
+            </SidebarMenuButton>
+            <CollapsibleTrigger asChild>
+              <SidebarMenuAction
+                className="left-2 bg-transparent text-sidebar-accent-foreground data-[state=open]:rotate-90 hover:bg-transparent"
+                showOnHover
+              >
+                <ChevronRight />
+              </SidebarMenuAction>
+            </CollapsibleTrigger>
+            <WorkspaceActions documentId={data!.id} />
+          </SidebarMenuItem>
+        </div>
+
+        {/* Input Field - always rendered but conditionally shown */}
+        <div
+          className={`flex justify-center absolute inset-0 transition-opacity duration-300 ${
+            data?.id === activeRenameId
+              ? "opacity-100"
+              : "opacity-0 pointer-events-none"
+          }`}
+        >
+          <Input
+            className="h-8 w-11/12 border-none bg-background shadow-[0_0_15px_10px] shadow-blue-500/50 focus-visible:ring-0"
+            placeholder="Rename..."
+          />
+        </div>
+      </div>
+
+      {/* Children content remains separate */}
+      <CollapsibleContent>
+        {data?.children &&
+          data.children.map((post) => (
+            <Workspace data={post} key={post?.id} level={level + 1} />
+          ))}
+      </CollapsibleContent>
     </Collapsible>
   );
 };

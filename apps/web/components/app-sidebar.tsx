@@ -222,7 +222,7 @@ export async function AppSidebar({
         />
         <SidebarMain items={data.navMain} />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="overflow-x-hidden">
         <SidebarFavorites favorites={data.favorites} />
         <SidebarWorkspaces />
         <SidebarSecondary items={data.navSecondary} className="mt-auto" />
