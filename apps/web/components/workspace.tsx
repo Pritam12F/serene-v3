@@ -4,7 +4,6 @@ import {
   CollapsibleTrigger,
 } from "@workspace/ui/components/collapsible";
 import {
-  SidebarInput,
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -18,16 +17,11 @@ import { useRef } from "react";
 import { Input } from "@workspace/ui/components/input";
 
 interface WorkspaceProps {
-  isActive?: boolean;
   data: SelectPostType;
   level?: number;
 }
 
-export const Workspace = ({
-  isActive = false,
-  data,
-  level = 0,
-}: WorkspaceProps) => {
+export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
   const { activeRenameId } = useStore();
   const ref = useRef<HTMLDivElement>(null);
 
