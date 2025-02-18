@@ -31,7 +31,7 @@ export function SidebarWorkspaces() {
 
     try {
       const postsFetched = await db.query.posts.findMany({
-        where: eq(posts.userId, "3b8bf1d0-3cd8-4719-8d02-33ac2bc96f9f"),
+        where: eq(posts.userId, userFetched!.id),
       });
 
       return arrayToTree(postsFetched, { parentProperty: "parentId" });
