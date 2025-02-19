@@ -13,7 +13,7 @@ import { WorkspaceActions } from "./workspace-actions";
 import { type SelectPostType } from "@workspace/common/types/db";
 import Link from "next/link";
 import useStore from "@workspace/store";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@workspace/ui/components/input";
 import { changePostName } from "@/server/actions";
 
@@ -27,7 +27,7 @@ export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
   const [inputValue, setInputValue] = useState<string>(data?.name ?? "");
   const ref = useRef<HTMLDivElement>(null);
 
-  const debounce = (cb: (...args: any[]) => void, delay = 5000) => {
+  const debounce = (cb: (...args: any[]) => void, delay = 2500) => {
     let timeoutId: NodeJS.Timeout;
 
     return (...args: any[]) => {
@@ -38,12 +38,17 @@ export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
     };
   };
 
+  const debouncedRenamePost = useMemo(
+    () =>
+      debounce(async (id: number, value: string) => {
+        await changePostName(id, value ?? "Unknown");
+      }),
+    []
+  );
+
   const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target?.value ?? "Unknown");
-
-    debounce(async () => {
-      await changePostName(data!.id, e.target.value ?? "Unknown");
-    })();
+    debouncedRenamePost(data!.id, e.target.value);
   };
 
   const handleOnEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
