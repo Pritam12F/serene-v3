@@ -11,10 +11,25 @@ import { ResponsiveDialog } from "./responsive-dialog";
 import { useState } from "react";
 import { Button } from "@workspace/ui/components/button";
 import useStore from "@workspace/store";
+import { toast } from "sonner";
+import { deletePostById } from "@/server/actions";
 
 export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
-  const { changeActiveRenameId } = useStore();
+  const [isNewPostOpen, setIsNewPostOpen] = useState<boolean>(false);
+  const { mutator, changeActiveRenameId } = useStore();
+
+  const handleDelete = async () => {
+    const { success, message } = await deletePostById(documentId);
+    if (success) {
+      setIsDeleteOpen(false);
+      mutator?.();
+      toast(message);
+    } else {
+      setIsDeleteOpen(false);
+      toast(message);
+    }
+  };
 
   return (
     <>
@@ -60,10 +75,11 @@ export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
       </DropdownMenu>
       <ResponsiveDialog
         title="Delete dialog"
-        description="Are you sure you want to delete this?"
+        content="Are you sure you want to delete this?"
         isOpen={isDeleteOpen}
         setIsOpen={setIsDeleteOpen}
-        action="Delete"
+        actionTitle="Delete"
+        actionHandler={handleDelete}
         documentId={documentId}
       />
     </>

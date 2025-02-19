@@ -15,7 +15,7 @@ import Link from "next/link";
 import useStore from "@workspace/store";
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@workspace/ui/components/input";
-import { changePostName } from "@/server/actions";
+import { changePostNameById } from "@/server/actions";
 
 interface WorkspaceProps {
   data: SelectPostType;
@@ -41,7 +41,7 @@ export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
   const debouncedRenamePost = useMemo(
     () =>
       debounce(async (id: number, value: string) => {
-        await changePostName(id, value ?? "Unknown");
+        await changePostNameById(id, value ?? "Unknown");
       }),
     []
   );
@@ -54,7 +54,7 @@ export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
   const handleOnEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      await changePostName(data!.id, inputValue);
+      await changePostNameById(data!.id, inputValue);
       mutator?.();
       changeActiveRenameId(null);
     }
