@@ -9,7 +9,7 @@ import {
 } from "@workspace/ui/components/dialog";
 import { Dispatch, SetStateAction } from "react";
 
-export const ResponsiveDialog = ({
+export const ActionDialog = ({
   isOpen,
   setIsOpen,
   title,

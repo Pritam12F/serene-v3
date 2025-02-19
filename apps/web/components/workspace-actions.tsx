@@ -7,17 +7,20 @@ import {
 import { SidebarMenuAction } from "@workspace/ui/components/sidebar";
 import { CircleX, Edit, MoreHorizontal, Plus } from "lucide-react";
 import { Separator } from "@workspace/ui/components/separator";
-import { ResponsiveDialog } from "./responsive-dialog";
+import { ActionDialog } from "./action-dialog";
 import { useState } from "react";
 import { Button } from "@workspace/ui/components/button";
 import useStore from "@workspace/store";
 import { toast } from "sonner";
 import { deletePostById } from "@/server/actions";
+import { PostDialog } from "./post-dialog";
+import dynamic from "next/dynamic";
 
 export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isNewPostOpen, setIsNewPostOpen] = useState<boolean>(false);
   const { mutator, changeActiveRenameId } = useStore();
+  const Editor = dynamic(() => import("./editor"), { ssr: false });
 
   const handleDelete = async () => {
     const { success, message } = await deletePostById(documentId);
@@ -34,7 +37,10 @@ export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
   return (
     <>
       <SidebarMenuAction showOnHover className="mx-8">
-        <Plus />
+        <PostDialog
+          trigger={<Plus />}
+          content={<Editor onChange={() => {}} editable={true} />}
+        />
       </SidebarMenuAction>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -73,7 +79,7 @@ export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ResponsiveDialog
+      <ActionDialog
         title="Delete dialog"
         content="Are you sure you want to delete this?"
         isOpen={isDeleteOpen}
