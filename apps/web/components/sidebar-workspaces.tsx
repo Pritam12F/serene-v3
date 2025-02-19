@@ -51,7 +51,11 @@ export function SidebarWorkspaces() {
       <SidebarGroupContent>
         <SidebarMenu ref={workspaceRef}>
           {data?.map((workspace, idx) => (
-            <Workspace data={workspace} key={idx} />
+            <Workspace
+              data={workspace}
+              parentUrl={`/documents/${workspace.id}`}
+              key={idx}
+            />
           ))}
         </SidebarMenu>
       </SidebarGroupContent>

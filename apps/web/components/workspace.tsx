@@ -20,9 +20,10 @@ import { changePostNameById } from "@/server/actions";
 interface WorkspaceProps {
   data: SelectPostType;
   level?: number;
+  parentUrl?: string;
 }
 
-export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
+export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
   const { activeRenameId, mutator, changeActiveRenameId } = useStore();
   const [inputValue, setInputValue] = useState<string>(data?.name ?? "");
   const ref = useRef<HTMLDivElement>(null);
@@ -60,6 +61,16 @@ export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
     }
   };
 
+  const currentPath = useMemo(() => {
+    if (parentUrl) {
+      if (parentUrl.includes(data!.id.toString())) {
+        return parentUrl;
+      }
+      return `${parentUrl}/${data?.id}`;
+    }
+    return `/documents/${data?.id}`;
+  }, [data?.id]);
+
   useEffect(() => {
     mutator?.();
   }, [activeRenameId]);
@@ -79,7 +90,7 @@ export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
         >
           <SidebarMenuItem>
             <SidebarMenuButton className="hover:bg-transparent" asChild>
-              <Link className="ml-7" href={"#"}>
+              <Link className="ml-7" href={currentPath}>
                 {data?.emoji ? <span>{data.emoji}</span> : <span>📝</span>}
                 <span>{data?.name}</span>
               </Link>
@@ -114,7 +125,12 @@ export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
       <CollapsibleContent>
         {data?.children &&
           data.children.map((post) => (
-            <Workspace data={post} key={post?.id} level={level + 1} />
+            <Workspace
+              data={post}
+              parentUrl={currentPath}
+              key={post?.id}
+              level={level + 1}
+            />
           ))}
       </CollapsibleContent>
     </Collapsible>

@@ -101,3 +101,30 @@ export const fetchAllPostsByUserId = async (user_id: string) => {
     return { success: false, message: errorMessage, data: null };
   }
 };
+
+export const fetchSinglePostById = async (postId: number) => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("You must be signed in to fetch users from the db");
+  }
+
+  try {
+    const fetchedPost = await db.query.posts.findFirst({
+      where: eq(posts.id, postId),
+    });
+
+    return {
+      success: true,
+      message: "Post fetched successfully",
+      data: fetchedPost,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to fetch post";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};
