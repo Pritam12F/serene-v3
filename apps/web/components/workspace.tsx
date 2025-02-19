@@ -13,8 +13,9 @@ import { WorkspaceActions } from "./workspace-actions";
 import { type SelectPostType } from "@workspace/common/types/db";
 import Link from "next/link";
 import useStore from "@workspace/store";
-import { useRef } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Input } from "@workspace/ui/components/input";
+import { changePostName } from "@/server/actions";
 
 interface WorkspaceProps {
   data: SelectPostType;
@@ -22,8 +23,41 @@ interface WorkspaceProps {
 }
 
 export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
-  const { activeRenameId } = useStore();
+  const { activeRenameId, mutator, changeActiveRenameId } = useStore();
+  const [inputValue, setInputValue] = useState<string>(data?.name ?? "");
   const ref = useRef<HTMLDivElement>(null);
+
+  const debounce = (cb: (...args: any[]) => void, delay = 5000) => {
+    let timeoutId: NodeJS.Timeout;
+
+    return (...args: any[]) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        cb(...args);
+      }, delay);
+    };
+  };
+
+  const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target?.value ?? "Unknown");
+
+    debounce(async () => {
+      await changePostName(data!.id, e.target.value ?? "Unknown");
+    })();
+  };
+
+  const handleOnEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      await changePostName(data!.id, inputValue);
+      mutator?.();
+      changeActiveRenameId(null);
+    }
+  };
+
+  useEffect(() => {
+    mutator?.();
+  }, [activeRenameId]);
 
   return (
     <Collapsible id={data?.id as unknown as string} ref={ref}>
@@ -66,6 +100,9 @@ export const Workspace = ({ data, level = 0 }: WorkspaceProps) => {
           <Input
             className="h-8 w-11/12 border-none transition-shadow/scale duration-500 bg-background shadow-[0_0_15px_10px] shadow-blue-500/50 focus-visible:scale-105 focus-visible:shadow-[0_0_15px_13px] focus-visible:shadow-blue-500/50 focus-visible:ring-0"
             placeholder="Rename..."
+            value={inputValue}
+            onChange={handleOnChange}
+            onKeyDown={handleOnEnter}
           />
         </div>
       </div>
