@@ -1,11 +1,35 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
+import {
+  SelectImageType,
+  SelectManyImageType,
+  SelectManyPostType,
+  SelectManyUserType,
+  SelectPostType,
+  SelectUserType,
+} from "@workspace/common/types/db";
 import db from "@workspace/db";
 import { posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 
-export const changePostNameById = async (postId: number, newName: string) => {
+interface ActionReturnType {
+  success: boolean;
+  message: string;
+  data:
+    | SelectUserType
+    | SelectManyUserType
+    | SelectImageType
+    | SelectManyImageType
+    | SelectPostType
+    | SelectManyPostType
+    | null;
+}
+
+export const changePostNameById = async (
+  postId: number,
+  newName: string
+): Promise<ActionReturnType> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -13,6 +37,23 @@ export const changePostNameById = async (postId: number, newName: string) => {
   }
 
   try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.clerkId, userId),
+      with: {
+        posts: true,
+      },
+    });
+
+    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
+
+    if (!hasAccessToPost) {
+      return {
+        success: false,
+        message: "User doesn't have access to this post",
+        data: null,
+      };
+    }
+
     await db.update(posts).set({ name: newName }).where(eq(posts.id, postId));
 
     return {
@@ -29,13 +70,32 @@ export const changePostNameById = async (postId: number, newName: string) => {
   }
 };
 
-export const deletePostById = async (postId: number) => {
+export const deletePostById = async (
+  postId: number
+): Promise<ActionReturnType> => {
   const { userId } = await auth();
 
   if (!userId) {
     throw new Error("You must be signed delete a post");
   }
   try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.clerkId, userId),
+      with: {
+        posts: true,
+      },
+    });
+
+    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
+
+    if (!hasAccessToPost) {
+      return {
+        success: false,
+        message: "User doesn't have access to this post",
+        data: null,
+      };
+    }
+
     await db.delete(posts).where(eq(posts.id, postId));
 
     return { success: true, message: "Post deleted successfully", data: null };
@@ -49,7 +109,9 @@ export const deletePostById = async (postId: number) => {
   }
 };
 
-export const fetchUserByClerkId = async (clerkId: string) => {
+export const fetchUserByClerkId = async (
+  clerkId: string
+): Promise<ActionReturnType> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -59,6 +121,7 @@ export const fetchUserByClerkId = async (clerkId: string) => {
   try {
     const userFetched = await db.query.users.findFirst({
       where: eq(users.clerkId, clerkId),
+      with: { posts: true },
     });
 
     return {
@@ -76,7 +139,9 @@ export const fetchUserByClerkId = async (clerkId: string) => {
   }
 };
 
-export const fetchAllPostsByUserId = async (user_id: string) => {
+export const fetchAllPostsByUserId = async (
+  user_id: string
+): Promise<ActionReturnType> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -86,6 +151,7 @@ export const fetchAllPostsByUserId = async (user_id: string) => {
   try {
     const postsFetched = await db.query.posts.findMany({
       where: eq(posts.userId, user_id),
+      with: { user: true, images: true, parent: true, children: true },
     });
 
     return {
@@ -102,7 +168,9 @@ export const fetchAllPostsByUserId = async (user_id: string) => {
   }
 };
 
-export const fetchSinglePostById = async (postId: number) => {
+export const fetchSinglePostById = async (
+  postId: number
+): Promise<ActionReturnType> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -110,8 +178,26 @@ export const fetchSinglePostById = async (postId: number) => {
   }
 
   try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.clerkId, userId),
+      with: {
+        posts: true,
+      },
+    });
+
+    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
+
+    if (!hasAccessToPost) {
+      return {
+        success: false,
+        message: "User doesn't have access to this post",
+        data: null,
+      };
+    }
+
     const fetchedPost = await db.query.posts.findFirst({
       where: eq(posts.id, postId),
+      with: { user: true, images: true, parent: true, children: true },
     });
 
     return {
