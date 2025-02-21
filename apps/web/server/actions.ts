@@ -2,10 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import {
-  SelectImageType,
-  SelectManyImageType,
   SelectManyPostType,
-  SelectManyUserType,
   SelectPostType,
   SelectUserType,
 } from "@workspace/common/types/db";
@@ -13,23 +10,10 @@ import db from "@workspace/db";
 import { posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 
-interface ActionReturnType {
-  success: boolean;
-  message: string;
-  data:
-    | SelectUserType
-    | SelectManyUserType
-    | SelectImageType
-    | SelectManyImageType
-    | SelectPostType
-    | SelectManyPostType
-    | null;
-}
-
 export const changePostNameById = async (
   postId: number,
   newName: string
-): Promise<ActionReturnType> => {
+): Promise<{ success: boolean; message: string; data: null }> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -72,7 +56,7 @@ export const changePostNameById = async (
 
 export const deletePostById = async (
   postId: number
-): Promise<ActionReturnType> => {
+): Promise<{ success: boolean; message: string; data: null }> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -111,7 +95,11 @@ export const deletePostById = async (
 
 export const fetchUserByClerkId = async (
   clerkId: string
-): Promise<ActionReturnType> => {
+): Promise<{
+  success: boolean;
+  message: string;
+  data: SelectUserType | null;
+}> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -141,7 +129,11 @@ export const fetchUserByClerkId = async (
 
 export const fetchAllPostsByUserId = async (
   user_id: string
-): Promise<ActionReturnType> => {
+): Promise<{
+  success: boolean;
+  message: string;
+  data: SelectManyPostType | null;
+}> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -170,7 +162,11 @@ export const fetchAllPostsByUserId = async (
 
 export const fetchSinglePostById = async (
   postId: number
-): Promise<ActionReturnType> => {
+): Promise<{
+  success: boolean;
+  message: string;
+  data: SelectPostType | null;
+}> => {
   const { userId } = await auth();
 
   if (!userId) {
