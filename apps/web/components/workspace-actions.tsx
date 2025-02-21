@@ -19,7 +19,7 @@ import dynamic from "next/dynamic";
 export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isNewPostOpen, setIsNewPostOpen] = useState<boolean>(false);
-  const { mutator, changeActiveRenameId } = useStore();
+  const { mutator, changeActiveWorkspaceId } = useStore();
   const Editor = dynamic(() => import("./editor"), { ssr: false });
 
   const handleDelete = async () => {
@@ -54,7 +54,7 @@ export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
               variant="ghost"
               className="w-full focus-visible:ring-0 px-2 justify-normal"
               onClick={() => {
-                changeActiveRenameId(documentId);
+                changeActiveWorkspaceId(documentId);
               }}
             >
               <Edit className="h-4 w-4" />

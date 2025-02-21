@@ -16,7 +16,7 @@ import useClickOutside from "@/hooks/use-on-click-outside";
 import { fetchAllPostsByUserId, fetchUserByClerkId } from "@/server/actions";
 
 export function SidebarWorkspaces() {
-  const { mutator, changeMutator, activeRenameId, changeActiveRenameId } =
+  const { mutator, changeMutator, activeWorkspaceId, changeActiveWorkspaceId } =
     useStore();
   const workspaceRef = useRef(null);
 
@@ -32,8 +32,8 @@ export function SidebarWorkspaces() {
   });
 
   useClickOutside(workspaceRef, () => {
-    if (activeRenameId) {
-      changeActiveRenameId(null);
+    if (activeWorkspaceId) {
+      changeActiveWorkspaceId(null);
     }
   });
 

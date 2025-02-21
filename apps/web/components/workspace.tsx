@@ -24,7 +24,7 @@ interface WorkspaceProps {
 }
 
 export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
-  const { activeRenameId, mutator, changeActiveRenameId } = useStore();
+  const { activeWorkspaceId, mutator, changeActiveWorkspaceId } = useStore();
   const [inputValue, setInputValue] = useState<string>(data?.name ?? "");
   const ref = useRef<HTMLDivElement>(null);
 
@@ -57,7 +57,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
       e.preventDefault();
       await changePostNameById(data!.id, inputValue);
       mutator?.();
-      changeActiveRenameId(null);
+      changeActiveWorkspaceId(null);
     }
   };
 
@@ -73,7 +73,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
 
   useEffect(() => {
     mutator?.();
-  }, [activeRenameId]);
+  }, [activeWorkspaceId]);
 
   return (
     <Collapsible id={data?.id as unknown as string} ref={ref}>
@@ -83,7 +83,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
       >
         <div
           className={`absolute inset-0 transition-opacity duration-400 ${
-            data?.id === activeRenameId
+            data?.id === activeWorkspaceId
               ? "opacity-0 pointer-events-none"
               : "opacity-100"
           }`}
@@ -108,7 +108,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
         </div>
         <div
           className={`flex justify-center absolute inset-0 transition-opacity duration-400 ${
-            data?.id === activeRenameId
+            data?.id === activeWorkspaceId
               ? "opacity-100"
               : "opacity-0 pointer-events-none"
           }`}

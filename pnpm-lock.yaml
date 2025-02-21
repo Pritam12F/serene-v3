@@ -165,6 +165,9 @@ importers:
       '@neondatabase/serverless':
         specifier: ^0.9.5
         version: 0.9.5
+      '@workspace/common':
+        specifier: workspace:*
+        version: link:../common
       dotenv:
         specifier: ^16.4.5
         version: 16.4.7
@@ -220,6 +223,9 @@ importers:
 
   packages/store:
     dependencies:
+      '@workspace/common':
+        specifier: workspace:*
+        version: link:../common
       zustand:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@18.3.0)(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0))
