@@ -10,10 +10,16 @@ import db from "@workspace/db";
 import { posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 
+type ActionResponse<T = null> = {
+  success: boolean;
+  message: string;
+  data: T;
+};
+
 export const changePostNameById = async (
   postId: number,
   newName: string
-): Promise<{ success: boolean; message: string; data: null }> => {
+): Promise<ActionResponse<null>> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -56,7 +62,7 @@ export const changePostNameById = async (
 
 export const deletePostById = async (
   postId: number
-): Promise<{ success: boolean; message: string; data: null }> => {
+): Promise<ActionResponse<null>> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -95,11 +101,7 @@ export const deletePostById = async (
 
 export const fetchUserByClerkId = async (
   clerkId: string
-): Promise<{
-  success: boolean;
-  message: string;
-  data: SelectUserType | null;
-}> => {
+): Promise<ActionResponse<SelectUserType | null>> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -109,7 +111,6 @@ export const fetchUserByClerkId = async (
   try {
     const userFetched = await db.query.users.findFirst({
       where: eq(users.clerkId, clerkId),
-      with: { posts: true },
     });
 
     return {
@@ -129,11 +130,7 @@ export const fetchUserByClerkId = async (
 
 export const fetchAllPostsByUserId = async (
   user_id: string
-): Promise<{
-  success: boolean;
-  message: string;
-  data: SelectManyPostType | null;
-}> => {
+): Promise<ActionResponse<SelectManyPostType | null>> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -143,7 +140,6 @@ export const fetchAllPostsByUserId = async (
   try {
     const postsFetched = await db.query.posts.findMany({
       where: eq(posts.userId, user_id),
-      with: { user: true, images: true, parent: true, children: true },
     });
 
     return {
@@ -162,11 +158,7 @@ export const fetchAllPostsByUserId = async (
 
 export const fetchSinglePostById = async (
   postId: number
-): Promise<{
-  success: boolean;
-  message: string;
-  data: SelectPostType | null;
-}> => {
+): Promise<ActionResponse<SelectPostType | null>> => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -193,7 +185,6 @@ export const fetchSinglePostById = async (
 
     const fetchedPost = await db.query.posts.findFirst({
       where: eq(posts.id, postId),
-      with: { user: true, images: true, parent: true, children: true },
     });
 
     return {
