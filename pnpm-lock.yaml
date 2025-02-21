@@ -165,9 +165,6 @@ importers:
       '@neondatabase/serverless':
         specifier: ^0.9.5
         version: 0.9.5
-      '@workspace/common':
-        specifier: workspace:*
-        version: link:../common
       dotenv:
         specifier: ^16.4.5
         version: 16.4.7
