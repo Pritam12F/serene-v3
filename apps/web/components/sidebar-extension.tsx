@@ -63,7 +63,9 @@ export const SidebarExtension = ({
         initialContent={
           workspaces ? workspaces[workspaces.length - 1]?.content : null
         }
-        title={workspaces ? workspaces[workspaces.length - 1]?.name : null}
+        title={
+          workspaces ? workspaces[workspaces.length - 1]?.name : "Untitled"
+        }
       />
     </SidebarInset>
   );

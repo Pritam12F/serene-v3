@@ -12,7 +12,7 @@ interface EditorProps {
   onChange?: () => void;
   editable: boolean;
   initialContent?: unknown;
-  title?: string;
+  title?: string | null;
 }
 
 const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
@@ -27,7 +27,7 @@ const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
       <TextareaAutosize
         className="w-full mx-12 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
         placeholder="Untitled"
-        value={title}
+        value={title!}
       />
       <BlockNoteView
         editor={editor}
