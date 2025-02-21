@@ -11,15 +11,17 @@ import { Separator } from "@workspace/ui/components/separator";
 import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { NavActions } from "./nav-actions";
 import dynamic from "next/dynamic";
+import { useWorkspaces } from "@/hooks/use-workspaces";
 
 export const SidebarExtension = ({
   children,
-  documents = [{ name: "Project Management & Task Tracking", href: "#" }],
+  documentList,
 }: {
   children?: React.ReactNode;
-  documents?: { name: string; href: string }[];
+  documentList?: string[];
 }) => {
   const Editor = dynamic(() => import("./editor"), { ssr: false });
+  const { workspaces } = useWorkspaces(documentList);
 
   return (
     <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-[#1f1f1f]">
@@ -29,12 +31,12 @@ export const SidebarExtension = ({
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
             <BreadcrumbList>
-              {documents.map(({ name, href }, index) => {
-                if (index === documents.length - 1) {
+              {workspaces?.map((workspace, index) => {
+                if (index === workspaces.length - 1) {
                   return (
                     <BreadcrumbItem key={index}>
                       <BreadcrumbPage className="line-clamp-1">
-                        {name}
+                        {workspace?.name}
                       </BreadcrumbPage>
                     </BreadcrumbItem>
                   );
@@ -42,8 +44,8 @@ export const SidebarExtension = ({
 
                 return (
                   <BreadcrumbItem key={index}>
-                    <BreadcrumbLink className="line-clamp-1" href={href}>
-                      {name}
+                    <BreadcrumbLink className="line-clamp-1">
+                      {workspace?.name}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
                 );
@@ -55,7 +57,14 @@ export const SidebarExtension = ({
           <NavActions />
         </div>
       </header>
-      <Editor onChange={() => {}} editable={true} />
+      <Editor
+        onChange={() => {}}
+        editable={true}
+        initialContent={
+          workspaces ? workspaces[workspaces.length - 1]?.content : null
+        }
+        title={workspaces ? workspaces[workspaces.length - 1]?.name : null}
+      />
     </SidebarInset>
   );
 };

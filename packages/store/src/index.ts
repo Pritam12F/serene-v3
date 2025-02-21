@@ -8,7 +8,7 @@ interface StoreType {
   changeActiveWorkspaceId: (id?: number | null) => void;
   workspaceState: Map<number, SelectPostType>;
   setWorkspace: (id: number, newState: SelectPostType) => void;
-  getWorkspace?: (id: number) => SelectPostType;
+  getWorkspace: (id: number) => SelectPostType;
   removeWorkspace: (id: number) => void;
 }
 

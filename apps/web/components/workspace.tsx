@@ -16,6 +16,7 @@ import useStore from "@workspace/store";
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@workspace/ui/components/input";
 import { changePostNameById } from "@/server/actions";
+import { debounce } from "@/lib/debounce";
 
 interface WorkspaceProps {
   data: SelectPostType;
@@ -24,20 +25,10 @@ interface WorkspaceProps {
 }
 
 export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
-  const { activeWorkspaceId, mutator, changeActiveWorkspaceId } = useStore();
+  const { activeWorkspaceId, setWorkspace, mutator, changeActiveWorkspaceId } =
+    useStore();
   const [inputValue, setInputValue] = useState<string>(data?.name ?? "");
   const ref = useRef<HTMLDivElement>(null);
-
-  const debounce = (cb: (...args: any[]) => void, delay = 2500) => {
-    let timeoutId: NodeJS.Timeout;
-
-    return (...args: any[]) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        cb(...args);
-      }, delay);
-    };
-  };
 
   const debouncedRenamePost = useMemo(
     () =>
@@ -73,6 +64,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
 
   useEffect(() => {
     mutator?.();
+    setWorkspace(data!.id, data);
   }, [activeWorkspaceId]);
 
   return (
