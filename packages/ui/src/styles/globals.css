@@ -98,3 +98,51 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Style the main button container */
+.bn-add-file-button {
+  background-color: #1f1f1f !important;
+  width: 250px;
+  margin: 8px 0;
+}
+
+.bn-add-file-button:hover {
+  background-color: #3a3a3a !important;
+}
+
+.bn-add-file-button-icon {
+  color: white;
+}
+
+.bn-add-file-button-text {
+  color: white;
+}
+
+.bn-panel {
+  width: 250px !important;
+  border-radius: 20px;
+}
+
+.bn-visual-media {
+  max-width: 500px;
+}
+
+.bn-block-group {
+  max-width: 500px;
+}
+
+.bn-block-outer {
+  max-width: 500px;
+}
+
+.bn-block {
+  max-width: 500px;
+}
+
+.bn-file-block-content-wrapper {
+  max-width: fit-content;
+}
+
+.bn-block-content {
+  max-width: fit-content;
+}
