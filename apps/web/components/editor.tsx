@@ -1,6 +1,11 @@
 "use client";
 
-import { BlockNoteView } from "@blocknote/mantine";
+import {
+  BlockNoteView,
+  darkDefaultTheme,
+  lightDefaultTheme,
+  Theme,
+} from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
 import React from "react";
 import TextareaAutosize from "react-textarea-autosize";
@@ -16,6 +21,59 @@ interface EditorProps {
   initialContent?: unknown;
   title?: string | null;
 }
+
+const lightBlueTheme = {
+  colors: {
+    editor: {
+      text: "#222222",
+      background: "white",
+    },
+    menu: {
+      text: "#ffffff",
+      background: "#1c3a5f",
+    },
+    tooltip: {
+      text: "#ffffff",
+      background: "#264b77",
+    },
+    hovered: {
+      text: "#ffffff",
+      background: "#264b77",
+    },
+    selected: {
+      text: "#ffffff",
+      background: "#2d5b92",
+    },
+    disabled: {
+      text: "#1c3a5f",
+      background: "#14273f",
+    },
+    shadow: "#0d1c2f",
+    border: "#1c3a5f",
+    sideMenu: "#bababa",
+    highlights: lightDefaultTheme.colors!.highlights,
+  },
+  borderRadius: 4,
+  fontFamily: "Helvetica Neue, sans-serif",
+} satisfies Theme;
+
+const darkBlueTheme = {
+  ...lightBlueTheme,
+  colors: {
+    ...lightBlueTheme.colors,
+    editor: {
+      text: "#ffffff",
+      background: "#282b32",
+    },
+    sideMenu: "#ffffff",
+    highlights: darkDefaultTheme.colors!.highlights,
+  },
+} satisfies Theme;
+
+const blueTheme = {
+  light: lightBlueTheme,
+  dark: darkBlueTheme,
+};
 
 const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
   const { resolvedTheme } = useTheme();
@@ -50,7 +108,7 @@ const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
   });
 
   return (
-    <div className="overflow-x-hidden max-w-[1500px] flex flex-1 flex-col gap-4 px-3 py-10">
+    <div className="overflow-x-scroll max-w-[1500px] flex flex-col gap-4 px-3 py-10">
       <TextareaAutosize
         className="w-full mx-14 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
         placeholder="Untitled"
@@ -60,7 +118,7 @@ const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
         editor={editor}
         onChange={onChange}
         editable={editable}
-        theme={resolvedTheme === "dark" ? "dark" : "light"}
+        theme={resolvedTheme === "dark" ? blueTheme.dark : blueTheme.light}
       />
     </div>
   );
