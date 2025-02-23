@@ -7,6 +7,8 @@ import TextareaAutosize from "react-textarea-autosize";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
+import { UploadButton, uploadFiles } from "@/lib/uploadthing";
+import { BlockNoteEditor } from "@blocknote/core";
 
 interface EditorProps {
   onChange?: () => void;
@@ -18,8 +20,13 @@ interface EditorProps {
 const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
   const { resolvedTheme } = useTheme();
 
-  const editor = useCreateBlockNote({
+  const editor: BlockNoteEditor = useCreateBlockNote({
     initialContent: initialContent as unknown as any,
+    uploadFile: async (file: File) => {
+      const [res] = await uploadFiles("imageUploader", { files: [file] });
+
+      return res?.url!;
+    },
   });
 
   return (
