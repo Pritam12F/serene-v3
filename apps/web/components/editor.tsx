@@ -7,8 +7,8 @@ import TextareaAutosize from "react-textarea-autosize";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
-import { UploadButton, uploadFiles } from "@/lib/uploadthing";
 import { BlockNoteEditor } from "@blocknote/core";
+import { uploadFiles } from "@/lib/uploadthing";
 
 interface EditorProps {
   onChange?: () => void;
@@ -19,20 +19,40 @@ interface EditorProps {
 
 const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
   const { resolvedTheme } = useTheme();
+  const uploadFile = async (file: File) => {
+    switch (true) {
+      case file.type.startsWith("image"):
+        const [res] = await uploadFiles("imageUploader", { files: [file] });
+        return res?.url!;
+
+      case file.type.startsWith("video"): {
+        const [res] = await uploadFiles("videoUploader", { files: [file] });
+        return res?.url!;
+      }
+
+      case file.type.startsWith("audio"): {
+        const [res] = await uploadFiles("audioUploader", { files: [file] });
+        return res?.url!;
+      }
+
+      default: {
+        const [res] = await uploadFiles("otherTypeUploader", {
+          files: [file],
+        });
+        return res?.url!;
+      }
+    }
+  };
 
   const editor: BlockNoteEditor = useCreateBlockNote({
     initialContent: initialContent as unknown as any,
-    uploadFile: async (file: File) => {
-      const [res] = await uploadFiles("imageUploader", { files: [file] });
-
-      return res?.url!;
-    },
+    uploadFile,
   });
 
   return (
-    <div className="overflow-x-hidden max-w-[1500px] flex flex-1 flex-col gap-4 px-4 py-10">
+    <div className="overflow-x-hidden max-w-[1500px] flex flex-1 flex-col gap-4 px-3 py-10">
       <TextareaAutosize
-        className="w-full mx-12 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
+        className="w-full mx-14 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
         placeholder="Untitled"
         value={title!}
       />

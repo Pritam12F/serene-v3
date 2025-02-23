@@ -32,6 +32,36 @@ export const images = pgTable("images", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const audios = pgTable("audios", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("url").notNull(),
+  postId: integer("post_id")
+    .notNull()
+    .references(() => posts.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const videos = pgTable("videos", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("url").notNull(),
+  postId: integer("post_id")
+    .notNull()
+    .references(() => posts.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const otherFiles = pgTable("other_files", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("url").notNull(),
+  postId: integer("post_id")
+    .notNull()
+    .references(() => posts.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Posts Table
 export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),
@@ -79,6 +109,9 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
     fields: [posts.userId],
     references: [users.id],
   }),
-  // Posts to images
+
   images: many(images),
+  audios: many(audios),
+  videos: many(videos),
+  otherFiles: many(otherFiles),
 }));
