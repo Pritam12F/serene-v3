@@ -29,24 +29,24 @@ const lightBlueTheme = {
       background: "white",
     },
     menu: {
-      text: "#ffffff",
-      background: "#1c3a5f",
+      text: "black",
+      background: "white",
     },
     tooltip: {
       text: "#ffffff",
-      background: "#264b77",
+      background: "black",
     },
     hovered: {
-      text: "#ffffff",
-      background: "#264b77",
+      text: "black",
+      background: "#ebeeff",
     },
     selected: {
-      text: "#ffffff",
-      background: "#2d5b92",
+      text: "white",
+      background: "black",
     },
     disabled: {
-      text: "#1c3a5f",
-      background: "#14273f",
+      text: "black",
+      background: "#ebeeff",
     },
     shadow: "#0d1c2f",
     border: "#1c3a5f",
@@ -64,6 +64,18 @@ const darkBlueTheme = {
     editor: {
       text: "#ffffff",
       background: "#282b32",
+    },
+    menu: {
+      text: "#ffffff",
+      background: "#454653",
+    },
+    tooltip: {
+      text: "#ffffff",
+      background: "#00c6c1",
+    },
+    hovered: {
+      text: "#ffffff",
+      background: "#757684",
     },
     sideMenu: "#ffffff",
     highlights: darkDefaultTheme.colors!.highlights,
@@ -108,7 +120,7 @@ const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
   });
 
   return (
-    <div className="overflow-x-scroll max-w-[1500px] flex flex-col gap-4 px-3 py-10">
+    <div className="overflow-x-hidden max-w-[1500px] flex flex-col gap-4 px-3 py-10">
       <TextareaAutosize
         className="w-full mx-14 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
         placeholder="Untitled"
