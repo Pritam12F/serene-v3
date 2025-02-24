@@ -49,24 +49,6 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
-
-    .bn-add-file-button {
-      background-color: white !important;
-      width: 250px;
-      margin: 8px 0;
-    }
-
-    .bn-add-file-button:hover {
-      background-color: #ebeeff !important;
-    }
-
-    .bn-add-file-button-icon {
-      color: black;
-    }
-
-    .bn-add-file-button-text {
-      color: black;
-    }
   }
 
   .dark {
@@ -105,24 +87,6 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-
-    .bn-add-file-button {
-      background-color: #282b32 !important;
-      width: 250px;
-      margin: 8px 0;
-    }
-
-    .bn-add-file-button:hover {
-      background-color: #454653 !important;
-    }
-
-    .bn-add-file-button-icon {
-      color: white;
-    }
-
-    .bn-add-file-button-text {
-      color: white;
-    }
   }
 }
 
@@ -135,9 +99,46 @@
   }
 }
 
+.light-block-note .bn-add-file-button {
+  background-color: white !important;
+  width: 250px;
+  margin: 8px 0;
+}
+
+.light-block-note .bn-add-file-button:hover {
+  background-color: #ebeeff !important;
+}
+
+.light-block-note .bn-add-file-button-icon {
+  color: black;
+}
+
+.light-block-note .bn-add-file-button-text {
+  color: black;
+}
+
+.dark-block-note .bn-add-file-button {
+  background-color: #282b32 !important;
+  width: 250px;
+  margin: 8px 0;
+}
+
+.dark-block-note .bn-add-file-button:hover {
+  background-color: #454653 !important;
+}
+
+.dark-block-note .bn-add-file-button-icon {
+  color: white;
+}
+
+.dark-block-note .bn-add-file-button-text {
+  color: white;
+}
+
 .bn-panel {
   width: 300px !important;
   border-radius: 20px;
+  letter-spacing: 0.5px;
 }
 
 .bn-visual-media {
