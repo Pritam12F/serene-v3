@@ -3,13 +3,13 @@
 import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
 import React from "react";
-import TextareaAutosize from "react-textarea-autosize";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
 import { BlockNoteEditor } from "@blocknote/core";
 import { uploadFiles } from "@/lib/uploadthing";
 import { blueTheme } from "@/lib/themes";
+import { WorkspaceCover } from "./workspace-cover";
 
 interface EditorProps {
   onChange?: () => void;
@@ -52,13 +52,9 @@ const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
 
   return (
     <div
-      className={`overflow-x-hidden max-w-[1500px] flex flex-col gap-4 px-3 py-10 ${resolvedTheme}-block-note`}
+      className={`overflow-x-hidden max-w-[1500px] flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`}
     >
-      <TextareaAutosize
-        className="w-fit mx-14 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
-        placeholder="Untitled"
-        value={title!}
-      />
+      <WorkspaceCover title="Untitled" />
       <BlockNoteView
         editor={editor}
         onChange={onChange}
