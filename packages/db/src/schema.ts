@@ -25,7 +25,7 @@ export const users = pgTable("users", {
 export const images = pgTable("images", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
-  url: text("url").notNull(),
+  url: text("image_url").notNull(),
   postId: integer("post_id")
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),
@@ -35,7 +35,7 @@ export const images = pgTable("images", {
 export const audios = pgTable("audios", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
-  url: text("url").notNull(),
+  url: text("audio_url").notNull(),
   postId: integer("post_id")
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),
@@ -45,7 +45,7 @@ export const audios = pgTable("audios", {
 export const videos = pgTable("videos", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
-  url: text("url").notNull(),
+  url: text("video_url").notNull(),
   postId: integer("post_id")
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),
@@ -55,7 +55,17 @@ export const videos = pgTable("videos", {
 export const otherFiles = pgTable("other_files", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
-  url: text("url").notNull(),
+  url: text("otherfile_url").notNull(),
+  postId: integer("post_id")
+    .notNull()
+    .references(() => posts.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const coverImages = pgTable("cover_images", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("cover_image_url").notNull(),
   postId: integer("post_id")
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),
@@ -114,4 +124,5 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
   audios: many(audios),
   videos: many(videos),
   otherFiles: many(otherFiles),
+  coverImages: many(coverImages),
 }));
