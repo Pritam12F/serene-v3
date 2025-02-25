@@ -2,7 +2,7 @@
 const nextConfig = {
   transpilePackages: ["@workspace/ui"],
   images: {
-    domains: ["assets-prd.ignimgs.com"],
+    domains: [],
   },
 };
 

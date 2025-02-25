@@ -1,7 +1,4 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { NextRequest } from "next/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
@@ -36,6 +33,15 @@ export const ourFileRouter: any = {
   profilePicUploader: f({
     image: {
       maxFileSize: "4MB",
+      maxFileCount: 1,
+    },
+  }).onUploadComplete(async ({ file }) => {
+    console.log("file url", file.url);
+  }),
+
+  coverImageUploader: f({
+    image: {
+      maxFileSize: "8MB",
       maxFileCount: 1,
     },
   }).onUploadComplete(async ({ file }) => {
