@@ -201,3 +201,11 @@ export const fetchSinglePostById = async (
     return { success: false, message: errorMessage, data: null };
   }
 };
+
+export const addCoverImage = async (coverUrl: string, postId: number) => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("You must be signed in to change cover image");
+  }
+};

@@ -169,6 +169,27 @@
       "when": 1740307514675,
       "tag": "0023_curved_dormammu",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1740463424055,
+      "tag": "0024_small_luckman",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1740465846311,
+      "tag": "0025_gifted_amazoness",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1740466865986,
+      "tag": "0026_eminent_the_twelve",
+      "breakpoints": true
     }
   ]
 }

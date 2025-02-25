@@ -1,0 +1,1 @@
+ALTER TABLE "cover_images" ADD COLUMN "active_state" boolean DEFAULT false;

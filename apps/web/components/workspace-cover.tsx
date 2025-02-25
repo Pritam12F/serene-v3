@@ -10,6 +10,8 @@ export const WorkspaceCover = ({
   coverUrl?: string;
   title: string;
 }) => {
+  const handleCoverChange = async (coverUrl: string) => {};
+
   return (
     <div className="relative w-full h-[270px]">
       {coverUrl ? (

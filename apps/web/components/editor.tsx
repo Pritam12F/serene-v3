@@ -20,6 +20,7 @@ interface EditorProps {
 
 const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
   const { resolvedTheme } = useTheme();
+
   const uploadFile = async (file: File) => {
     switch (true) {
       case file.type.startsWith("image"):
