@@ -1,37 +1,41 @@
-import { fetchSinglePostById } from "@/server/actions";
-import { SelectPostType } from "@workspace/common/types/db";
-import useStore from "@workspace/store";
+import { fetchAllPostsByUserId, fetchUserByClerkId } from "@/server/actions";
+import { SelectManyPostType } from "@workspace/common/types/db";
+import arrayToTree from "array-to-tree";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
-export const useWorkspaces = (documentList?: string[]) => {
-  const [workspaces, setWorkspaces] = useState<SelectPostType[] | undefined>(
-    []
+export const useWorkspaces = (user_id: string, documentList?: string[]) => {
+  const { data, mutate, isLoading } = useSWR(
+    `${user_id}/workspaces`,
+    async () => {
+      const fetchedUser = await fetchUserByClerkId(user_id);
+      const fetchedPosts = await fetchAllPostsByUserId(fetchedUser.data!.id);
+
+      if (fetchedUser.success && fetchedPosts.success && fetchedPosts.data) {
+        return {
+          tree: arrayToTree(fetchedPosts.data, { parentProperty: "parentId" }),
+          list: fetchedPosts.data,
+        };
+      }
+      return { tree: [], list: [] };
+    }
   );
-  const { getWorkspace, setWorkspace } = useStore();
+
+  const [postTree, setPostTree] =
+    useState<arrayToTree.Tree<SelectManyPostType>>();
+  const [postList, setPostList] = useState<SelectManyPostType | undefined>([]);
 
   useEffect(() => {
-    const inStatePosts = documentList?.map((docId) =>
-      getWorkspace(Number(docId))
-    );
+    setPostTree(data?.tree);
 
-    if (inStatePosts?.length === 1 && !inStatePosts[0]) {
-      const fetchPosts = async () => {
-        const fetchedPosts = await Promise.all(
-          documentList!.map(async (docId) => {
-            const post = await fetchSinglePostById(Number(docId));
-            setWorkspace(Number(docId), post.data!);
-            return post.data!;
-          })
-        );
+    if (documentList && data?.list) {
+      const filtered = data?.list.filter((x) =>
+        documentList.includes(x.id.toString())
+      );
 
-        setWorkspaces(fetchedPosts);
-      };
-
-      fetchPosts();
+      setPostList(filtered);
     }
+  }, [data?.tree, data?.list, documentList]);
 
-    setWorkspaces(inStatePosts);
-  }, [documentList]);
-
-  return { workspaces };
+  return { postTree, postList, mutate, isLoading };
 };

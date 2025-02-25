@@ -1,7 +1,6 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import useSWR from "swr";
 import useStore from "@workspace/store";
 import { useEffect, useRef } from "react";
 import { Workspace } from "./workspace";
@@ -11,9 +10,8 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
 } from "@workspace/ui/components/sidebar";
-import arrayToTree from "array-to-tree";
 import useClickOutside from "@/hooks/use-on-click-outside";
-import { fetchAllPostsByUserId, fetchUserByClerkId } from "@/server/actions";
+import { useWorkspaces } from "@/hooks/use-workspaces";
 
 export function SidebarWorkspaces() {
   const { mutator, changeMutator, activeWorkspaceId, changeActiveWorkspaceId } =
@@ -22,14 +20,7 @@ export function SidebarWorkspaces() {
 
   const user = useUser();
   const user_id = user.user?.id ?? "";
-  const { data, mutate } = useSWR(`${user_id}/workspaces`, async () => {
-    const fetchedUser = await fetchUserByClerkId(user_id);
-    const fetchedPosts = await fetchAllPostsByUserId(fetchedUser.data!.id);
-
-    if (fetchedUser.success && fetchedPosts.success && fetchedPosts.data) {
-      return arrayToTree(fetchedPosts.data, { parentProperty: "parentId" });
-    }
-  });
+  const { postTree, mutate } = useWorkspaces(user_id);
 
   useClickOutside(workspaceRef, () => {
     if (activeWorkspaceId) {
@@ -50,7 +41,7 @@ export function SidebarWorkspaces() {
       <SidebarGroupLabel>Workspaces</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu ref={workspaceRef}>
-          {data?.map((workspace, idx) => (
+          {postTree?.map((workspace, idx) => (
             <Workspace
               data={workspace}
               parentUrl={`/documents/${workspace.id}`}

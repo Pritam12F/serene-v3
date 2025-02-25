@@ -12,6 +12,7 @@ import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { NavActions } from "./nav-actions";
 import dynamic from "next/dynamic";
 import { useWorkspaces } from "@/hooks/use-workspaces";
+import { useUser } from "@clerk/nextjs";
 
 export const SidebarExtension = ({
   children,
@@ -21,7 +22,14 @@ export const SidebarExtension = ({
   documentList?: string[];
 }) => {
   const Editor = dynamic(() => import("./editor"), { ssr: false });
-  const { workspaces } = useWorkspaces(documentList);
+
+  const { user } = useUser();
+
+  const { postList, isLoading } = useWorkspaces(user?.id!, documentList);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-[#282b32]">
@@ -31,12 +39,12 @@ export const SidebarExtension = ({
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
             <BreadcrumbList>
-              {workspaces?.map((workspace, index) => {
-                if (index === workspaces.length - 1) {
+              {postList?.map((post, index) => {
+                if (index === postList.length - 1) {
                   return (
                     <BreadcrumbItem key={index}>
                       <BreadcrumbPage className="line-clamp-1">
-                        {workspace?.name}
+                        {post?.name}
                       </BreadcrumbPage>
                     </BreadcrumbItem>
                   );
@@ -45,7 +53,7 @@ export const SidebarExtension = ({
                 return (
                   <BreadcrumbItem key={index}>
                     <BreadcrumbLink className="line-clamp-1">
-                      {workspace?.name}
+                      {post?.name}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
                 );
@@ -61,11 +69,9 @@ export const SidebarExtension = ({
         onChange={() => {}}
         editable={true}
         initialContent={
-          workspaces ? workspaces[workspaces.length - 1]?.content : null
+          postList ? postList[postList.length - 1]?.content : null
         }
-        title={
-          workspaces ? workspaces[workspaces.length - 1]?.name : "Untitled"
-        }
+        title={postList ? postList[postList.length - 1]?.name : "Untitled"}
       />
     </SidebarInset>
   );
