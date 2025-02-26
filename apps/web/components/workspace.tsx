@@ -32,12 +32,11 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
     changeActiveWorkspaceId,
     setWorkspaceName,
   } = useStore();
-
   const ref = useRef<HTMLDivElement>(null);
 
   const debouncedRenamePost = useMemo(
     () =>
-      debounce(async (title: string, postId: number) => {
+      debounce(async (postId: number, title: string) => {
         await changePostNameById(postId, title ?? "Untitled");
       }),
     []
