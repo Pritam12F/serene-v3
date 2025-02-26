@@ -1,15 +1,14 @@
 import { create } from "zustand";
-import { type SelectPostType } from "@workspace/common/types/db";
 
 interface StoreType {
   mutator: (() => void) | null;
   changeMutator: (myMutator: () => void) => void;
   activeWorkspaceId: number | null;
   changeActiveWorkspaceId: (id?: number | null) => void;
-  workspaceState: Map<number, SelectPostType>;
-  setWorkspace: (id: number, newState: SelectPostType) => void;
-  getWorkspace: (id: number) => SelectPostType;
-  removeWorkspace: (id: number) => void;
+  workspaceNames: Map<number, string>;
+  setWorkspaceName: (id: number, newName: string) => void;
+  getWorkspaceName: (id: number) => string | undefined;
+  removeWorkspaceName: (id: number) => void;
 }
 
 const useStore = create<StoreType>((set, get) => ({
@@ -19,22 +18,22 @@ const useStore = create<StoreType>((set, get) => ({
   activeWorkspaceId: null,
   changeActiveWorkspaceId: (id) => set({ activeWorkspaceId: id }),
 
-  workspaceState: new Map(),
-  setWorkspace: (postId, newState) => {
+  workspaceNames: new Map(),
+  setWorkspaceName: (postId, newName) => {
     set((state) => {
-      const updatedState = new Map(state.workspaceState);
-      updatedState.set(postId, newState);
-      return { ...state, workspaceState: updatedState };
+      const updatedRecord = state.workspaceNames;
+      updatedRecord.set(postId, newName);
+      return { ...state, workspaceNames: updatedRecord };
     });
   },
-  getWorkspace: (postId) => {
-    return get().workspaceState.get(postId);
+  getWorkspaceName: (postId) => {
+    return get().workspaceNames.get(postId);
   },
-  removeWorkspace: (postId) => {
+  removeWorkspaceName: (postId: number) => {
     set((state) => {
-      const updatedState = new Map(state.workspaceState);
-      updatedState.delete(postId);
-      return { ...state, workspaceState: updatedState };
+      const updatedRecord = state.workspaceNames;
+      updatedRecord.delete(postId);
+      return { ...state, workspaceNames: updatedRecord };
     });
   },
 }));

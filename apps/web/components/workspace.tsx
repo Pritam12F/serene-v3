@@ -25,28 +25,33 @@ interface WorkspaceProps {
 }
 
 export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
-  const { activeWorkspaceId, setWorkspace, mutator, changeActiveWorkspaceId } =
-    useStore();
-  const [inputValue, setInputValue] = useState<string>(data?.name ?? "");
+  const {
+    activeWorkspaceId,
+    workspaceNames,
+    mutator,
+    changeActiveWorkspaceId,
+    setWorkspaceName,
+  } = useStore();
+
   const ref = useRef<HTMLDivElement>(null);
 
   const debouncedRenamePost = useMemo(
     () =>
-      debounce(async (id: number, value: string) => {
-        await changePostNameById(id, value ?? "Unknown");
+      debounce(async (title: string, postId: number) => {
+        await changePostNameById(postId, title ?? "Untitled");
       }),
     []
   );
 
   const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target?.value ?? "Unknown");
+    setWorkspaceName(data!.id, e.target?.value ?? "Unknown");
     debouncedRenamePost(data!.id, e.target.value);
   };
 
   const handleOnEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      await changePostNameById(data!.id, inputValue);
+      await changePostNameById(data!.id, workspaceNames.get(data!.id)!);
       mutator?.();
       changeActiveWorkspaceId(null);
     }
@@ -64,7 +69,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
 
   useEffect(() => {
     mutator?.();
-    setWorkspace(data!.id, data);
+    setWorkspaceName(data!.id, data?.name ?? "Untitled");
   }, [activeWorkspaceId]);
 
   return (
@@ -84,7 +89,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
             <SidebarMenuButton className="hover:bg-transparent" asChild>
               <Link className="ml-7" href={currentPath}>
                 {data?.emoji ? <span>{data.emoji}</span> : <span>📝</span>}
-                <span>{data?.name}</span>
+                <span>{workspaceNames.get(data!.id)!}</span>
               </Link>
             </SidebarMenuButton>
             <CollapsibleTrigger asChild>
@@ -108,7 +113,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
           <Input
             className="h-8 w-11/12 border-none transition-shadow/scale duration-500 bg-background shadow-[0_0_15px_10px] shadow-blue-500/50 focus-visible:scale-105 focus-visible:shadow-[0_0_15px_13px] focus-visible:shadow-blue-500/50 focus-visible:ring-0"
             placeholder="Rename..."
-            value={inputValue}
+            value={workspaceNames.get(data!.id) ?? "Untitled"}
             onChange={handleOnChange}
             onKeyDown={handleOnEnter}
           />

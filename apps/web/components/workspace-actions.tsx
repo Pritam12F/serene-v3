@@ -18,16 +18,15 @@ import dynamic from "next/dynamic";
 
 export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
-  const [isNewPostOpen, setIsNewPostOpen] = useState<boolean>(false);
-  const { mutator, changeActiveWorkspaceId, removeWorkspace } = useStore();
+  const { mutator, changeActiveWorkspaceId, removeWorkspaceName } = useStore();
   const Editor = dynamic(() => import("./editor"), { ssr: false });
 
   const handleDelete = async () => {
     const { success, message } = await deletePostById(documentId);
     if (success) {
-      setIsDeleteOpen(false);
-      removeWorkspace(documentId);
       mutator?.();
+      setIsDeleteOpen(false);
+      removeWorkspaceName(documentId);
       toast(message);
     } else {
       setIsDeleteOpen(false);

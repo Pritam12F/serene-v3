@@ -16,9 +16,16 @@ interface EditorProps {
   editable: boolean;
   initialContent?: unknown;
   title?: string | null;
+  postId?: number | null;
 }
 
-const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
+const Editor = ({
+  onChange,
+  editable,
+  initialContent,
+  title,
+  postId,
+}: EditorProps) => {
   const { resolvedTheme } = useTheme();
 
   const uploadFile = async (file: File) => {
@@ -55,7 +62,7 @@ const Editor = ({ onChange, editable, initialContent, title }: EditorProps) => {
     <div
       className={`overflow-x-hidden max-w-[1500px] flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`}
     >
-      <WorkspaceCover title="Untitled" />
+      <WorkspaceCover title={title ?? "Unknown"} postId={postId!} />
       <BlockNoteView
         editor={editor}
         onChange={onChange}

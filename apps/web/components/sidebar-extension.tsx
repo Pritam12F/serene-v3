@@ -68,6 +68,7 @@ export const SidebarExtension = ({
       <Editor
         onChange={() => {}}
         editable={true}
+        postId={postList ? postList[postList.length - 1]?.id : null}
         initialContent={
           postList ? postList[postList.length - 1]?.content : null
         }
