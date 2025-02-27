@@ -68,6 +68,14 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
             fill
             className="object-cover absolute inset-0"
           />
+          <button
+            onClick={() => {
+              console.log(coverLink);
+            }}
+            className="h-[200px]"
+          >
+            click me!!!!
+          </button>
         </>
       ) : (
         <div className="absolute inset-0 bg-gradient-to-b from-[#454653] to-[#282b32]">
