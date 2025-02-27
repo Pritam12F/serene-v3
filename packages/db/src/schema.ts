@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, jsonb } from "drizzle-orm/pg-core";
+import { jsonb } from "drizzle-orm/pg-core";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 import {
   integer,

@@ -44,7 +44,7 @@ export function SidebarWorkspaces() {
           {postTree?.map((workspace, idx) => (
             <Workspace
               data={workspace}
-              parentUrl={`/documents/${workspace.id}`}
+              parentUrl={`/documents/${workspace!.id}`}
               key={idx}
             />
           ))}

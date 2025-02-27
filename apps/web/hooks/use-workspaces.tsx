@@ -31,7 +31,7 @@ export const useWorkspaces = (user_id: string, documentList?: string[]) => {
 
     if (documentList && data?.list) {
       const filtered = data?.list.filter((x) =>
-        documentList.includes(x.id.toString())
+        documentList.includes(x!.id.toString())
       );
 
       setPostList(filtered);

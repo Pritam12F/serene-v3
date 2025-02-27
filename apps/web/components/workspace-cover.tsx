@@ -1,10 +1,14 @@
 import { UploadButton } from "@/lib/uploadthing";
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { debounce } from "@/lib/debounce";
-import { addOrUpdateCoverImage, changePostNameById } from "@/server/actions";
+import {
+  addOrUpdateCoverImage,
+  changePostNameById,
+  fetchSinglePostById,
+} from "@/server/actions";
 import useStore from "@workspace/store";
 
 export const WorkspaceCover = ({
@@ -17,6 +21,17 @@ export const WorkspaceCover = ({
   postId: number;
 }) => {
   const { workspaceNames, setWorkspaceName } = useStore();
+  const [coverLink, setCoverLink] = useState("");
+
+  const fetchCover = useCallback(async () => {
+    const post = await fetchSinglePostById(postId);
+
+    setCoverLink(post.data?.coverImage?.url ?? "");
+  }, [postId]);
+
+  useEffect(() => {
+    fetchCover();
+  }, []);
 
   const debouncedRenamePost = useMemo(
     () =>
@@ -46,10 +61,11 @@ export const WorkspaceCover = ({
             }}
             onClientUploadComplete={async (file) => {
               await addOrUpdateCoverImage(file[0]!.url, postId);
+              fetchCover();
             }}
           />
           <Image
-            src={coverUrl}
+            src={coverLink}
             alt="Example Image"
             fill
             className="object-cover absolute inset-0"
@@ -73,8 +89,17 @@ export const WorkspaceCover = ({
             }}
             onClientUploadComplete={async (file) => {
               await addOrUpdateCoverImage(file[0]!.url, postId);
+              fetchCover();
             }}
           />
+          <button
+            onClick={() => {
+              console.log(coverLink);
+            }}
+            className="h-[200px]"
+          >
+            click me!!!!
+          </button>
         </div>
       )}
       <TextareaAutosize

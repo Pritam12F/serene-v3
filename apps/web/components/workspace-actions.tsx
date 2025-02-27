@@ -37,10 +37,7 @@ export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
   return (
     <>
       <SidebarMenuAction showOnHover className="mx-8">
-        <PostDialog
-          trigger={<Plus />}
-          content={<Editor onChange={() => {}} editable={true} />}
-        />
+        <PostDialog trigger={<Plus />} content={<Editor editable={true} />} />
       </SidebarMenuAction>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

@@ -12,21 +12,16 @@ import { blueTheme } from "@/lib/themes";
 import { WorkspaceCover } from "./workspace-cover";
 
 interface EditorProps {
-  onChange?: () => void;
   editable: boolean;
   initialContent?: unknown;
   title?: string | null;
   postId?: number | null;
 }
 
-const Editor = ({
-  onChange,
-  editable,
-  initialContent,
-  title,
-  postId,
-}: EditorProps) => {
+const Editor = ({ editable, initialContent, title, postId }: EditorProps) => {
   const { resolvedTheme } = useTheme();
+
+  const onEditorContentChange = async () => {};
 
   const uploadFile = async (file: File) => {
     switch (true) {
@@ -65,7 +60,9 @@ const Editor = ({
       <WorkspaceCover title={title ?? "Unknown"} postId={postId!} />
       <BlockNoteView
         editor={editor}
-        onChange={onChange}
+        onChange={() => {
+          console.log(editor.document);
+        }}
         editable={editable}
         theme={resolvedTheme === "dark" ? blueTheme.dark : blueTheme.light}
       />

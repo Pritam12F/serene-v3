@@ -185,6 +185,7 @@ export const fetchSinglePostById = async (
 
     const fetchedPost = await db.query.posts.findFirst({
       where: eq(posts.id, postId),
+      with: { coverImage: true },
     });
 
     return {

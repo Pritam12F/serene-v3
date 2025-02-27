@@ -1,56 +1,109 @@
-import { images, posts, users } from "@workspace/db/schema";
+import {
+  audios,
+  coverImages,
+  images,
+  otherFiles,
+  posts,
+  users,
+  videos,
+} from "@workspace/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-//Types
-
-// 1. User types
+// User Types
 export type SelectUserType =
   | (typeof users.$inferSelect & {
-      posts?: SelectManyPostType | null;
+      posts?: SelectManyPostType;
     })
   | undefined;
-export type SelectManyUserType = (typeof users.$inferSelect & {
-  posts?: SelectManyPostType | null;
-})[];
+export type SelectManyUserType = SelectUserType[];
 export type InsertUserType = typeof users.$inferInsert;
-export type InsertManyUserType = (typeof users.$inferInsert)[];
+export type InsertManyUserType = InsertUserType[];
 
-// 2. Post Types
+// Post Types
 export type SelectPostType =
   | (typeof posts.$inferSelect & {
       parent?: SelectPostType | null;
       children?: SelectManyPostType;
+      user?: SelectUserType | null;
       images?: SelectManyImageType;
-      user?: SelectUserType;
+      audios?: SelectManyAudioType;
+      videos?: SelectManyVideoType;
+      otherFiles?: SelectManyOtherFileType;
+      coverImage?: SelectCoverImageType | null;
     })
   | undefined;
-export type SelectManyPostType = (typeof posts.$inferSelect & {
-  parent?: SelectPostType | null;
-  children?: SelectManyPostType;
-  images?: SelectManyImageType;
-  user?: SelectUserType;
-})[];
+export type SelectManyPostType = SelectPostType[];
 export type InsertPostType = typeof posts.$inferInsert;
-export type InsertManyPostType = (typeof posts.$inferInsert)[];
+export type InsertManyPostType = InsertPostType[];
 
-// 3. Image Types
+// Image Types
 export type SelectImageType =
   | (typeof images.$inferSelect & {
       post?: SelectPostType;
     })
   | undefined;
-export type SelectManyImageType = (typeof images.$inferSelect & {
-  post?: SelectPostType;
-})[];
+export type SelectManyImageType = SelectImageType[];
 export type InsertImageType = typeof images.$inferInsert;
-export type InsertManyImageType = (typeof images.$inferInsert)[];
+export type InsertManyImageType = InsertImageType[];
 
-// Schemas
-export const SelectUserSchema = createSelectSchema(users).extend({});
-export const InsertUserSchema = createInsertSchema(users).extend({});
+// Audio Types
+export type SelectAudioType =
+  | (typeof audios.$inferSelect & {
+      post?: SelectPostType;
+    })
+  | undefined;
+export type SelectManyAudioType = SelectAudioType[];
+export type InsertAudioType = typeof audios.$inferInsert;
+export type InsertManyAudioType = InsertAudioType[];
 
-export const SelectPostSchema = createSelectSchema(posts).extend({});
-export const InsertPostSchema = createInsertSchema(posts).extend({});
+// Video Types
+export type SelectVideoType =
+  | (typeof videos.$inferSelect & {
+      post?: SelectPostType;
+    })
+  | undefined;
+export type SelectManyVideoType = SelectVideoType[];
+export type InsertVideoType = typeof videos.$inferInsert;
+export type InsertManyVideoType = InsertVideoType[];
 
-export const SelectImageSchema = createSelectSchema(images).extend({});
-export const InsertImageSchema = createInsertSchema(images).extend({});
+// Other Files Types
+export type SelectOtherFileType =
+  | (typeof otherFiles.$inferSelect & {
+      post?: SelectPostType;
+    })
+  | undefined;
+export type SelectManyOtherFileType = SelectOtherFileType[];
+export type InsertOtherFileType = typeof otherFiles.$inferInsert;
+export type InsertManyOtherFileType = InsertOtherFileType[];
+
+// Cover Image Types
+export type SelectCoverImageType =
+  | (typeof coverImages.$inferSelect & {
+      post?: SelectPostType;
+    })
+  | undefined;
+export type SelectManyCoverImageType = SelectCoverImageType[];
+export type InsertCoverImageType = typeof coverImages.$inferInsert;
+export type InsertManyCoverImageType = InsertCoverImageType[];
+
+// Zod Schemas
+export const SelectUserSchema = createSelectSchema(users);
+export const InsertUserSchema = createInsertSchema(users);
+
+export const SelectPostSchema = createSelectSchema(posts);
+export const InsertPostSchema = createInsertSchema(posts);
+
+export const SelectImageSchema = createSelectSchema(images);
+export const InsertImageSchema = createInsertSchema(images);
+
+export const SelectAudioSchema = createSelectSchema(audios);
+export const InsertAudioSchema = createInsertSchema(audios);
+
+export const SelectVideoSchema = createSelectSchema(videos);
+export const InsertVideoSchema = createInsertSchema(videos);
+
+export const SelectOtherFileSchema = createSelectSchema(otherFiles);
+export const InsertOtherFileSchema = createInsertSchema(otherFiles);
+
+export const SelectCoverImageSchema = createSelectSchema(coverImages);
+export const InsertCoverImageSchema = createInsertSchema(coverImages);
