@@ -10,23 +10,18 @@ import {
   fetchSinglePostById,
 } from "@/server/actions";
 import useStore from "@workspace/store";
+import { ClientUploadedFileData } from "uploadthing/types";
 
-export const WorkspaceCover = ({
-  coverUrl,
-  title,
-  postId,
-}: {
-  coverUrl?: string;
-  title: string;
-  postId: number;
-}) => {
+export const WorkspaceCover = ({ postId }: { postId: number }) => {
   const { workspaceNames, setWorkspaceName } = useStore();
-  const [coverLink, setCoverLink] = useState("");
+  const [coverLink, setCoverLink] = useState<string | null>();
 
   const fetchCover = useCallback(async () => {
-    const post = await fetchSinglePostById(postId);
+    const { success, data } = await fetchSinglePostById(postId);
 
-    setCoverLink(post.data?.coverImage?.url ?? "");
+    if (success) {
+      setCoverLink(data?.coverImage?.url);
+    }
   }, [postId]);
 
   useEffect(() => {
@@ -41,9 +36,15 @@ export const WorkspaceCover = ({
     []
   );
 
+  const handleOnUpload = async (file: ClientUploadedFileData<any>[]) => {
+    const { success } = await addOrUpdateCoverImage(file[0]!.url, postId);
+
+    if (success) setCoverLink(file[0]?.url!);
+  };
+
   return (
     <div className="relative w-full h-[270px] min-h-[270px]">
-      {coverUrl ? (
+      {coverLink ? (
         <>
           <UploadButton
             endpoint="coverImageUploader"
@@ -59,10 +60,7 @@ export const WorkspaceCover = ({
               },
               allowedContent: " ",
             }}
-            onClientUploadComplete={async (file) => {
-              await addOrUpdateCoverImage(file[0]!.url, postId);
-              fetchCover();
-            }}
+            onClientUploadComplete={handleOnUpload}
           />
           <Image
             src={coverLink}
@@ -87,10 +85,7 @@ export const WorkspaceCover = ({
               },
               allowedContent: " ",
             }}
-            onClientUploadComplete={async (file) => {
-              await addOrUpdateCoverImage(file[0]!.url, postId);
-              fetchCover();
-            }}
+            onClientUploadComplete={handleOnUpload}
           />
           <button
             onClick={() => {

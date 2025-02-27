@@ -57,7 +57,7 @@ const Editor = ({ editable, initialContent, title, postId }: EditorProps) => {
     <div
       className={`overflow-x-hidden max-w-[1500px] flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`}
     >
-      <WorkspaceCover title={title ?? "Unknown"} postId={postId!} />
+      <WorkspaceCover postId={postId!} />
       <BlockNoteView
         editor={editor}
         onChange={() => {
