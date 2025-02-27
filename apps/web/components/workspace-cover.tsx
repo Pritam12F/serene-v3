@@ -68,14 +68,6 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
             fill
             className="object-cover absolute inset-0"
           />
-          <button
-            onClick={() => {
-              console.log(coverLink);
-            }}
-            className="h-[200px]"
-          >
-            click me!!!!
-          </button>
         </>
       ) : (
         <div className="absolute inset-0 bg-gradient-to-b from-[#454653] to-[#282b32]">
@@ -95,25 +87,27 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
             }}
             onClientUploadComplete={handleOnUpload}
           />
-          <button
-            onClick={() => {
-              console.log(coverLink);
-            }}
-            className="h-[200px]"
-          >
-            click me!!!!
-          </button>
         </div>
       )}
-      <TextareaAutosize
-        className="w-fit mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
-        placeholder="Untitled"
-        value={workspaceNames.get(postId)}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-          setWorkspaceName(postId, e.target.value);
-          debouncedRenamePost(workspaceNames.get(postId), postId);
-        }}
-      />
+      <div>
+        <TextareaAutosize
+          className="w-fit mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
+          placeholder="Untitled"
+          value={workspaceNames.get(postId)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            setWorkspaceName(postId, e.target.value);
+            debouncedRenamePost(workspaceNames.get(postId), postId);
+          }}
+        />
+        <button
+          onClick={() => {
+            console.log(coverLink);
+          }}
+          className="h-[300px]"
+        >
+          click
+        </button>
+      </div>
     </div>
   );
 };
