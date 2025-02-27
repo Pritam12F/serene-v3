@@ -32,7 +32,7 @@ export const WorkspaceCover = ({
         <>
           <UploadButton
             endpoint="coverImageUploader"
-            className="absolute ml-12 mt-40 opacity-0 hover:opacity-100 z-50 duration-500 ut-button:bg-transparent text-slate-300 ut-button:hover:ring-0"
+            className="absolute ml-12 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
             content={{
               button: () => {
                 return (
@@ -56,7 +56,7 @@ export const WorkspaceCover = ({
         <div className="absolute inset-0 bg-gradient-to-b from-[#454653] to-[#282b32]">
           <UploadButton
             endpoint="coverImageUploader"
-            className="absolute ml-8 mt-40 opacity-0 hover:opacity-100 z-50 duration-500 ut-button:bg-transparent text-slate-300 ut-button:hover:ring-0"
+            className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
             content={{
               button: () => {
                 return (
@@ -77,7 +77,7 @@ export const WorkspaceCover = ({
         value={workspaceNames.get(postId)}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
           setWorkspaceName(postId, e.target.value);
-          debouncedRenamePost(title, postId);
+          debouncedRenamePost(workspaceNames.get(postId), postId);
         }}
       />
     </div>

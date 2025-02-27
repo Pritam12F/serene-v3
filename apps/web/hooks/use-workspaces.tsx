@@ -8,7 +8,9 @@ export const useWorkspaces = (user_id: string, documentList?: string[]) => {
   const { data, mutate, isLoading } = useSWR(
     `${user_id}/workspaces`,
     async () => {
-      const fetchedUser = await fetchUserByClerkId(user_id);
+      const fetchedUser = await fetchUserByClerkId(
+        "user_2taK9HrSAJ79PwjCXuSgvSKFshg"
+      );
       const fetchedPosts = await fetchAllPostsByUserId(fetchedUser.data!.id);
 
       if (fetchedUser.success && fetchedPosts.success && fetchedPosts.data) {
