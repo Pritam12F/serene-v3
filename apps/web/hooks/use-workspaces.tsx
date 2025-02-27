@@ -18,7 +18,8 @@ export const useWorkspaces = (user_id: string, documentList?: string[]) => {
         };
       }
       return { tree: [], list: [] };
-    }
+    },
+    { suspense: true }
   );
 
   const [postTree, setPostTree] =

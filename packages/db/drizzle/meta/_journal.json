@@ -190,6 +190,20 @@
       "when": 1740466865986,
       "tag": "0026_eminent_the_twelve",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1740646127910,
+      "tag": "0027_left_maestro",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1740647300951,
+      "tag": "0028_watery_deathstrike",
+      "breakpoints": true
     }
   ]
 }

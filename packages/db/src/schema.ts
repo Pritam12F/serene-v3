@@ -27,7 +27,7 @@ export const posts = pgTable("posts", {
   name: varchar("name", { length: 255 }),
   content: jsonb("content").notNull(),
   emoji: text("emoji"),
-  activeCoverImage: integer("active_cover_id"),
+  coverImageId: integer("cover_id"),
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
@@ -86,8 +86,8 @@ export const coverImages = pgTable("cover_images", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
   url: text("cover_image_url").notNull(),
-  activeCoverImage: boolean("active_state").default(false),
   postId: integer("post_id")
+    .unique()
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
@@ -163,5 +163,8 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
   audios: many(audios),
   videos: many(videos),
   otherFiles: many(otherFiles),
-  coverImages: many(coverImages),
+  coverImage: one(coverImages, {
+    fields: [posts.coverImageId],
+    references: [coverImages.id],
+  }),
 }));

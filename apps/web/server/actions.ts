@@ -7,7 +7,7 @@ import {
   SelectUserType,
 } from "@workspace/common/types/db";
 import db from "@workspace/db";
-import { posts, users } from "@workspace/db/schema";
+import { coverImages, posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 
 type ActionResponse<T = null> = {
@@ -202,10 +202,53 @@ export const fetchSinglePostById = async (
   }
 };
 
-export const addCoverImage = async (coverUrl: string, postId: number) => {
+export const addOrUpdateCoverImage = async (
+  coverUrl: string,
+  postId: number
+): Promise<ActionResponse<null>> => {
   const { userId } = await auth();
 
   if (!userId) {
     throw new Error("You must be signed in to change cover image");
+  }
+
+  try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.clerkId, userId),
+      with: {
+        posts: true,
+      },
+    });
+
+    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
+
+    if (!hasAccessToPost) {
+      return {
+        success: false,
+        message: "User doesn't have access to this post",
+        data: null,
+      };
+    }
+
+    await db
+      .insert(coverImages)
+      .values({ url: coverUrl, postId })
+      .onConflictDoUpdate({
+        target: coverImages.postId,
+        set: { url: coverUrl },
+      });
+
+    return {
+      success: true,
+      message: "Successfully added cover image",
+      data: null,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to add cover image";
+
+    return { success: false, message: errorMessage, data: null };
   }
 };

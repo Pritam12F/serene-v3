@@ -4,7 +4,7 @@ import { ImageIcon } from "lucide-react";
 import { useMemo } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { debounce } from "@/lib/debounce";
-import { changePostNameById } from "@/server/actions";
+import { addOrUpdateCoverImage, changePostNameById } from "@/server/actions";
 import useStore from "@workspace/store";
 
 export const WorkspaceCover = ({
@@ -44,6 +44,9 @@ export const WorkspaceCover = ({
               },
               allowedContent: " ",
             }}
+            onClientUploadComplete={async (file) => {
+              await addOrUpdateCoverImage(file[0]!.url, postId);
+            }}
           />
           <Image
             src={coverUrl}
@@ -67,6 +70,9 @@ export const WorkspaceCover = ({
                 );
               },
               allowedContent: " ",
+            }}
+            onClientUploadComplete={async (file) => {
+              await addOrUpdateCoverImage(file[0]!.url, postId);
             }}
           />
         </div>

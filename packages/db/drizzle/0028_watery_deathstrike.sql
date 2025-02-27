@@ -1,0 +1,1 @@
+ALTER TABLE "cover_images" ADD CONSTRAINT "cover_images_post_id_unique" UNIQUE("post_id");
