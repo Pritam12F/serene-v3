@@ -22,7 +22,10 @@ export const SidebarExtension = ({
   children?: React.ReactNode;
   documentList?: string[];
 }) => {
-  const Editor = dynamic(() => import("./editor"), { ssr: false });
+  const Editor = dynamic(() => import("./editor"), {
+    ssr: false,
+    loading: () => <div>Loading...</div>,
+  });
 
   const { user } = useUser();
 
