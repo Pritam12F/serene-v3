@@ -2,7 +2,7 @@
 
 import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
-import React from "react";
+import React, { Dispatch, SetStateAction, Suspense, useEffect } from "react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
@@ -14,14 +14,27 @@ import { WorkspaceCover } from "./workspace-cover";
 interface EditorProps {
   editable: boolean;
   initialContent?: unknown;
-  title?: string | null;
   postId?: number | null;
+  onReady: Dispatch<SetStateAction<boolean>>;
+  isReady: boolean;
 }
 
-const Editor = ({ editable, initialContent, title, postId }: EditorProps) => {
+const Editor = ({
+  editable,
+  initialContent,
+  postId,
+  isReady,
+  onReady,
+}: EditorProps) => {
   const { resolvedTheme } = useTheme();
 
-  const onEditorContentChange = async () => {};
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onReady(true);
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const uploadFile = async (file: File) => {
     switch (true) {
@@ -55,14 +68,12 @@ const Editor = ({ editable, initialContent, title, postId }: EditorProps) => {
 
   return (
     <div
-      className={`overflow-x-hidden max-w-[1500px] flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`}
+      className={`${!isReady ? "hidden" : "block"} overflow-x-hidden max-w-[1500px] flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`}
     >
       <WorkspaceCover postId={postId!} />
       <BlockNoteView
         editor={editor}
-        onChange={() => {
-          console.log(editor.document);
-        }}
+        onChange={() => {}}
         editable={editable}
         theme={resolvedTheme === "dark" ? blueTheme.dark : blueTheme.light}
       />
