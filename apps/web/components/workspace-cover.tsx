@@ -20,8 +20,6 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
     const { success, data } = await fetchSinglePostById(postId);
 
     if (success) {
-      console.log("Not early return 1");
-      console.log(data?.coverImage?.url);
       setCoverLink(data?.coverImage?.url);
     }
   }, [postId]);
@@ -42,8 +40,6 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
     const { success } = await addOrUpdateCoverImage(file[0]!.url, postId);
 
     if (success) {
-      console.log("Not early return 2");
-      console.log(file[0]?.url);
       setCoverLink(file[0]?.url!);
     }
   };
@@ -103,9 +99,6 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             setWorkspaceName(postId, e.target.value);
             debouncedRenamePost(workspaceNames.get(postId), postId);
-          }}
-          onClick={() => {
-            console.log(coverLink);
           }}
         />
       </div>
