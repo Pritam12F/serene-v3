@@ -1,42 +1,61 @@
 import { fetchAllPostsByUserId, fetchUserByClerkId } from "@/server/actions";
 import { SelectManyPostType } from "@workspace/common/types/db";
 import arrayToTree from "array-to-tree";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
+import { useCallback, useEffect, useState } from "react";
 
 export const useWorkspaces = (user_id: string, documentList?: string[]) => {
-  const { data, mutate, isLoading } = useSWR(
-    `${user_id}/workspaces`,
-    async () => {
+  const [postData, setPostData] = useState<{
+    tree: arrayToTree.Tree<SelectManyPostType>;
+    list: SelectManyPostType | undefined;
+  }>();
+  const [postList, setPostList] = useState<SelectManyPostType | undefined>();
+  const [postTree, setPostTree] =
+    useState<arrayToTree.Tree<SelectManyPostType>>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
+
+  const fetchWorkspaces = useCallback(async () => {
+    try {
+      setIsLoading(true);
       const fetchedUser = await fetchUserByClerkId(user_id);
       const fetchedPosts = await fetchAllPostsByUserId(fetchedUser.data!.id);
 
       if (fetchedUser.success && fetchedPosts.success && fetchedPosts.data) {
-        return {
-          tree: arrayToTree(fetchedPosts.data, { parentProperty: "parentId" }),
-          list: fetchedPosts.data,
-        };
+        const tree = arrayToTree(fetchedPosts.data, {
+          parentProperty: "parentId",
+        });
+        setPostData({ tree, list: fetchedPosts.data });
       }
-      return { tree: [], list: [] };
-    },
-    { suspense: true }
-  );
 
-  const [postTree, setPostTree] =
-    useState<arrayToTree.Tree<SelectManyPostType>>();
-  const [postList, setPostList] = useState<SelectManyPostType | undefined>([]);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      const error =
+        err instanceof Error
+          ? err.message
+          : "Error occured trying to fetch posts";
+      setError(error);
+    }
+  }, [user_id]);
 
   useEffect(() => {
-    setPostTree(data?.tree);
+    fetchWorkspaces();
+  }, [user_id]);
 
-    if (documentList && data?.list) {
-      const filtered = data?.list.filter((x) =>
+  const mutate = useCallback(async () => {
+    await fetchWorkspaces();
+  }, []);
+
+  useEffect(() => {
+    setPostTree(postData?.tree);
+    if (documentList && postData?.list) {
+      const filtered = postData?.list.filter((x) =>
         documentList.includes(x!.id.toString())
       );
 
       setPostList(filtered);
     }
-  }, [data?.tree, data?.list, documentList]);
+  }, [documentList, postData?.tree, postData?.list]);
 
-  return { postTree, postList, mutate, isLoading };
+  return { postTree, postList, isLoading, error, mutate };
 };
