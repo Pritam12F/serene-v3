@@ -30,7 +30,7 @@ const Editor = ({
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      onReady(true);
+      onReady?.(true);
     }, 1200);
 
     return () => clearTimeout(timer);
