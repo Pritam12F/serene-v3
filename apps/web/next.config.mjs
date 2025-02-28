@@ -5,7 +5,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "takglywyy4.ufs.sh",
+        hostname: "utfs.io",
+        port: "",
       },
     ],
   },
