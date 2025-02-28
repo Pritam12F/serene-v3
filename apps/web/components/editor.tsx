@@ -15,8 +15,8 @@ interface EditorProps {
   editable: boolean;
   initialContent?: unknown;
   postId?: number | null;
-  onReady: Dispatch<SetStateAction<boolean>>;
-  isReady: boolean;
+  onReady?: Dispatch<SetStateAction<boolean>>;
+  isReady?: boolean;
 }
 
 const Editor = ({
