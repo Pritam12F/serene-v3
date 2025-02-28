@@ -28,14 +28,6 @@ const Editor = ({
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onReady?.(true);
-    }, 2500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const uploadFile = async (file: File) => {
     switch (true) {
       case file.type.startsWith("image"):
@@ -65,6 +57,12 @@ const Editor = ({
     initialContent: initialContent as unknown as any,
     uploadFile,
   });
+
+  useEffect(() => {
+    if (editor.document.length > 1) {
+      onReady?.(true);
+    }
+  }, [editor.document]);
 
   return (
     <div
