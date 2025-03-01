@@ -12,7 +12,6 @@ import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { NavActions } from "./nav-actions";
 import dynamic from "next/dynamic";
 import { useWorkspaces } from "@/hooks/use-workspaces";
-import { useUser } from "@clerk/nextjs";
 import Loading from "@/app/(main)/documents/[[...slug]]/loading";
 import { useState } from "react";
 
@@ -27,7 +26,6 @@ export const SidebarExtension = ({
     ssr: false,
   });
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
-  const { user, isLoaded } = useUser();
 
   const { postList, isLoading } = useWorkspaces(user?.id!, documentList);
 

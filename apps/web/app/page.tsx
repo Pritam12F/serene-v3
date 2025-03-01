@@ -1,11 +1,12 @@
 import { Landing } from "@/components/landing";
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { authOptions } from "./api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
 
 export default async function Page() {
-  const { userId } = await auth();
+  const session = await getServerSession(authOptions);
 
-  if (userId) {
+  if (session?.user) {
     redirect("/documents");
   }
 

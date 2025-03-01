@@ -2,7 +2,7 @@
 
 import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
-import React, { Dispatch, SetStateAction, Suspense, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";

@@ -4,9 +4,10 @@ import "@workspace/ui/globals.css";
 import { Providers } from "@/components/providers";
 import type { Metadata } from "next";
 import Navbar from "@/components/navbar";
-import { SignedOut } from "@clerk/nextjs";
 import Footer from "@/components/footer";
 import { Toaster } from "@workspace/ui/components/sonner";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/options";
 
 const fontInter = Inter({
   subsets: ["latin"],
@@ -18,24 +19,22 @@ export const metadata: Metadata = {
   description: "Created by Pritam",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${fontInter.variable} font-sans antialiased min-h-screen`}
       >
         <Providers>
-          <SignedOut>
-            <Navbar />
-          </SignedOut>
+          {!session?.user ? <Navbar /> : null}
           {children}
-          <SignedOut>
-            <Footer />
-          </SignedOut>
+          {!session?.user ? <Footer /> : null}
           <Toaster closeButton />
         </Providers>
       </body>

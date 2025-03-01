@@ -23,7 +23,8 @@ import { SidebarFavorites } from "./sidebar-favorites";
 import { SidebarWorkspaces } from "./sidebar-workspaces";
 import { SidebarSecondary } from "./sidebar-secondary";
 import { SidebarUser } from "./sidebar-user";
-import { currentUser } from "@clerk/nextjs/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 
 const data = {
   teams: [
@@ -207,17 +208,15 @@ const data = {
 export async function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const user = await currentUser();
+  const session = await getServerSession(authOptions);
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
         <SidebarUser
           user={{
-            name: user?.fullName ?? "Anonymous",
-            email:
-              user?.primaryEmailAddress?.emailAddress ??
-              "anonymous@example.com",
-            avatar: user?.imageUrl ?? "",
+            name: session?.user?.name ?? "Anonymous",
+            email: session?.user?.email ?? "anonymous@example.com",
+            avatar: session?.user?.image ?? "",
           }}
         />
         <SidebarMain items={data.navMain} />

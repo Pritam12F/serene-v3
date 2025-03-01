@@ -13,12 +13,14 @@ import {
 
 // Users Table
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey(),
-  clerkId: varchar("clerk_id", { length: 300 }).notNull(),
+  id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   profilePic: text("profile_pic"),
   email: text("email").unique().notNull(),
   phone: integer("phone").unique(),
+  hashedPassword: text("hashed_password"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Posts Table

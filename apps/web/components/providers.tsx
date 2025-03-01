@@ -6,16 +6,11 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { HeroUIProvider } from "@heroui/react";
-import { ClerkProvider } from "@clerk/nextjs";
-import { neobrutalism } from "@clerk/themes";
+import { SessionProvider } from "next-auth/react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: neobrutalism,
-      }}
-    >
+    <SessionProvider>
       <HeroUIProvider>
         <NextThemesProvider
           attribute="class"
@@ -36,6 +31,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           {children}
         </NextThemesProvider>
       </HeroUIProvider>
-    </ClerkProvider>
+    </SessionProvider>
   );
 }

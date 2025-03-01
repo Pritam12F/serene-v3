@@ -13,7 +13,7 @@ import { WorkspaceActions } from "./workspace-actions";
 import { type SelectPostType } from "@workspace/common/types/db";
 import Link from "next/link";
 import useStore from "@workspace/store";
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef } from "react";
 import { Input } from "@workspace/ui/components/input";
 import { changePostNameById } from "@/server/actions";
 import { debounce } from "@/lib/debounce";

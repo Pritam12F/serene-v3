@@ -1,6 +1,5 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import useStore from "@workspace/store";
 import { useEffect, useRef } from "react";
 import { Workspace } from "./workspace";
@@ -18,7 +17,6 @@ export function SidebarWorkspaces() {
     useStore();
   const workspaceRef = useRef(null);
 
-  const user = useUser();
   const user_id = user.user?.id ?? "";
   const { postTree, mutate } = useWorkspaces(user_id);
 
