@@ -18,7 +18,6 @@ import {
   Trash,
   Trash2,
 } from "lucide-react";
-
 import { Button } from "@workspace/ui/components/button";
 import {
   Popover,

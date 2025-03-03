@@ -32,9 +32,9 @@ export default async function RootLayout({
         className={`${fontInter.variable} font-sans antialiased min-h-screen`}
       >
         <Providers>
-          {!session?.user ? <Navbar /> : null}
+          {session?.user ? null : <Navbar />}
           {children}
-          {!session?.user ? <Footer /> : null}
+          {session?.user ? null : <Footer />}
           <Toaster closeButton />
         </Providers>
       </body>

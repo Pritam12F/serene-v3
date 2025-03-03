@@ -14,8 +14,9 @@ import dynamic from "next/dynamic";
 import { useWorkspaces } from "@/hooks/use-workspaces";
 import Loading from "@/app/(main)/documents/[[...slug]]/loading";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
-export const SidebarExtension = ({
+export const SidebarExtension = async ({
   children,
   documentList,
 }: {
@@ -26,8 +27,11 @@ export const SidebarExtension = ({
     ssr: false,
   });
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
-
-  const { postList, isLoading } = useWorkspaces(user?.id!, documentList);
+  const { data: session } = useSession();
+  const { postList, isLoading } = useWorkspaces(
+    session?.user.id!,
+    documentList
+  );
 
   return (
     <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-[#282b32]">
@@ -72,7 +76,7 @@ export const SidebarExtension = ({
         onReady={setIsEditorReady}
         isReady={isEditorReady}
       />
-      {(!isEditorReady || !isLoaded || isLoading) && <Loading />}
+      {(!isEditorReady || isLoading) && <Loading />}
     </SidebarInset>
   );
 };
