@@ -8,6 +8,7 @@ import {
 import db from "@workspace/db";
 import { coverImages, posts, users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
+import { getServerSession } from "next-auth";
 
 type ActionResponse<T = null> = {
   success: boolean;
@@ -19,15 +20,15 @@ export const changePostNameById = async (
   postId: number,
   newName: string
 ): Promise<ActionResponse<null>> => {
-  const { userId } = await auth();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session?.user) {
     throw new Error("You must be signed in to change the name of a post");
   }
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.clerkId, userId),
+      where: eq(users.id, session.user.id),
       with: {
         posts: true,
       },
@@ -62,14 +63,14 @@ export const changePostNameById = async (
 export const deletePostById = async (
   postId: number
 ): Promise<ActionResponse<null>> => {
-  const { userId } = await auth();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session?.user) {
     throw new Error("You must be signed delete a post");
   }
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.clerkId, userId),
+      where: eq(users.id, session.user.id),
       with: {
         posts: true,
       },
@@ -98,18 +99,18 @@ export const deletePostById = async (
   }
 };
 
-export const fetchUserByClerkId = async (
-  clerkId: string
+export const fetchUserById = async (
+  userId: string
 ): Promise<ActionResponse<SelectUserType | null>> => {
-  const { userId } = await auth();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session?.user) {
     throw new Error("You must be signed in to fetch users from the db");
   }
 
   try {
     const userFetched = await db.query.users.findFirst({
-      where: eq(users.clerkId, clerkId),
+      where: eq(users.id, userId),
     });
 
     return {
@@ -130,9 +131,9 @@ export const fetchUserByClerkId = async (
 export const fetchAllPostsByUserId = async (
   user_id: string
 ): Promise<ActionResponse<SelectManyPostType | null>> => {
-  const { userId } = await auth();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session?.user) {
     throw new Error("You must be signed in to fetch users from the db");
   }
 
@@ -158,15 +159,15 @@ export const fetchAllPostsByUserId = async (
 export const fetchSinglePostById = async (
   postId: number
 ): Promise<ActionResponse<SelectPostType | null>> => {
-  const { userId } = await auth();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session?.user) {
     throw new Error("You must be signed in to fetch users from the db");
   }
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.clerkId, userId),
+      where: eq(users.id, session.user.id),
       with: {
         posts: true,
       },
@@ -206,15 +207,15 @@ export const addOrUpdateCoverImage = async (
   coverUrl: string,
   postId: number
 ): Promise<ActionResponse<null>> => {
-  const { userId } = await auth();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session?.user) {
     throw new Error("You must be signed in to change cover image");
   }
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.clerkId, userId),
+      where: eq(users.id, session.user.id),
       with: {
         posts: true,
       },
