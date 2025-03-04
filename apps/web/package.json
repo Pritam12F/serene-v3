@@ -25,7 +25,6 @@
     "array-to-tree": "^3.3.2",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
-    "drizzle-orm": "^0.33.0",
     "framer-motion": "^11.15.0",
     "lucide-react": "0.456.0",
     "next": "^15.1.0",

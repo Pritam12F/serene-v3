@@ -1,4 +1,4 @@
-import { fetchAllPostsByUserId, fetchUserByClerkId } from "@/server/actions";
+import { fetchAllPostsByUserId, fetchUserById } from "@/server/actions";
 import { SelectManyPostType } from "@workspace/common/types/db";
 import arrayToTree from "array-to-tree";
 import { useCallback, useEffect, useState } from "react";
@@ -17,7 +17,7 @@ export const useWorkspaces = (user_id: string, documentList?: string[]) => {
   const fetchWorkspaces = useCallback(async () => {
     try {
       setIsLoading(true);
-      const fetchedUser = await fetchUserByClerkId(user_id);
+      const fetchedUser = await fetchUserById(user_id);
       const fetchedPosts = await fetchAllPostsByUserId(fetchedUser.data!.id);
 
       if (fetchedUser.success && fetchedPosts.success && fetchedPosts.data) {

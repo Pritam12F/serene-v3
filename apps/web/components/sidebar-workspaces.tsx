@@ -11,13 +11,14 @@ import {
 } from "@workspace/ui/components/sidebar";
 import useClickOutside from "@/hooks/use-on-click-outside";
 import { useWorkspaces } from "@/hooks/use-workspaces";
+import { useSession } from "next-auth/react";
 
 export function SidebarWorkspaces() {
   const { mutator, changeMutator, activeWorkspaceId, changeActiveWorkspaceId } =
     useStore();
   const workspaceRef = useRef(null);
-
-  const user_id = user.user?.id ?? "";
+  const session = useSession();
+  const user_id = session.data?.user.id ?? "";
   const { postTree, mutate } = useWorkspaces(user_id);
 
   useClickOutside(workspaceRef, () => {
