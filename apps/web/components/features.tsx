@@ -8,7 +8,7 @@ import {
   IconSearch,
   IconTerminal2,
 } from "@tabler/icons-react";
-import { Feature } from "@workspace/ui/components/aceternityui/feature";
+import { Feature } from "@workspace/ui/components/feature";
 
 export function FeaturesSection() {
   const features = [

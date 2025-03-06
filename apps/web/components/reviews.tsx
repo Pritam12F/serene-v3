@@ -1,4 +1,4 @@
-import { Marquee } from "@workspace/ui/components/magicui/marquee";
+import { Marquee } from "@workspace/ui/components/marquee";
 import { cn } from "@workspace/ui/lib/utils";
 
 const reviews = [
@@ -114,7 +114,7 @@ const ReviewCard = ({
   );
 };
 
-export function MarqueeSection() {
+export function ReviewSection() {
   return (
     <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden border-none bg-background">
       <Marquee pauseOnHover className="[--duration:20s]">

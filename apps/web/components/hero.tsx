@@ -1,41 +1,24 @@
-import { Button } from "@workspace/ui/components/button";
-import Image from "next/image";
-import { Ripple } from "@workspace/ui/components/magicui/ripple";
+import { BackgroundLines } from "@workspace/ui/components/background-lines";
+import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="py-20 px-4 md:px-6 lg:px-8 text-center bg-gradient-to-b relative overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-transparent via-white to-transparent opacity-20"></div>
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-      </div>
-      <div className="relative z-10">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-4 bg-clip-text py-4 text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
-          Your thoughts, organized{" "}
-          <span className="text-blue-600 dark:text-blue-600">serenely</span>
-        </h1>
-        <p className="text-xl text-gray-700 dark:text-gray-200 mb-8 max-w-2xl mx-auto">
-          Serene is the all-in-one workspace for your notes, tasks, and ideas.
+    <BackgroundLines className="flex items-center justify-center w-full flex-col px-4">
+      <h2 className="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 dark:from-neutral-600 dark:to-white text-3xl md:text-4xl lg:text-7xl font-sans py-2 md:py-10 relative z-20 font-bold tracking-tight">
+        Your{" "}
+        <p className="inline bg-gradient-to-b from-blue-400 via-blue-500 to-blue-800 bg-clip-text text-transparent">
+          thoughts
         </p>
-        <div className="flex justify-center space-x-4">
-          <Button
-            size="lg"
-            className="bg-blue-600 text-white duration-300 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
-          >
-            Watch Demo
-          </Button>
-        </div>
-      </div>
-      <div className="mt-12 flex justify-center relative">
-        <Image
-          src="/image1.jpg"
-          alt="Serene app interface"
-          width={800}
-          height={600}
-          className="rounded-lg shadow-2xl duration-150 hover:scale-105 border border-gray-200 z-20 dark:border-gray-700"
-        />
-      </div>
-      <Ripple />
-    </section>
+        , organized
+      </h2>
+      <p className="max-w-xl mx-auto text-sm md:text-lg text-neutral-700 dark:text-neutral-400 text-center">
+        Serene is the all-in-one workspace for your notes, tasks, and ideas.
+      </p>
+      <Link href="/sign-up" className="z-30">
+        <button className="z-30 mt-10 px-8 py-2 rounded-full bg-gradient-to-b from-blue-500 to-blue-600 text-white focus:ring-2 focus:ring-blue-400 hover:shadow-xl transition duration-200">
+          Sign up now
+        </button>
+      </Link>
+    </BackgroundLines>
   );
 }

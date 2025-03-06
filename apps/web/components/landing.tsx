@@ -1,6 +1,6 @@
 import { TypewriterEffect } from "./cta";
 import Hero from "./hero";
-import { MarqueeSection } from "./reviews";
+import { ReviewSection } from "./reviews";
 import { FeaturesSection } from "./features";
 
 export const Landing = () => {
@@ -8,7 +8,7 @@ export const Landing = () => {
     <>
       <Hero />
       <FeaturesSection />
-      <MarqueeSection />
+      <ReviewSection />
       <TypewriterEffect />
     </>
   );

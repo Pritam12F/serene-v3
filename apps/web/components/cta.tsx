@@ -1,4 +1,4 @@
-import { TypewriterEffectSmooth } from "@workspace/ui/components/aceternityui/typewriter-effect";
+import { TypewriterEffectSmooth } from "@workspace/ui/components/typewriter-effect";
 
 export function TypewriterEffect() {
   const words = [

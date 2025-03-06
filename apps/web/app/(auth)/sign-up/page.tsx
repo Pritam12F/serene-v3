@@ -1,3 +1,5 @@
-export default async function SignUp() {
-  return <div>Sign up</div>;
+import { SignUp } from "@/components/signup";
+
+export default async function SignUpPage() {
+  return <SignUp />;
 }

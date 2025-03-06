@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -11,33 +11,36 @@ import {
   NavbarMenuItem,
   Link,
 } from "@heroui/react";
-import { Button } from "@workspace/ui/components/button";
+import { Button } from "@heroui/react";
 import ThemeSwitcherButton from "./theme-switcher";
+import Image from "next/image";
+import { useTheme } from "next-themes";
 
-export const SereneLogo = () => {
+export const BrandLogo = ({ style }: { style?: string }) => {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const themeClass = mounted && resolvedTheme === "dark" ? "invert" : "";
+
   return (
-    <Link href="/" className="flex items-center space-x-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="h-6 w-6 text-blue-600 dark:text-blue-600"
-      >
-        <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-      </svg>
-      <span className="font-bold text-xl text-gray-800 dark:text-gray-200">
-        Serene
-      </span>
+    <Link href="/" className="inline-flex items-center space-x-2 mt-1">
+      <Image
+        src="/serene-logo.png"
+        alt="Serene Logo"
+        width={160}
+        height={50}
+        className={`transition-all duration-200 bg-transparent ${themeClass} ${style}`}
+      />
     </Link>
   );
 };
 
 export default function App() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuItems = [
     { name: "Log in", href: "/sign-in" },
@@ -45,14 +48,14 @@ export default function App() {
   ];
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen}>
+    <Navbar onMenuOpenChange={setIsMenuOpen} className="overflow-y-hidden">
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden"
         />
         <NavbarBrand>
-          <SereneLogo />
+          <BrandLogo />
         </NavbarBrand>
       </NavbarContent>
 
@@ -77,7 +80,7 @@ export default function App() {
         <NavbarItem className="translate-x-14 md:translate-x-3">
           <ThemeSwitcherButton />
         </NavbarItem>
-        <NavbarItem>
+        <NavbarItem className="ml-2">
           <Link href="/sign-in" className="hidden md:block">
             Login
           </Link>
@@ -86,8 +89,8 @@ export default function App() {
           <Link href="/sign-up">
             <Button
               color="default"
-              variant="default"
-              className="hidden rounded-md bg-gradient-to-b from-blue-400 via-blue-500 to-blue-800 text-gray-100 hover:text-white dark:hover:text-white duration-300 md:inline-flex"
+              variant={"bordered"}
+              className="hidden lg:block"
             >
               Sign up
             </Button>
@@ -97,20 +100,14 @@ export default function App() {
       <NavbarMenu>
         {menuItems.map(({ name, href }, index) => (
           <NavbarMenuItem key={`${name}-${index}`}>
-            <Link
+            <Button
               className="w-full"
-              color={
-                index === 2
-                  ? "primary"
-                  : index === menuItems.length - 1
-                    ? "danger"
-                    : "foreground"
-              }
               href={`${href}`}
-              size="lg"
+              size={"md"}
+              color={"secondary"}
             >
               {name}
-            </Link>
+            </Button>
           </NavbarMenuItem>
         ))}
       </NavbarMenu>
