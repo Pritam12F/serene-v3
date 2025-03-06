@@ -31,7 +31,7 @@ export const BrandLogo = ({ style }: { style?: string }) => {
       <Image
         src="/serene-logo.png"
         alt="Serene Logo"
-        width={160}
+        width={120}
         height={50}
         className={`transition-all duration-200 bg-transparent ${themeClass} ${style}`}
       />
