@@ -27,7 +27,7 @@ export const BrandLogo = ({ style }: { style?: string }) => {
   const themeClass = mounted && resolvedTheme === "dark" ? "invert" : "";
 
   return (
-    <Link href="/" className="inline-flex items-center space-x-2 mt-1">
+    <Link href="/" className="inline-flex items-center mb-[1px] lg:mt-1">
       <Image
         src="/serene-logo.png"
         alt="Serene Logo"

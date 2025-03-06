@@ -14,8 +14,8 @@ export default function Hero() {
       <p className="max-w-xl mx-auto text-sm md:text-lg text-neutral-700 dark:text-neutral-400 text-center">
         Serene is the all-in-one workspace for your notes, tasks, and ideas.
       </p>
-      <Link href="/sign-up" className="z-30">
-        <button className="z-30 mt-10 px-8 py-2 rounded-full bg-gradient-to-b from-blue-500 to-blue-600 text-white focus:ring-2 focus:ring-blue-400 hover:shadow-xl transition duration-200">
+      <Link href="/sign-up" className="z-30 mt-10">
+        <button className="px-8 py-2 rounded-full bg-gradient-to-b from-blue-500 to-blue-600 text-white focus:ring-2 focus:ring-blue-400 hover:shadow-xl transition duration-200">
           Sign up now
         </button>
       </Link>
