@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@workspace/ui/components/sidebar";
 
-export default function LoggedInLayout({
+export default function MainInLayout({
   children,
 }: {
   children: React.ReactNode;

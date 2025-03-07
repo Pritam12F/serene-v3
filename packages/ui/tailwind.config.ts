@@ -97,6 +97,9 @@ export default withUt({
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        formRed: {
+          DEFAULT: "hsl(var(--form-destructive))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

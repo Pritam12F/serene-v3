@@ -8,6 +8,8 @@ import {
   videos,
 } from "@workspace/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import db from "@workspace/db";
+import { z } from "zod";
 
 // User Types
 export type SelectUserType =
@@ -87,7 +89,7 @@ export type InsertCoverImageType = typeof coverImages.$inferInsert;
 export type InsertManyCoverImageType = InsertCoverImageType[];
 
 // Zod Schemas
-export const SelectUserSchema = createSelectSchema(users);
+export const SelectUserSchema = createSelectSchema(users).strict();
 export const InsertUserSchema = createInsertSchema(users);
 
 export const SelectPostSchema = createSelectSchema(posts);
@@ -107,3 +109,26 @@ export const InsertOtherFileSchema = createInsertSchema(otherFiles);
 
 export const SelectCoverImageSchema = createSelectSchema(coverImages);
 export const InsertCoverImageSchema = createInsertSchema(coverImages);
+
+//Form Schema
+export const SignInFormSchema = z.object({
+  email: z.string().email({ message: "Not a valid email address" }),
+  password: z.string().min(5, { message: "Password must be of length 5" }),
+});
+
+export const SignUpFormSchema = z
+  .object({
+    email: z.string().email({ message: "Not a valid email address" }),
+    phone: z.string().length(10, { message: "Phone number must be 10 digits" }),
+    name: z.string().min(5, { message: "Name must be at least of 5 length" }),
+    password: z.string().min(5, { message: "Password must be of length 5" }),
+    confirmPassword: z
+      .string()
+      .min(5, { message: "Password must be of length 5" }),
+  })
+  .refine(
+    (schema) => {
+      return schema.password !== schema.confirmPassword;
+    },
+    { message: "Passwords don't match" }
+  );
