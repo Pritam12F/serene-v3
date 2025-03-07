@@ -15,15 +15,17 @@ import {
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
 import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
 import { FaGithub, FaGoogle } from "react-icons/fa";
+import { Eye, EyeClosed } from "lucide-react";
+import { useState } from "react";
 
 export const SignIn = () => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const form = useForm<z.infer<typeof SignInFormSchema>>({
     resolver: zodResolver(SignInFormSchema),
     defaultValues: {
@@ -37,7 +39,7 @@ export const SignIn = () => {
   }
   return (
     <div className="min-h-screen mx-auto flex justify-center items-center w-[337px] lg:max-w-[350px]">
-      <Card className="bg-gradient-to-tr from-white via-blue-100 to-gray-200 dark:from-gray-900 dark:via-[#071f3d] dark:to-[#031c41]">
+      <Card className="bg-gradient-to-tr from-white via-gray-100 to-gray-200 dark:from-gray-900 dark:via-[#071f3d] dark:to-[#031c41]">
         <CardHeader className="flex justify-center">
           <CardTitle className="text-2xl">Login to your account</CardTitle>
         </CardHeader>
@@ -71,12 +73,26 @@ export const SignIn = () => {
                   <FormItem className="lg:min-w-[300px]">
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter password"
-                        className="border-gray-600"
-                        type="password"
-                        {...field}
-                      />
+                      <div className="flex">
+                        <Input
+                          placeholder="Enter password"
+                          className="border-gray-600"
+                          type={`${isPasswordVisible ? "text" : "password"}`}
+                          {...field}
+                        />
+                        <span
+                          onClick={() => {
+                            setIsPasswordVisible((v) => !v);
+                          }}
+                          className="transition-all duration-400 -ml-8 mt-1.5 cursor-pointer"
+                        >
+                          {isPasswordVisible ? (
+                            <EyeClosed className="opacity-20 transition-opacity duration-200 hover:opacity-80" />
+                          ) : (
+                            <Eye className="opacity-20 transition-opacity duration-200 hover:opacity-80" />
+                          )}
+                        </span>
+                      </div>
                     </FormControl>
                     <FormMessage className="dark:text-red-500" />
                   </FormItem>

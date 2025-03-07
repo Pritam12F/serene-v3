@@ -119,16 +119,20 @@ export const SignInFormSchema = z.object({
 export const SignUpFormSchema = z
   .object({
     email: z.string().email({ message: "Not a valid email address" }),
-    phone: z.string().length(10, { message: "Phone number must be 10 digits" }),
-    name: z.string().min(5, { message: "Name must be at least of 5 length" }),
-    password: z.string().min(5, { message: "Password must be of length 5" }),
+    name: z.string().min(1, { message: "Name must be not empty" }),
+    password: z
+      .string()
+      .min(5, { message: "Password must be at least of length 5" }),
     confirmPassword: z
       .string()
-      .min(5, { message: "Password must be of length 5" }),
+      .min(5, { message: "Password must be at least of length 5" }),
   })
   .refine(
-    (schema) => {
-      return schema.password !== schema.confirmPassword;
+    (values) => {
+      return values.password === values.confirmPassword;
     },
-    { message: "Passwords don't match" }
+    {
+      message: "Passwords must match!",
+      path: ["confirmPassword"],
+    }
   );
