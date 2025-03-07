@@ -30,20 +30,21 @@ export const authOptions = {
             }
 
             const isPasswordCorrect = await bcrypt.compare(
-              userDb.hashedPassword!,
-              credentials.password
+              credentials.password,
+              userDb.hashedPassword!
             );
 
-            if (isPasswordCorrect) {
-              return {
-                id: userDb.id,
-                name: userDb.name,
-                email: userDb.email,
-                image: userDb.profilePic,
-                phone: userDb.phone,
-              };
+            if (!isPasswordCorrect) {
+              throw new Error("Password is incorrect");
             }
-            throw new Error("Password is incorrect");
+
+            return {
+              id: userDb.id,
+              name: userDb.name,
+              email: userDb.email,
+              image: userDb.profilePic,
+              phone: userDb.phone,
+            };
           } catch (err) {
             throw err;
           }

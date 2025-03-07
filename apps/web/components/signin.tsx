@@ -20,9 +20,12 @@ import {
 } from "@workspace/ui/components/card";
 import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
-import { FaGithub, FaGoogle } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { signIn } from "next-auth/react";
 
 export const SignIn = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -34,14 +37,20 @@ export const SignIn = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof SignInFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof SignInFormSchema>) {
+    await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      callbackUrl: `${window.location.origin}/documents`,
+    });
   }
   return (
     <div className="min-h-screen mx-auto flex justify-center items-center w-[337px] lg:max-w-[350px]">
       <Card className="bg-gradient-to-tr from-white via-gray-100 to-gray-200 dark:from-gray-900 dark:via-[#071f3d] dark:to-[#031c41]">
         <CardHeader className="flex justify-center">
-          <CardTitle className="text-2xl">Login to your account</CardTitle>
+          <CardTitle className="text-2xl text-center">
+            Login to your account
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -98,13 +107,42 @@ export const SignIn = () => {
                   </FormItem>
                 )}
               />
+              <p>
+                Already logged in?{" "}
+                <Link
+                  href={"/sign-up"}
+                  className="underline underline-offset-1 hover:underline-offset-2 transition-all duration-200"
+                >
+                  Sign up
+                </Link>
+              </p>
               <Button type="submit">Log in</Button>
               <div className="flex justify-between">
-                <Button className="w-[132px] lg:w-36">
-                  <FaGoogle color="red" />
+                <Button
+                  className="w-[140px] lg:w-36"
+                  onClick={async () => {
+                    await signIn("google", {
+                      callbackUrl: `${window.location.origin}/documents`,
+                    });
+                  }}
+                >
+                  <Image
+                    src={"/google-logo.svg"}
+                    alt="google"
+                    width={16}
+                    height={16}
+                  />
                   Google
                 </Button>
-                <Button className="w-[132px] lg:w-36">
+                <Button
+                  className="w-[140px] lg:w-36"
+                  onClick={async () => {
+                    await signIn("github"),
+                      {
+                        callbackUrl: `${window.location.origin}/documents`,
+                      };
+                  }}
+                >
                   <FaGithub color="gray" />
                   Github
                 </Button>

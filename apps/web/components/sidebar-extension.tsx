@@ -16,7 +16,7 @@ import Loading from "@/app/(main)/documents/[[...slug]]/loading";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 
-export const SidebarExtension = async ({
+export const SidebarExtension = ({
   children,
   documentList,
 }: {

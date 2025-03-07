@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="grid grid-cols-18 sm:grid-cols-12">
           <div className="ml-4 col-span-9 sm:mx-5 sm:col-span-5 md:col-span-6 lg:col-span-6">
-            <BrandLogo style="-mx-1 my-2.5" />
+            <BrandLogo style="my-2.5" />
           </div>
           <div className="ml-5 sm:-ml-3 mt-3 sm:-mt-1 col-span-9 sm:col-span-4 md:col-span-3 lg:col-span-4">
             <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-4">
