@@ -89,13 +89,18 @@ export const authOptions = {
     },
     async signIn({ account, user }) {
       if (account?.provider === "google" || account?.provider === "github") {
-        await db
-          .insert(users)
-          .values({
+        const isUserInDB = await db.query.users.findFirst({
+          where: eq(users.email, user.email),
+        });
+
+        console.log(isUserInDB);
+
+        if (!isUserInDB) {
+          await db.insert(users).values({
             name: user.name,
             email: user.email,
-          })
-          .onConflictDoNothing();
+          });
+        }
       }
 
       return true;
