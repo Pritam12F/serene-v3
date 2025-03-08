@@ -35,14 +35,12 @@ export async function POST(req: Request) {
   }
 
   data.hashedPassword = await bcrypt.hash(data.hashedPassword, 10);
-  const userId = uuid();
-  data.id = userId;
   data.accountType = "credentials";
 
   try {
     await db.insert(users).values(data);
 
-    await createInitialPosts(userId);
+    await createInitialPosts(data.id);
 
     return NextResponse.json({
       message: "User signed up successfully",

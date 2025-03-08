@@ -100,16 +100,14 @@ export const authOptions = {
         });
 
         if (!isUserInDB) {
-          const userId = uuid();
-
           await db.insert(users).values({
-            id: userId,
+            id: user.id,
             name: user.name,
             email: user.email,
             accountType: account.provider,
           });
 
-          await createInitialPosts(userId);
+          await createInitialPosts(user.id);
         } else {
           if (isUserInDB.accountType === "credentials") {
             return false;
