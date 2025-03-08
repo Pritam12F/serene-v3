@@ -26,6 +26,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+import { toast } from "sonner";
 
 export const SignIn = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -38,12 +39,28 @@ export const SignIn = () => {
   });
 
   async function onSubmit(values: z.infer<typeof SignInFormSchema>) {
-    await signIn("credentials", {
+    const res = await signIn("credentials", {
       email: values.email,
       password: values.password,
       callbackUrl: `${window.location.origin}/documents`,
     });
+
+    if (!res?.ok) {
+      toast.error("Incorrect details", {
+        style: {
+          backgroundColor: "red",
+        },
+      });
+      return;
+    }
+
+    toast.success("Signed in!", {
+      style: {
+        backgroundColor: "#38b000",
+      },
+    });
   }
+
   return (
     <div className="min-h-screen mx-auto flex justify-center items-center w-[337px] lg:max-w-[350px]">
       <Card className="bg-gradient-to-tr from-white via-gray-100 to-gray-200 dark:from-gray-900 dark:via-[#071f3d] dark:to-[#031c41]">

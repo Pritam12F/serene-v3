@@ -26,7 +26,7 @@ export const authOptions = {
             });
 
             if (!userDb) {
-              throw new Error("No user exists with this email address");
+              return null;
             }
 
             const isPasswordCorrect = await bcrypt.compare(
@@ -35,7 +35,7 @@ export const authOptions = {
             );
 
             if (!isPasswordCorrect) {
-              throw new Error("Password is incorrect");
+              return null;
             }
 
             return {
@@ -46,7 +46,7 @@ export const authOptions = {
               phone: userDb.phone,
             };
           } catch (err) {
-            throw err;
+            return null;
           }
         }
         return null;
@@ -86,6 +86,11 @@ export const authOptions = {
       }
 
       return session;
+    },
+    async signIn({ account }) {
+      if (account?.provider === "google" || account?.provider === "github") {
+      }
+      return true;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,

@@ -28,6 +28,7 @@ import Image from "next/image";
 import axios from "axios";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export const SignUp = () => {
   const [isPasswordVisible1, setIsPasswordVisible1] = useState(false);
