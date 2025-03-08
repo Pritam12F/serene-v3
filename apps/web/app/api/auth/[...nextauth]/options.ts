@@ -87,9 +87,17 @@ export const authOptions = {
 
       return session;
     },
-    async signIn({ account }) {
+    async signIn({ account, user }) {
       if (account?.provider === "google" || account?.provider === "github") {
+        await db
+          .insert(users)
+          .values({
+            name: user.name,
+            email: user.email,
+          })
+          .onConflictDoNothing();
       }
+
       return true;
     },
   },
