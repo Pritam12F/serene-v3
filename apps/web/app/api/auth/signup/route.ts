@@ -4,6 +4,8 @@ import { users } from "@workspace/db/schema";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
+import { createInitialPosts } from "@workspace/db/seed";
+import { v4 as uuid } from "uuid";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -28,14 +30,19 @@ export async function POST(req: Request) {
       {
         message: "User already exists!",
       },
-      { status: 403 }
+      { status: 409 }
     );
   }
 
   data.hashedPassword = await bcrypt.hash(data.hashedPassword, 10);
+  const userId = uuid();
+  data.id = userId;
+  data.accountType = "credentials";
 
   try {
     await db.insert(users).values(data);
+
+    await createInitialPosts(userId);
 
     return NextResponse.json({
       message: "User signed up successfully",

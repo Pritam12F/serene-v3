@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { jsonb } from "drizzle-orm/pg-core";
+import { jsonb, pgEnum } from "drizzle-orm/pg-core";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 import {
   integer,
@@ -11,6 +11,12 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+export const accountTypeEnum = pgEnum("account_type", [
+  "credentials",
+  "google",
+  "github",
+]);
+
 // Users Table
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -18,6 +24,7 @@ export const users = pgTable("users", {
   profilePic: text("profile_pic"),
   email: text("email").unique().notNull(),
   phone: integer("phone").unique(),
+  accountType: accountTypeEnum("account_type").notNull(),
   hashedPassword: text("hashed_password"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

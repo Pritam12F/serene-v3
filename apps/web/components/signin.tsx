@@ -46,11 +46,15 @@ export const SignIn = () => {
     });
 
     if (!res?.ok) {
-      toast.error("Incorrect details", {
-        style: {
-          backgroundColor: "red",
-        },
-      });
+      toast.error(
+        "Incorrect details or email already registered with socials",
+        {
+          style: {
+            backgroundColor: "red",
+          },
+        }
+      );
+
       return;
     }
 
@@ -125,7 +129,7 @@ export const SignIn = () => {
                 )}
               />
               <p>
-                Already logged in?{" "}
+                Don't have an account?{" "}
                 <Link
                   href={"/sign-up"}
                   className="underline underline-offset-1 hover:underline-offset-2 transition-all duration-200"
@@ -138,8 +142,19 @@ export const SignIn = () => {
                 <Button
                   className="w-[140px] lg:w-36"
                   onClick={async () => {
-                    await signIn("google", {
+                    const res = await signIn("google", {
                       callbackUrl: `${window.location.origin}/documents`,
+                    });
+
+                    if (!res?.ok) {
+                      toast.error("User registered with credentials already!", {
+                        style: { backgroundColor: "red" },
+                      });
+                      return;
+                    }
+
+                    toast.success("Signed in", {
+                      style: { backgroundColor: "#38b000" },
                     });
                   }}
                 >
@@ -154,10 +169,20 @@ export const SignIn = () => {
                 <Button
                   className="w-[140px] lg:w-36"
                   onClick={async () => {
-                    await signIn("github"),
-                      {
-                        callbackUrl: `${window.location.origin}/documents`,
-                      };
+                    const res = await signIn("github", {
+                      callbackUrl: `${window.location.origin}/documents`,
+                    });
+
+                    if (!res?.ok) {
+                      toast.error("User registered with credentials already!", {
+                        style: { backgroundColor: "red" },
+                      });
+                      return;
+                    }
+
+                    toast.success("Signed in", {
+                      style: { backgroundColor: "#38b000" },
+                    });
                   }}
                 >
                   <FaGithub color="gray" />

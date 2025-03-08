@@ -57,10 +57,19 @@ export const SignUp = () => {
           backgroundColor: "#38b000",
         },
       });
-    } catch {
-      toast.error("Error signin up user!", {
-        style: { backgroundColor: "red" },
-      });
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 409) {
+          toast.info("User already exists with this email", {
+            style: { backgroundColor: "yellow", color: "black" },
+          });
+          return;
+        }
+
+        toast.error("Error signing up user", {
+          style: { backgroundColor: "red" },
+        });
+      }
     }
   }
 
@@ -190,8 +199,20 @@ export const SignUp = () => {
                 <Button
                   className="w-[140px] lg:w-36"
                   onClick={async () => {
-                    await signIn("google", {
+                    const res = await signIn("google", {
                       callbackUrl: `${window.location.origin}/documents`,
+                    });
+
+                    if (!res?.ok) {
+                      toast.error("User registered with credentials already!", {
+                        style: { backgroundColor: "red" },
+                      });
+
+                      return;
+                    }
+
+                    toast.success("Signed up!", {
+                      style: { backgroundColor: "#38b000" },
                     });
                   }}
                 >
@@ -206,8 +227,20 @@ export const SignUp = () => {
                 <Button
                   className="w-[140px] lg:w-36"
                   onClick={async () => {
-                    await signIn("github", {
+                    const res = await signIn("github", {
                       callbackUrl: `${window.location.origin}/documents`,
+                    });
+
+                    if (!res?.ok) {
+                      toast.error("User registered with credentials already!", {
+                        style: { backgroundColor: "red" },
+                      });
+
+                      return;
+                    }
+
+                    toast.success("Signed up!", {
+                      style: { backgroundColor: "#38b000" },
                     });
                   }}
                 >

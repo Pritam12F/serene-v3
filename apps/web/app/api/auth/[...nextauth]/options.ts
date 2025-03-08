@@ -6,6 +6,8 @@ import bcrypt from "bcrypt";
 import db from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { users } from "@workspace/db/schema";
+import { v4 as uuid } from "uuid";
+import { createInitialPosts } from "@workspace/db/seed";
 
 export const authOptions = {
   providers: [
@@ -26,6 +28,10 @@ export const authOptions = {
             });
 
             if (!userDb) {
+              return null;
+            }
+
+            if (userDb.accountType !== "credentials") {
               return null;
             }
 
@@ -93,13 +99,21 @@ export const authOptions = {
           where: eq(users.email, user.email),
         });
 
-        console.log(isUserInDB);
-
         if (!isUserInDB) {
+          const userId = user.id ? user.id : uuid();
+
           await db.insert(users).values({
+            id: userId,
             name: user.name,
             email: user.email,
+            accountType: account.provider,
           });
+
+          await createInitialPosts(userId);
+        } else {
+          if (isUserInDB.accountType === "credentials") {
+            return false;
+          }
         }
       }
 

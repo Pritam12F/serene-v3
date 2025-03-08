@@ -8,7 +8,6 @@ import {
   videos,
 } from "@workspace/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import db from "@workspace/db";
 import { z } from "zod";
 
 // User Types
