@@ -100,7 +100,7 @@ export const authOptions = {
         });
 
         if (!isUserInDB) {
-          const userId = user.id ? user.id : uuid();
+          const userId = uuid();
 
           await db.insert(users).values({
             id: userId,
