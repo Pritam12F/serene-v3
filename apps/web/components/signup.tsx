@@ -213,13 +213,8 @@ export const SignUp = () => {
                       if (res?.ok) {
                         router.push("/documents");
                       }
-                    } catch {
-                      toast.error(
-                        "User already registered with different method",
-                        {
-                          style: { backgroundColor: "red" },
-                        }
-                      );
+                    } catch (err) {
+                      console.error(err);
                     }
                   }}
                 >
@@ -243,13 +238,8 @@ export const SignUp = () => {
                       if (res?.ok) {
                         router.push("/documents");
                       }
-                    } catch {
-                      toast.error(
-                        "User already registered with different method",
-                        {
-                          style: { backgroundColor: "red" },
-                        }
-                      );
+                    } catch (err) {
+                      console.error(err);
                     }
                   }}
                 >
