@@ -29,7 +29,7 @@ export const SidebarExtension = ({
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
   const { data: session } = useSession();
   const { postList, isLoading } = useWorkspaces(
-    session?.user.id!,
+    session?.user.email!,
     documentList
   );
 

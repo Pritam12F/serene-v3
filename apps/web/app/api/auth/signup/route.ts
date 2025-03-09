@@ -29,18 +29,20 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         message: "User already exists!",
+        accountType: userExists.accountType,
       },
       { status: 409 }
     );
   }
 
+  const userId = uuid();
   data.hashedPassword = await bcrypt.hash(data.hashedPassword, 10);
-  data.accountType = "credentials";
+  data.id = userId;
 
   try {
     await db.insert(users).values(data);
 
-    await createInitialPosts(data.id);
+    await createInitialPosts(userId);
 
     return NextResponse.json({
       message: "User signed up successfully",

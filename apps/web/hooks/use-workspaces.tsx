@@ -1,9 +1,9 @@
-import { fetchAllPostsByUserId, fetchUserById } from "@/server/actions";
+import { fetchAllPostsByUserId, fetchUserByEmail } from "@/server/actions";
 import { SelectManyPostType } from "@workspace/common/types/db";
 import arrayToTree from "array-to-tree";
 import { useCallback, useEffect, useState } from "react";
 
-export const useWorkspaces = (user_id: string, documentList?: string[]) => {
+export const useWorkspaces = (user_email: string, documentList?: string[]) => {
   const [postData, setPostData] = useState<{
     tree: arrayToTree.Tree<SelectManyPostType>;
     list: SelectManyPostType | undefined;
@@ -17,8 +17,8 @@ export const useWorkspaces = (user_id: string, documentList?: string[]) => {
   const fetchWorkspaces = useCallback(async () => {
     try {
       setIsLoading(true);
-      const fetchedUser = await fetchUserById(user_id);
-      const fetchedPosts = await fetchAllPostsByUserId(fetchedUser.data!.id);
+      const fetchedUser = await fetchUserByEmail();
+      const fetchedPosts = await fetchAllPostsByUserId(fetchedUser.data?.id!);
 
       if (fetchedUser.success && fetchedPosts.success && fetchedPosts.data) {
         const tree = arrayToTree(fetchedPosts.data, {
@@ -36,11 +36,11 @@ export const useWorkspaces = (user_id: string, documentList?: string[]) => {
           : "Error occured trying to fetch posts";
       setError(error);
     }
-  }, [user_id]);
+  }, [user_email]);
 
   useEffect(() => {
     fetchWorkspaces();
-  }, [user_id]);
+  }, [user_email]);
 
   const mutate = useCallback(async () => {
     await fetchWorkspaces();

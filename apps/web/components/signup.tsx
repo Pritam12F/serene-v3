@@ -25,13 +25,15 @@ import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import axios from "axios";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import axios, { isAxiosError } from "axios";
 
 export const SignUp = () => {
   const [isPasswordVisible1, setIsPasswordVisible1] = useState(false);
   const [isPasswordVisible2, setIsPasswordVisible2] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof SignUpFormSchema>>({
     resolver: zodResolver(SignUpFormSchema),
@@ -45,28 +47,31 @@ export const SignUp = () => {
 
   async function onSubmit(values: z.infer<typeof SignUpFormSchema>) {
     try {
-      await axios.post("/api/auth/signup", {
-        email: values.email,
+      const res = await axios.post("/api/auth/signup", {
         name: values.name,
+        email: values.email,
         hashedPassword: values.password,
         accountType: "credentials",
       });
 
-      toast.success("Signed up user!", {
-        style: {
-          backgroundColor: "#38b000",
-        },
-      });
+      if (res.status === 200) {
+        toast.success("Signed up user!", {
+          style: { backgroundColor: "#38b000" },
+        });
+        router.push("/documents");
+      }
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        if (err.response?.status === 409) {
-          toast.info("User already exists with this email", {
-            style: { backgroundColor: "yellow", color: "black" },
-          });
+      if (isAxiosError(err)) {
+        if (err.status === 409) {
+          toast.error(
+            `User already registered${err.response?.data.accountType === "credentials" ? "!" : ` with ${err.response?.data.accountType}`}`,
+            { style: { backgroundColor: "red" } }
+          );
+
           return;
         }
 
-        toast.error("Error signing up user", {
+        toast.error("Oops couldn't signup!", {
           style: { backgroundColor: "red" },
         });
       }
@@ -200,19 +205,19 @@ export const SignUp = () => {
                   className="w-[140px] lg:w-36"
                   onClick={async () => {
                     const res = await signIn("google", {
-                      callbackUrl: `${window.location.origin}/documents`,
+                      redirect: false,
                     });
 
-                    if (!res?.ok) {
-                      toast.error("User registered with credentials already!", {
-                        style: { backgroundColor: "red" },
+                    if (!res?.error) {
+                      toast.success("Signed up!", {
+                        style: { backgroundColor: "#38b000" },
                       });
-
+                      router.push("/documents");
                       return;
                     }
 
-                    toast.success("Signed up!", {
-                      style: { backgroundColor: "#38b000" },
+                    toast.error("Error signing up user", {
+                      style: { backgroundColor: "red" },
                     });
                   }}
                 >
@@ -228,19 +233,19 @@ export const SignUp = () => {
                   className="w-[140px] lg:w-36"
                   onClick={async () => {
                     const res = await signIn("github", {
-                      callbackUrl: `${window.location.origin}/documents`,
+                      redirect: false,
                     });
 
-                    if (!res?.ok) {
-                      toast.error("User registered with credentials already!", {
-                        style: { backgroundColor: "red" },
+                    if (!res?.error) {
+                      toast.success("Signed up!", {
+                        style: { backgroundColor: "#38b000" },
                       });
-
+                      router.push("/documents");
                       return;
                     }
 
-                    toast.success("Signed up!", {
-                      style: { backgroundColor: "#38b000" },
+                    toast.error("Error signing up user", {
+                      style: { backgroundColor: "red" },
                     });
                   }}
                 >

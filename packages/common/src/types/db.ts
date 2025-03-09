@@ -1,3 +1,4 @@
+import db from "@workspace/db";
 import {
   audios,
   coverImages,
@@ -88,7 +89,7 @@ export type InsertCoverImageType = typeof coverImages.$inferInsert;
 export type InsertManyCoverImageType = InsertCoverImageType[];
 
 // Zod Schemas
-export const SelectUserSchema = createSelectSchema(users).strict();
+export const SelectUserSchema = createSelectSchema(users);
 export const InsertUserSchema = createInsertSchema(users);
 
 export const SelectPostSchema = createSelectSchema(posts);

@@ -27,9 +27,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const SignIn = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof SignInFormSchema>>({
     resolver: zodResolver(SignInFormSchema),
     defaultValues: {
@@ -42,25 +44,23 @@ export const SignIn = () => {
     const res = await signIn("credentials", {
       email: values.email,
       password: values.password,
-      callbackUrl: `${window.location.origin}/documents`,
+      redirect: false,
     });
 
-    if (!res?.ok) {
-      toast.error(
-        "Incorrect details or email already registered with socials",
-        {
-          style: {
-            backgroundColor: "red",
-          },
-        }
-      );
+    if (!res?.error) {
+      toast.success("Signed in!", {
+        style: {
+          backgroundColor: "#38b000",
+        },
+      });
 
+      router.push("/documents");
       return;
     }
 
-    toast.success("Signed in!", {
+    toast.error("Incorrect details or email already registered with socials", {
       style: {
-        backgroundColor: "#38b000",
+        backgroundColor: "red",
       },
     });
   }
@@ -143,19 +143,23 @@ export const SignIn = () => {
                   className="w-[140px] lg:w-36"
                   onClick={async () => {
                     const res = await signIn("google", {
-                      callbackUrl: `${window.location.origin}/documents`,
+                      redirect: false,
                     });
 
-                    if (!res?.ok) {
-                      toast.error("User registered with credentials already!", {
-                        style: { backgroundColor: "red" },
+                    if (!res?.error) {
+                      toast.success("Signed in", {
+                        style: { backgroundColor: "#38b000" },
                       });
+                      router.push("/documents");
                       return;
                     }
 
-                    toast.success("Signed in", {
-                      style: { backgroundColor: "#38b000" },
-                    });
+                    toast.error(
+                      "User registered with another method already!",
+                      {
+                        style: { backgroundColor: "red" },
+                      }
+                    );
                   }}
                 >
                   <Image
@@ -170,19 +174,23 @@ export const SignIn = () => {
                   className="w-[140px] lg:w-36"
                   onClick={async () => {
                     const res = await signIn("github", {
-                      callbackUrl: `${window.location.origin}/documents`,
+                      redirect: false,
                     });
 
-                    if (!res?.ok) {
-                      toast.error("User registered with credentials already!", {
-                        style: { backgroundColor: "red" },
+                    if (!res?.error) {
+                      toast.success("Signed in", {
+                        style: { backgroundColor: "#38b000" },
                       });
+                      router.push("/documents");
                       return;
                     }
 
-                    toast.success("Signed in", {
-                      style: { backgroundColor: "#38b000" },
-                    });
+                    toast.error(
+                      "User registered with another method already!",
+                      {
+                        style: { backgroundColor: "red" },
+                      }
+                    );
                   }}
                 >
                   <FaGithub color="gray" />

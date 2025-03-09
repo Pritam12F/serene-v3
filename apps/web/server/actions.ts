@@ -99,9 +99,9 @@ export const deletePostById = async (
   }
 };
 
-export const fetchUserById = async (
-  userId: string
-): Promise<ActionResponse<SelectUserType | null>> => {
+export const fetchUserByEmail = async (): Promise<
+  ActionResponse<SelectUserType | null>
+> => {
   const session = await getServerSession();
 
   if (!session?.user) {
@@ -110,7 +110,7 @@ export const fetchUserById = async (
 
   try {
     const userFetched = await db.query.users.findFirst({
-      where: eq(users.id, userId),
+      where: eq(users.email, session.user.email),
     });
 
     return {

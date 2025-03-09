@@ -19,7 +19,7 @@ export const accountTypeEnum = pgEnum("account_type", [
 
 // Users Table
 export const users = pgTable("users", {
-  id: varchar("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   profilePic: text("profile_pic"),
   email: text("email").unique().notNull(),
@@ -37,7 +37,7 @@ export const posts = pgTable("posts", {
   content: jsonb("content").notNull(),
   emoji: text("emoji"),
   coverImageId: integer("cover_id"),
-  userId: varchar("user_id")
+  userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   parentId: integer("parent_id").references((): AnyPgColumn => posts.id, {
