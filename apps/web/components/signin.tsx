@@ -142,24 +142,22 @@ export const SignIn = () => {
                 <Button
                   className="w-[140px] lg:w-36"
                   onClick={async () => {
-                    const res = await signIn("google", {
-                      redirect: false,
-                    });
-
-                    if (!res?.error) {
-                      toast.success("Signed in", {
-                        style: { backgroundColor: "#38b000" },
+                    try {
+                      const res = await signIn("google", {
+                        redirect: false,
                       });
-                      router.push("/documents");
-                      return;
-                    }
 
-                    toast.error(
-                      "User registered with another method already!",
-                      {
-                        style: { backgroundColor: "red" },
+                      if (res?.ok) {
+                        router.push("/documents");
                       }
-                    );
+                    } catch {
+                      toast.error(
+                        "User already registered with different method",
+                        {
+                          style: { backgroundColor: "red" },
+                        }
+                      );
+                    }
                   }}
                 >
                   <Image
@@ -173,24 +171,22 @@ export const SignIn = () => {
                 <Button
                   className="w-[140px] lg:w-36"
                   onClick={async () => {
-                    const res = await signIn("github", {
-                      redirect: false,
-                    });
-
-                    if (!res?.error) {
-                      toast.success("Signed in", {
-                        style: { backgroundColor: "#38b000" },
+                    try {
+                      const res = await signIn("github", {
+                        redirect: false,
                       });
-                      router.push("/documents");
-                      return;
-                    }
 
-                    toast.error(
-                      "User registered with another method already!",
-                      {
-                        style: { backgroundColor: "red" },
+                      if (res?.ok) {
+                        router.push("/documents");
                       }
-                    );
+                    } catch {
+                      toast.error(
+                        "User already registered with different method",
+                        {
+                          style: { backgroundColor: "red" },
+                        }
+                      );
+                    }
                   }}
                 >
                   <FaGithub color="gray" />
