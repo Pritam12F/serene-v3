@@ -203,6 +203,7 @@ export const SignUp = () => {
               <div className="flex justify-between">
                 <Button
                   className="w-[140px] lg:w-36"
+                  type="button"
                   onClick={async () => {
                     try {
                       const res = await signIn("google", {
@@ -232,6 +233,7 @@ export const SignUp = () => {
                 </Button>
                 <Button
                   className="w-[140px] lg:w-36"
+                  type="button"
                   onClick={async () => {
                     try {
                       const res = await signIn("github", {

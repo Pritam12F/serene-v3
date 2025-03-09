@@ -111,7 +111,7 @@ export const authOptions = {
 
           await createInitialPosts(userId);
         } else if (isUserInDB && isUserInDB.accountType !== account.provider) {
-          return "/sign-up";
+          return `/sign-in?error=${encodeURIComponent("User is already registered with other method")}`;
         }
       }
 

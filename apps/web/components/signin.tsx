@@ -22,16 +22,30 @@ import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
 import { FaGithub } from "react-icons/fa";
 import { Eye, EyeClosed } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const SignIn = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const error = decodeURIComponent(searchParams.get("error") ?? "");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isMounted && error === "User is already registered with other method") {
+      toast.error(error, { style: { backgroundColor: "red" } });
+    }
+  }, [isMounted]);
+
   const form = useForm<z.infer<typeof SignInFormSchema>>({
     resolver: zodResolver(SignInFormSchema),
     defaultValues: {
@@ -141,6 +155,7 @@ export const SignIn = () => {
               <div className="flex justify-between">
                 <Button
                   className="w-[140px] lg:w-36"
+                  type="button"
                   onClick={async () => {
                     try {
                       const res = await signIn("google", {
@@ -170,6 +185,7 @@ export const SignIn = () => {
                 </Button>
                 <Button
                   className="w-[140px] lg:w-36"
+                  type="button"
                   onClick={async () => {
                     try {
                       const res = await signIn("github", {
