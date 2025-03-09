@@ -20,8 +20,7 @@ import {
 } from "@workspace/ui/components/card";
 import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
-import { FaGithub } from "react-icons/fa";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeOff, Github } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -79,33 +78,35 @@ export const SignUp = () => {
   }
 
   return (
-    <div className="min-h-screen mx-auto flex justify-center items-center w-[337px] lg:max-w-[350px]">
-      <Card className="bg-gradient-to-tr from-white via-gray-100 to-gray-200 dark:from-gray-900 dark:via-[#071f3d] dark:to-[#031c41]">
-        <CardHeader className="flex justify-center">
-          <CardTitle className="text-2xl text-center">
-            Sign up for a new account
+    <div className="min-h-screen p-4 flex justify-center items-center">
+      <Card className="w-full max-w-md bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border border-gray-200 dark:border-gray-700 shadow-xl">
+        <CardHeader className="space-y-3 pb-6">
+          <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent">
+            Create Account
           </CardTitle>
+          <p className="text-sm text-center text-gray-500 dark:text-gray-400">
+            Sign up to get started with our platform
+          </p>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-7 flex flex-col w-[300px]"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                  <FormItem className="lg:min-w-[300px]">
-                    <FormLabel>Name</FormLabel>
+                  <FormItem>
+                    <FormLabel className="text-gray-700 dark:text-gray-300">
+                      Name
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Enter your name"
-                        className="border-gray-600"
+                        className="bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200"
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="dark:text-red-500" />
+                    <FormMessage className="text-red-500 dark:text-red-400" />
                   </FormItem>
                 )}
               />
@@ -113,16 +114,19 @@ export const SignUp = () => {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="lg:min-w-[300px]">
-                    <FormLabel>Email</FormLabel>
+                  <FormItem>
+                    <FormLabel className="text-gray-700 dark:text-gray-300">
+                      Email
+                    </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter email"
-                        className="border-gray-600"
+                        type="email"
+                        placeholder="Enter your email"
+                        className="bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200"
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="dark:text-red-500" />
+                    <FormMessage className="text-red-500 dark:text-red-400" />
                   </FormItem>
                 )}
               />
@@ -130,31 +134,34 @@ export const SignUp = () => {
                 control={form.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem className="lg:min-w-[300px]">
-                    <FormLabel>Password</FormLabel>
+                  <FormItem>
+                    <FormLabel className="text-gray-700 dark:text-gray-300">
+                      Password
+                    </FormLabel>
                     <FormControl>
-                      <div className="flex">
+                      <div className="relative">
                         <Input
-                          placeholder="Enter password"
-                          className="border-gray-600"
-                          type={`${isPasswordVisible1 ? "text" : "password"}`}
+                          type={isPasswordVisible1 ? "text" : "password"}
+                          placeholder="Create a password"
+                          className="bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200 pr-10"
                           {...field}
                         />
-                        <span
-                          onClick={() => {
-                            setIsPasswordVisible1((v) => !v);
-                          }}
-                          className="transition-all duration-400 -ml-8 mt-1.5 cursor-pointer"
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setIsPasswordVisible1(!isPasswordVisible1)
+                          }
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                         >
                           {isPasswordVisible1 ? (
-                            <EyeClosed className="opacity-20 transition-opacity duration-200 hover:opacity-80" />
+                            <EyeOff className="h-4 w-4" />
                           ) : (
-                            <Eye className="opacity-20 transition-opacity duration-200 hover:opacity-80" />
+                            <Eye className="h-4 w-4" />
                           )}
-                        </span>
+                        </button>
                       </div>
                     </FormControl>
-                    <FormMessage className="dark:text-red-500" />
+                    <FormMessage className="text-red-500 dark:text-red-400" />
                   </FormItem>
                 )}
               />
@@ -162,91 +169,114 @@ export const SignUp = () => {
                 control={form.control}
                 name="confirmPassword"
                 render={({ field }) => (
-                  <FormItem className="lg:min-w-[300px]">
-                    <FormLabel>Confirm Password</FormLabel>
+                  <FormItem>
+                    <FormLabel className="text-gray-700 dark:text-gray-300">
+                      Confirm Password
+                    </FormLabel>
                     <FormControl>
-                      <div className="flex">
+                      <div className="relative">
                         <Input
-                          placeholder="Re-enter password"
-                          className="border-gray-600"
-                          type={`${isPasswordVisible2 ? "text" : "password"}`}
+                          type={isPasswordVisible2 ? "text" : "password"}
+                          placeholder="Confirm your password"
+                          className="bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200 pr-10"
                           {...field}
                         />
-                        <span
-                          onClick={() => {
-                            setIsPasswordVisible2((v) => !v);
-                          }}
-                          className="transition-all duration-400 -ml-8 mt-1.5 cursor-pointer"
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setIsPasswordVisible2(!isPasswordVisible2)
+                          }
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                         >
                           {isPasswordVisible2 ? (
-                            <EyeClosed className="opacity-20 transition-opacity duration-200 hover:opacity-80" />
+                            <EyeOff className="h-4 w-4" />
                           ) : (
-                            <Eye className="opacity-20 transition-opacity duration-200 hover:opacity-80" />
+                            <Eye className="h-4 w-4" />
                           )}
-                        </span>
+                        </button>
                       </div>
                     </FormControl>
-                    <FormMessage className="dark:text-red-500" />
+                    <FormMessage className="text-red-500 dark:text-red-400" />
                   </FormItem>
                 )}
               />
-              <p>
-                Already have an account?{" "}
+              <div className="space-y-4">
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 py-2"
+                >
+                  Create Account
+                </Button>
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-white dark:bg-gray-900 text-gray-500">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700"
+                    onClick={async () => {
+                      try {
+                        const res = await signIn("google", {
+                          redirect: false,
+                        });
+
+                        if (res?.ok) {
+                          router.push("/documents");
+                        }
+                      } catch (err) {
+                        console.error(err);
+                      }
+                    }}
+                  >
+                    <Image
+                      src="/google-logo.svg"
+                      alt="Google"
+                      className="mr-2"
+                      width={15}
+                      height={15}
+                    />
+                    Google
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700"
+                    onClick={async () => {
+                      try {
+                        const res = await signIn("github", {
+                          redirect: false,
+                        });
+
+                        if (res?.ok) {
+                          router.push("/documents");
+                        }
+                      } catch (err) {
+                        console.error(err);
+                      }
+                    }}
+                  >
+                    <Github className="w-5 h-5 mr-2" />
+                    GitHub
+                  </Button>
+                </div>
+              </div>
+              <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
+                Already have an account?
                 <Link
-                  href={"/sign-in"}
-                  className="underline underline-offset-1 hover:underline-offset-2 transition-all duration-200"
+                  href="/sign-in"
+                  className="font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors ml-1"
                 >
                   Sign in
                 </Link>
               </p>
-              <Button type="submit">Sign up</Button>
-              <div className="flex justify-between">
-                <Button
-                  className="w-[140px] lg:w-36"
-                  type="button"
-                  onClick={async () => {
-                    try {
-                      const res = await signIn("google", {
-                        redirect: false,
-                      });
-
-                      if (res?.ok) {
-                        router.push("/documents");
-                      }
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  }}
-                >
-                  <Image
-                    src={"/google-logo.svg"}
-                    alt="google"
-                    width={16}
-                    height={16}
-                  />
-                  Google
-                </Button>
-                <Button
-                  className="w-[140px] lg:w-36"
-                  type="button"
-                  onClick={async () => {
-                    try {
-                      const res = await signIn("github", {
-                        redirect: false,
-                      });
-
-                      if (res?.ok) {
-                        router.push("/documents");
-                      }
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  }}
-                >
-                  <FaGithub color="gray" />
-                  Github
-                </Button>
-              </div>
             </form>
           </Form>
         </CardContent>
