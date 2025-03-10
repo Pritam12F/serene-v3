@@ -211,7 +211,7 @@ export async function AppSidebar({
   const session = await getServerSession(authOptions);
   return (
     <Sidebar
-      className="border-r-0 dark:bg-editorbackgrounddark"
+      className="border-r-0 dark:bg-gray-900"
       {...props}
       variant="floating"
     >

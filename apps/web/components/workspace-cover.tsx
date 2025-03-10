@@ -11,19 +11,20 @@ import {
 } from "@/server/actions";
 import useStore from "@workspace/store";
 import { ClientUploadedFileData } from "uploadthing/types";
+import { EmojiPicker } from "./emoji-picker";
 
 export const WorkspaceCover = ({ postId }: { postId: number }) => {
   const { workspaceNames, setWorkspaceName } = useStore();
   const [coverLink, setCoverLink] = useState<string | null>();
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
+  const [emoji, setEmoji] = useState<string | null>();
 
   const fetchCover = useCallback(async () => {
     const { success, data } = await fetchSinglePostById(postId);
 
-    console.log(success);
-    console.log(data);
-
     if (success) {
       setCoverLink(data?.coverImage?.url!);
+      setEmoji(data?.emoji);
     }
     if (!workspaceNames.get(postId)) {
       workspaceNames.set(postId, data?.name!);
@@ -44,7 +45,6 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
 
   const handleOnUpload = async (file: ClientUploadedFileData<any>[]) => {
     const { success } = await addOrUpdateCoverImage(file[0]!.ufsUrl, postId);
-    console.log("Success");
 
     if (success) {
       setCoverLink(file[0]?.ufsUrl!);
@@ -57,7 +57,7 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
         <>
           <UploadButton
             endpoint="coverImageUploader"
-            className="absolute ml-12 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
+            className="absolute ml-12 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
             content={{
               button: () => {
                 return (
@@ -79,9 +79,16 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
             unoptimized
             priority
           />
+          <div className="text-8xl absolute left-14 top-16">{emoji}</div>
+          <EmojiPicker
+            isPickerOpen={isEmojiPickerOpen}
+            setIsPickerOpen={setIsEmojiPickerOpen}
+            postId={postId}
+            setChangeEmoji={setEmoji}
+          />
         </>
       ) : (
-        <div className="absolute inset-0 dark:bg-editorbackgrounddark">
+        <div className="absolute inset-0 dark:bg-gray-900">
           <UploadButton
             endpoint="coverImageUploader"
             className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"

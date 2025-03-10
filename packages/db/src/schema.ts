@@ -1,6 +1,4 @@
 import { relations } from "drizzle-orm";
-import { jsonb, pgEnum } from "drizzle-orm/pg-core";
-import { AnyPgColumn } from "drizzle-orm/pg-core";
 import {
   integer,
   pgTable,
@@ -9,6 +7,9 @@ import {
   timestamp,
   uuid,
   varchar,
+  AnyPgColumn,
+  jsonb,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
 export const accountTypeEnum = pgEnum("account_type", [

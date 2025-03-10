@@ -38,6 +38,7 @@
     "react-hook-form": "^7.54.2",
     "react-icons": "^5.4.0",
     "react-textarea-autosize": "^8.5.7",
+    "shiki": "^3.1.0",
     "sonner": "^1.7.4",
     "svix": "^1.45.1",
     "swr": "^2.3.2",
@@ -46,6 +47,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@emoji-mart/data": "^1.2.1",
+    "@emoji-mart/react": "^1.1.1",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
@@ -53,6 +56,7 @@
     "@types/react-dom": "18.3.1",
     "@workspace/eslint-config": "workspace:^",
     "@workspace/typescript-config": "workspace:*",
+    "emoji-mart": "^5.6.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.19.2",

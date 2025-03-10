@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@emoji-mart/data": "^1.2.1",
     "@neondatabase/serverless": "^0.10.4",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.40.0",

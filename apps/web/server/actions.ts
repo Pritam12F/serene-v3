@@ -28,7 +28,7 @@ export const changePostNameById = async (
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.id, session.user.id),
+      where: eq(users.email, session.user.email),
       with: {
         posts: true,
       },
@@ -70,7 +70,7 @@ export const deletePostById = async (
   }
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.id, session.user.id),
+      where: eq(users.email, session.user.email),
       with: {
         posts: true,
       },
@@ -252,6 +252,52 @@ export const addOrUpdateCoverImage = async (
       message: "Successfully added cover image",
       data: null,
     };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to add cover image";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const addOrUpdatePostEmoji = async (
+  postId: number,
+  emoji: string
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession();
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to change cover image");
+  }
+
+  try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.email, session.user.email),
+      with: {
+        posts: true,
+      },
+    });
+
+    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
+
+    if (!hasAccessToPost) {
+      return {
+        success: false,
+        message: "User doesn't have access to this post",
+        data: null,
+      };
+    }
+
+    await db
+      .update(posts)
+      .set({
+        emoji,
+      })
+      .where(eq(posts.id, postId));
+
+    return { success: true, message: "Emoji updated successfully", data: null };
   } catch (err) {
     const errorMessage =
       err instanceof Error

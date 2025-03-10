@@ -21,5 +21,10 @@
   "packageManager": "pnpm@9.12.3",
   "engines": {
     "node": ">=20"
+  },
+  "pnpm": {
+    "overrides": {
+      "shiki": "3.1.0"
+    }
   }
 }

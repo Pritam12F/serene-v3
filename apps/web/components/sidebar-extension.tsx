@@ -34,7 +34,7 @@ export const SidebarExtension = ({
   );
 
   return (
-    <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-editorbackgrounddark">
+    <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-gray-900">
       <header className="flex h-12 shrink-0 items-center gap-2">
         <div className="flex flex-1 items-center gap-2 px-3">
           <SidebarTrigger />
