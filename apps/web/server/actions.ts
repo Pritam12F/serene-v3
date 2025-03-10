@@ -167,7 +167,7 @@ export const fetchSinglePostById = async (
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.id, session.user.id),
+      where: eq(users.email, session.user.email),
       with: {
         posts: true,
       },
@@ -215,7 +215,7 @@ export const addOrUpdateCoverImage = async (
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.id, session.user.id),
+      where: eq(users.email, session.user.email),
       with: {
         posts: true,
       },
@@ -231,13 +231,21 @@ export const addOrUpdateCoverImage = async (
       };
     }
 
-    await db
+    const insertedCoverImage = await db
       .insert(coverImages)
       .values({ url: coverUrl, postId })
       .onConflictDoUpdate({
         target: coverImages.postId,
         set: { url: coverUrl },
-      });
+      })
+      .returning({ id: coverImages.id });
+
+    await db
+      .update(posts)
+      .set({
+        coverImageId: insertedCoverImage[0]?.id,
+      })
+      .where(eq(posts.id, postId));
 
     return {
       success: true,

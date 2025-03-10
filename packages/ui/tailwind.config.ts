@@ -100,6 +100,9 @@ export default withUt({
         formRed: {
           DEFAULT: "hsl(var(--form-destructive))",
         },
+        editorbackgrounddark: {
+          DEFAULT: "hsl(var(--editor-background-dark))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

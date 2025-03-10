@@ -210,7 +210,11 @@ export async function AppSidebar({
 }: React.ComponentProps<typeof Sidebar>) {
   const session = await getServerSession(authOptions);
   return (
-    <Sidebar className="border-r-0" {...props}>
+    <Sidebar
+      className="border-r-0 dark:bg-editorbackgrounddark"
+      {...props}
+      variant="floating"
+    >
       <SidebarHeader>
         <SidebarUser
           user={{

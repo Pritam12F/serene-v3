@@ -41,7 +41,7 @@ const darkBlueTheme = {
     ...lightBlueTheme.colors,
     editor: {
       text: "#ffffff",
-      background: "#282b32",
+      background: "bg-editorbackgrounddark",
     },
     menu: {
       text: "#ffffff",

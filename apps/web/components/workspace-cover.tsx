@@ -19,8 +19,14 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
   const fetchCover = useCallback(async () => {
     const { success, data } = await fetchSinglePostById(postId);
 
+    console.log(success);
+    console.log(data);
+
     if (success) {
-      setCoverLink(data?.coverImage?.url);
+      setCoverLink(data?.coverImage?.url!);
+    }
+    if (!workspaceNames.get(postId)) {
+      workspaceNames.set(postId, data?.name!);
     }
   }, [postId]);
 
@@ -37,10 +43,11 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
   );
 
   const handleOnUpload = async (file: ClientUploadedFileData<any>[]) => {
-    const { success } = await addOrUpdateCoverImage(file[0]!.url, postId);
+    const { success } = await addOrUpdateCoverImage(file[0]!.ufsUrl, postId);
+    console.log("Success");
 
     if (success) {
-      setCoverLink(file[0]?.url!);
+      setCoverLink(file[0]?.ufsUrl!);
     }
   };
 
@@ -69,10 +76,12 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
             alt="Example Image"
             fill
             className="object-cover absolute inset-0"
+            unoptimized
+            priority
           />
         </>
       ) : (
-        <div className="absolute inset-0 bg-gradient-to-b from-[#454653] to-[#282b32]">
+        <div className="absolute inset-0 dark:bg-editorbackgrounddark">
           <UploadButton
             endpoint="coverImageUploader"
             className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
