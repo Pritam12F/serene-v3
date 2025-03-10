@@ -14,7 +14,7 @@ import dynamic from "next/dynamic";
 import { useWorkspaces } from "@/hooks/use-workspaces";
 import Loading from "@/app/(main)/documents/[[...slug]]/loading";
 import { useState } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export const SidebarExtension = ({
   children,
@@ -76,13 +76,6 @@ export const SidebarExtension = ({
         onReady={setIsEditorReady}
         isReady={isEditorReady}
       />
-      <button
-        onClick={() => {
-          signOut();
-        }}
-      >
-        click
-      </button>
       {(!isEditorReady || isLoading) && <Loading />}
     </SidebarInset>
   );

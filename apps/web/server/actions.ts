@@ -307,3 +307,52 @@ export const addOrUpdatePostEmoji = async (
     return { success: false, message: errorMessage, data: null };
   }
 };
+
+export const addOrUpdatePostContent = async (
+  postId: number,
+  newContent: unknown
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession();
+  if (!session?.user) {
+    throw new Error("You must be signed in to change post content");
+  }
+
+  try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.email, session.user.email),
+      with: {
+        posts: true,
+      },
+    });
+
+    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
+
+    if (!hasAccessToPost) {
+      return {
+        success: false,
+        message: "User doesn't have access to this post",
+        data: null,
+      };
+    }
+
+    const res = await db
+      .update(posts)
+      .set({
+        content: newContent,
+      })
+      .where(eq(posts.id, postId));
+
+    return {
+      success: true,
+      message: "Post content updated",
+      data: null,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to upload content";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};

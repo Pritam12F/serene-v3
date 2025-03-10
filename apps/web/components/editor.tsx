@@ -2,7 +2,7 @@
 
 import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
@@ -10,6 +10,11 @@ import { BlockNoteEditor } from "@blocknote/core";
 import { uploadFiles } from "@/lib/uploadthing";
 import { blueTheme } from "@/lib/themes";
 import { WorkspaceCover } from "./workspace-cover";
+import { debounce } from "@/lib/debounce";
+import db from "@workspace/db";
+import { posts, users } from "@workspace/db/schema";
+import { addOrUpdatePostContent } from "@/server/actions";
+import { toast } from "sonner";
 
 interface EditorProps {
   editable: boolean;
@@ -27,6 +32,7 @@ const Editor = ({
   onReady,
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
+  const [currentContent, setCurrentContent] = useState<any>();
 
   const uploadFile = async (file: File) => {
     switch (true) {
@@ -71,7 +77,11 @@ const Editor = ({
       <WorkspaceCover postId={postId!} />
       <BlockNoteView
         editor={editor}
-        onChange={() => {}}
+        onChange={async () => {
+          setCurrentContent(editor.document);
+
+          await addOrUpdatePostContent(postId!, currentContent);
+        }}
         editable={editable}
         theme={resolvedTheme === "dark" ? blueTheme.dark : blueTheme.light}
       />
