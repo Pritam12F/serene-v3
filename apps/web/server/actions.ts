@@ -348,6 +348,8 @@ export const addOrUpdatePostContent = async (
       data: null,
     };
   } catch (err) {
+    console.log(err);
+
     const errorMessage =
       err instanceof Error
         ? err.message

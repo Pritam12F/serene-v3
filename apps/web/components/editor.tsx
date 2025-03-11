@@ -2,7 +2,13 @@
 
 import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
@@ -33,6 +39,12 @@ const Editor = ({
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
   const [currentContent, setCurrentContent] = useState<any>();
+  const debouncedOnChangeHandler = useCallback(
+    debounce(async (postId, currentContent) => {
+      await addOrUpdatePostContent(postId!, currentContent);
+    }, 5000),
+    [postId]
+  );
 
   const uploadFile = async (file: File) => {
     switch (true) {
@@ -70,6 +82,10 @@ const Editor = ({
     }
   }, [editor.document]);
 
+  useEffect(() => {
+    debouncedOnChangeHandler(postId, currentContent);
+  }, [currentContent]);
+
   return (
     <div
       className={`${!isReady ? "hidden" : "block"} overflow-x-hidden max-w-[1500px] flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`}
@@ -79,8 +95,6 @@ const Editor = ({
         editor={editor}
         onChange={async () => {
           setCurrentContent(editor.document);
-
-          await addOrUpdatePostContent(postId!, currentContent);
         }}
         editable={editable}
         theme={resolvedTheme === "dark" ? blueTheme.dark : blueTheme.light}
