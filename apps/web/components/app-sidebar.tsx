@@ -209,6 +209,7 @@ export async function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const session = await getServerSession(authOptions);
+
   return (
     <Sidebar
       className="border-r-0 dark:bg-gray-900"

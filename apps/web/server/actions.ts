@@ -308,7 +308,7 @@ export const addOrUpdatePostEmoji = async (
   }
 };
 
-export const addOrUpdatePostContent = async (
+export const updatePostContent = async (
   postId: number,
   newContent: unknown
 ): Promise<ActionResponse<null>> => {
@@ -354,6 +354,53 @@ export const addOrUpdatePostContent = async (
       err instanceof Error
         ? err.message
         : "Something happened trying to upload content";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const createNewPost = async (
+  title: string,
+  content: string
+): Promise<ActionResponse<number | null>> => {
+  const session = await getServerSession();
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to create a new post");
+  }
+
+  try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.email, session.user.email),
+    });
+
+    if (!fetchedUser) {
+      return {
+        success: false,
+        message: "User not found",
+        data: null,
+      };
+    }
+
+    const newPost = await db
+      .insert(posts)
+      .values({
+        name: title,
+        content,
+        userId: fetchedUser.id,
+      })
+      .returning({ id: posts.id });
+
+    return {
+      success: true,
+      message: "Post created successfully",
+      data: newPost[0]?.id || null,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to create a new post";
 
     return { success: false, message: errorMessage, data: null };
   }

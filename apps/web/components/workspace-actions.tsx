@@ -12,7 +12,7 @@ import { useState } from "react";
 import { Button } from "@workspace/ui/components/button";
 import useStore from "@workspace/store";
 import { toast } from "sonner";
-import { deletePostById } from "@/server/actions";
+import { createNewPost, deletePostById } from "@/server/actions";
 import { PostDialog } from "./post-dialog";
 import dynamic from "next/dynamic";
 
@@ -36,8 +36,16 @@ export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
 
   return (
     <>
-      <SidebarMenuAction showOnHover className="mx-8">
-        <PostDialog trigger={<Plus />} content={<Editor editable={true} />} />
+      <SidebarMenuAction className="mx-8">
+        <PostDialog
+          trigger={<Plus />}
+          content={
+            <Editor editable={true} styles="relative z-[9999] h-[500px] p-4" />
+          }
+          action={async () => {
+            createNewPost();
+          }}
+        />
       </SidebarMenuAction>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

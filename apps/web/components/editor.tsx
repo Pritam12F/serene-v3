@@ -3,9 +3,9 @@
 import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
 import React, {
+  createContext,
   Dispatch,
   SetStateAction,
-  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -16,11 +16,9 @@ import { BlockNoteEditor } from "@blocknote/core";
 import { uploadFiles } from "@/lib/uploadthing";
 import { blueTheme } from "@/lib/themes";
 import { WorkspaceCover } from "./workspace-cover";
-import { debounce } from "@/lib/debounce";
-import db from "@workspace/db";
-import { posts, users } from "@workspace/db/schema";
-import { addOrUpdatePostContent } from "@/server/actions";
-import { toast } from "sonner";
+import { updatePostContent } from "@/server/actions";
+import useDebounce from "@/hooks/use-debounce";
+import { cn } from "@workspace/ui/lib/utils";
 
 interface EditorProps {
   editable: boolean;
@@ -28,6 +26,7 @@ interface EditorProps {
   postId?: number | null;
   onReady?: Dispatch<SetStateAction<boolean>>;
   isReady?: boolean;
+  styles?: string;
 }
 
 const Editor = ({
@@ -36,15 +35,15 @@ const Editor = ({
   postId,
   isReady,
   onReady,
+  styles,
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
   const [currentContent, setCurrentContent] = useState<any>();
-  const debouncedOnChangeHandler = useCallback(
-    debounce(async (postId, currentContent) => {
-      await addOrUpdatePostContent(postId!, currentContent);
-    }, 5000),
-    [postId]
-  );
+  const postContent = createContext(currentContent);
+
+  const debouncedCallback = useDebounce(async () => {
+    await updatePostContent(postId!, currentContent);
+  }, 5000);
 
   const uploadFile = async (file: File) => {
     switch (true) {
@@ -83,12 +82,15 @@ const Editor = ({
   }, [editor.document]);
 
   useEffect(() => {
-    debouncedOnChangeHandler(postId, currentContent);
+    debouncedCallback();
   }, [currentContent]);
 
   return (
     <div
-      className={`${!isReady ? "hidden" : "block"} overflow-x-hidden max-w-[1500px] flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`}
+      className={cn(
+        `${!isReady ? "hidden" : "block"} overflow-x-hidden max-w-[1500px] flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`,
+        styles
+      )}
     >
       <WorkspaceCover postId={postId!} />
       <BlockNoteView

@@ -16,7 +16,8 @@ import useStore from "@workspace/store";
 import { ChangeEvent, useEffect, useMemo, useRef } from "react";
 import { Input } from "@workspace/ui/components/input";
 import { changePostNameById } from "@/server/actions";
-import { debounce } from "@/lib/debounce";
+import useDebounce from "@/hooks/use-debounce";
+import { toast } from "sonner";
 
 interface WorkspaceProps {
   data: SelectPostType;
@@ -34,23 +35,33 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
   } = useStore();
   const ref = useRef<HTMLDivElement>(null);
 
-  const debouncedRenamePost = useMemo(
-    () =>
-      debounce(async (postId: number, title: string) => {
-        await changePostNameById(postId, title ?? "Untitled");
-      }),
-    []
+  const debouncedRenamePost = useDebounce(
+    async (postId: number, newName: string) => {
+      await changePostNameById(postId, newName);
+    },
+    5000
   );
 
   const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setWorkspaceName(data!.id, e.target?.value ?? "Unknown");
     debouncedRenamePost(data!.id, e.target.value);
+    data!.name = e.target.value;
   };
 
   const handleOnEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      await changePostNameById(data!.id, workspaceNames.get(data!.id)!);
+      const res = await changePostNameById(
+        data!.id,
+        workspaceNames.get(data!.id)!
+      );
+
+      if (res.success) {
+        toast.success("Post renamed successfully", {
+          style: { backgroundColor: "#38b000" },
+        });
+      }
+      data!.name = workspaceNames.get(data!.id) ?? "Unknown";
       mutator?.();
       changeActiveWorkspaceId(null);
     }

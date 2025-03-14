@@ -1,9 +1,6 @@
-import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -15,7 +12,8 @@ interface DialogProps {
   trigger: React.ReactNode;
   content: React.ReactNode;
   actionName?: React.ReactNode;
-  action?: () => void;
+  action?: (args: any[]) => void;
+  actionArgs: any[];
 }
 
 export function PostDialog({
@@ -25,26 +23,21 @@ export function PostDialog({
   content,
   action,
   actionName,
+  actionArgs,
 }: DialogProps) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          {title && <DialogTitle>Edit profile</DialogTitle>}
-          {description && (
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
-          )}
-        </DialogHeader>
-        {content}
-        {actionName && (
-          <DialogFooter>
-            <Button onClick={action}>{actionName}</Button>
-          </DialogFooter>
-        )}
-      </DialogContent>
+    <Dialog
+      onOpenChange={(e) => {
+        if (!e && action) {
+          action(actionArgs);
+        }
+      }}
+    >
+      <DialogTrigger className="newPostTrigger" asChild>
+        {trigger}
+      </DialogTrigger>
+      <DialogHeader>{title && <DialogTitle>{title}</DialogTitle>}</DialogHeader>
+      <DialogContent className="dark:bg-gray-900">{content}</DialogContent>
     </Dialog>
   );
 }
