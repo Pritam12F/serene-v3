@@ -16,9 +16,11 @@ import useDebounce from "@/hooks/use-debounce";
 export const WorkspaceCover = ({
   postId,
   type,
+  isEditorReady,
 }: {
   postId: number;
   type: "existing" | "new";
+  isEditorReady: boolean;
 }) => {
   const { workspaceNames, setWorkspaceName } = useStore();
   const [coverLink, setCoverLink] = useState<string | null>();
@@ -54,6 +56,10 @@ export const WorkspaceCover = ({
       setCoverLink(file[0]?.ufsUrl!);
     }
   };
+
+  if (!isEditorReady) {
+    return null;
+  }
 
   return (
     <div className="relative w-full h-[270px] min-h-[270px]">

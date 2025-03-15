@@ -30,6 +30,7 @@ import {
   useSidebar,
 } from "@workspace/ui/components/sidebar";
 import { signOut } from "next-auth/react";
+import { ProfileDialog } from "./profile-dialog";
 
 export function SidebarUser({
   user,
@@ -82,24 +83,8 @@ export function SidebarUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
+              <DropdownMenuItem className="cursor-pointer">
+                <ProfileDialog trigger={<BadgeCheck />} />
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -107,6 +92,7 @@ export function SidebarUser({
               onClick={() => {
                 signOut();
               }}
+              className="cursor-pointer"
             >
               <LogOut />
               Log out

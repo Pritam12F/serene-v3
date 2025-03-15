@@ -68,33 +68,7 @@ const data = {
       badge: "10",
     },
   ],
-  navSecondary: [
-    {
-      title: "Calendar",
-      url: "#",
-      icon: Calendar,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-    },
-    {
-      title: "Templates",
-      url: "#",
-      icon: Blocks,
-    },
-    {
-      title: "Trash",
-      url: "#",
-      icon: Trash2,
-    },
-    {
-      title: "Help",
-      url: "#",
-      icon: MessageCircleQuestion,
-    },
-  ],
+  navSecondary: [],
   favorites: [],
   workspaces: [
     {
@@ -229,7 +203,6 @@ export async function AppSidebar({
       <SidebarContent className="overflow-x-hidden">
         <SidebarFavorites favorites={data.favorites} />
         <SidebarWorkspaces />
-        <SidebarSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

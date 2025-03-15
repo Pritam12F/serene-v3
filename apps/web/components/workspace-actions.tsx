@@ -41,12 +41,17 @@ export const WorkspaceActions = ({
 
   return (
     <>
-      <SidebarMenuAction className="mx-8">
-        <Plus
-          onClick={() => {
-            router.push(`/documents/newPost?parentId=${parentIdParams}`);
-          }}
-        />
+      <SidebarMenuAction
+        className="mx-8"
+        onClick={(e) => {
+          e.preventDefault();
+          router.push(`/documents/newPost?parentId=${parentIdParams}`);
+        }}
+        onTouchStart={(e) => {
+          router.push(`/documents/newPost?parentId=${parentIdParams}`);
+        }}
+      >
+        <Plus />
       </SidebarMenuAction>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

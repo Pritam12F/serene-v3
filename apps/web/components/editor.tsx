@@ -20,7 +20,7 @@ interface EditorProps {
   initialContent?: unknown;
   postId?: number | null;
   onReady?: Dispatch<SetStateAction<boolean>>;
-  isReady?: boolean;
+  isReady: boolean;
   styles?: string;
   type?: "new" | "existing";
 }
@@ -87,7 +87,7 @@ const Editor = ({
         styles
       )}
     >
-      <WorkspaceCover postId={postId!} type={type} />
+      <WorkspaceCover postId={postId!} type={type} isEditorReady={isReady} />
       <BlockNoteView
         editor={editor}
         onChange={async () => {
