@@ -15,6 +15,10 @@ import { useWorkspaces } from "@/hooks/use-workspaces";
 import Loading from "@/app/(main)/documents/[[...slug]]/loading";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { store } from "@workspace/store";
+import { createNewPost } from "@/server/actions";
+import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export const SidebarExtension = ({
   children,
@@ -27,11 +31,47 @@ export const SidebarExtension = ({
     ssr: false,
   });
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
+  const params = useSearchParams().get("parentId");
+  const parentId = Number(
+    decodeURIComponent(params ?? "")
+      .split("/")
+      .at(-1)
+  );
+  const getWorkspaceName = (id: number) =>
+    store.getState().getWorkspaceName(id);
+  const getWorkspaceContent = (id: number) =>
+    store.getState().getWorkspaceContent(id);
+
+  const postType =
+    !documentList || documentList[0] === "newPost" ? "new" : "existing";
   const { data: session } = useSession();
   const { postList, isLoading } = useWorkspaces(
     session?.user.email!,
     documentList
   );
+
+  const createPostHandler = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    const { success, message } = await createNewPost(
+      getWorkspaceName(0) ?? "Untitled",
+      getWorkspaceContent(0),
+      parentId
+    );
+
+    if (success) {
+      toast.success("Post created successfully!", {
+        style: { backgroundColor: "#38b000" },
+      });
+
+      return;
+    }
+
+    toast.error("Error adding post", { style: { backgroundColor: "red" } });
+    console.error(message);
+  };
 
   return (
     <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-gray-900">
@@ -39,32 +79,44 @@ export const SidebarExtension = ({
         <div className="flex flex-1 items-center gap-2 px-3">
           <SidebarTrigger />
           <Separator orientation="vertical" className="mr-2 h-4" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              {postList?.map((post, index) => {
-                if (index === postList.length - 1) {
+          {postType === "existing" && (
+            <Breadcrumb>
+              <BreadcrumbList>
+                {postList?.map((post, index) => {
+                  if (index === postList.length - 1) {
+                    return (
+                      <BreadcrumbItem key={index}>
+                        <BreadcrumbPage className="line-clamp-1">
+                          {post?.name}
+                        </BreadcrumbPage>
+                      </BreadcrumbItem>
+                    );
+                  }
+
                   return (
                     <BreadcrumbItem key={index}>
-                      <BreadcrumbPage className="line-clamp-1">
+                      <BreadcrumbLink className="line-clamp-1">
                         {post?.name}
-                      </BreadcrumbPage>
+                      </BreadcrumbLink>
                     </BreadcrumbItem>
                   );
-                }
-
-                return (
-                  <BreadcrumbItem key={index}>
-                    <BreadcrumbLink className="line-clamp-1">
-                      {post?.name}
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                );
-              })}
-            </BreadcrumbList>
-          </Breadcrumb>
+                })}
+              </BreadcrumbList>
+            </Breadcrumb>
+          )}
+          {postType === "new" && <p>Create new post</p>}
         </div>
         <div className="ml-auto px-3">
-          <NavActions />
+          {postType === "existing" && <NavActions />}
+          {postType === "new" && (
+            <button
+              type="button"
+              className="mt-5 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2"
+              onClick={createPostHandler}
+            >
+              Create
+            </button>
+          )}
         </div>
       </header>
       <Editor
@@ -75,6 +127,7 @@ export const SidebarExtension = ({
         }
         onReady={setIsEditorReady}
         isReady={isEditorReady}
+        type={postType}
       />
       {(!isEditorReady || isLoading) && <Loading />}
     </SidebarInset>

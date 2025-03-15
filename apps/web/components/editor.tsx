@@ -2,13 +2,7 @@
 
 import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
-import React, {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
@@ -19,6 +13,7 @@ import { WorkspaceCover } from "./workspace-cover";
 import { updatePostContent } from "@/server/actions";
 import useDebounce from "@/hooks/use-debounce";
 import { cn } from "@workspace/ui/lib/utils";
+import useStore from "@workspace/store";
 
 interface EditorProps {
   editable: boolean;
@@ -27,6 +22,7 @@ interface EditorProps {
   onReady?: Dispatch<SetStateAction<boolean>>;
   isReady?: boolean;
   styles?: string;
+  type?: "new" | "existing";
 }
 
 const Editor = ({
@@ -36,10 +32,11 @@ const Editor = ({
   isReady,
   onReady,
   styles,
+  type = "existing",
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
   const [currentContent, setCurrentContent] = useState<any>();
-  const postContent = createContext(currentContent);
+  const { setWorkspaceContent } = useStore();
 
   const debouncedCallback = useDebounce(async () => {
     await updatePostContent(postId!, currentContent);
@@ -76,9 +73,7 @@ const Editor = ({
   });
 
   useEffect(() => {
-    if (editor.document.length > 1) {
-      onReady?.(true);
-    }
+    onReady?.(true);
   }, [editor.document]);
 
   useEffect(() => {
@@ -88,14 +83,18 @@ const Editor = ({
   return (
     <div
       className={cn(
-        `${!isReady ? "hidden" : "block"} overflow-x-hidden max-w-[1500px] flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`,
+        `${!isReady ? "hidden" : "block"} overflow-x-hidden max-w-[1500px] h-full flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`,
         styles
       )}
     >
-      <WorkspaceCover postId={postId!} />
+      <WorkspaceCover postId={postId!} type={type} />
       <BlockNoteView
         editor={editor}
         onChange={async () => {
+          if (type === "new") {
+            setWorkspaceContent(0, editor.document);
+            return;
+          }
           setCurrentContent(editor.document);
         }}
         editable={editable}

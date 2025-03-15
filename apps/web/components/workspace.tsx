@@ -99,7 +99,12 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
             <SidebarMenuButton className="hover:bg-transparent" asChild>
               <Link className="ml-7" href={currentPath}>
                 {data?.emoji ? <span>{data.emoji}</span> : <span>📝</span>}
-                <span>{workspaceNames.get(data!.id)!}</span>
+                <span>
+                  {workspaceNames.get(data!.id) &&
+                  workspaceNames.get(data!.id)!.length > 11
+                    ? workspaceNames.get(data!.id)?.substring(0, 11) + "..."
+                    : workspaceNames.get(data!.id)!}
+                </span>
               </Link>
             </SidebarMenuButton>
             <CollapsibleTrigger asChild>
@@ -110,7 +115,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
                 <ChevronRight />
               </SidebarMenuAction>
             </CollapsibleTrigger>
-            <WorkspaceActions documentId={data!.id} />
+            <WorkspaceActions documentId={data!.id} parentId={currentPath} />
           </SidebarMenuItem>
         </div>
         <div

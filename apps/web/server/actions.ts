@@ -361,7 +361,8 @@ export const updatePostContent = async (
 
 export const createNewPost = async (
   title: string,
-  content: string
+  content: any,
+  parentId?: number | null
 ): Promise<ActionResponse<number | null>> => {
   const session = await getServerSession();
 
@@ -388,6 +389,7 @@ export const createNewPost = async (
         name: title,
         content,
         userId: fetchedUser.id,
+        parentId,
       })
       .returning({ id: posts.id });
 
@@ -397,6 +399,7 @@ export const createNewPost = async (
       data: newPost[0]?.id || null,
     };
   } catch (err) {
+    console.log(err);
     const errorMessage =
       err instanceof Error
         ? err.message

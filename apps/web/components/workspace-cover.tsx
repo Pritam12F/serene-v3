@@ -1,9 +1,8 @@
 import { UploadButton } from "@/lib/uploadthing";
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import { debounce } from "@/lib/debounce";
 import {
   addOrUpdateCoverImage,
   changePostNameById,
@@ -12,8 +11,15 @@ import {
 import useStore from "@workspace/store";
 import { ClientUploadedFileData } from "uploadthing/types";
 import { EmojiPicker } from "./emoji-picker";
+import useDebounce from "@/hooks/use-debounce";
 
-export const WorkspaceCover = ({ postId }: { postId: number }) => {
+export const WorkspaceCover = ({
+  postId,
+  type,
+}: {
+  postId: number;
+  type: "existing" | "new";
+}) => {
   const { workspaceNames, setWorkspaceName } = useStore();
   const [coverLink, setCoverLink] = useState<string | null>();
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
@@ -35,12 +41,10 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
     fetchCover();
   }, []);
 
-  const debouncedRenamePost = useMemo(
-    () =>
-      debounce(async (title: string, postId: number) => {
-        await changePostNameById(postId, title ?? "Untitled");
-      }),
-    []
+  const debouncedRenamePost = useDebounce(
+    async (postId: number, newName: string) => {
+      await changePostNameById(postId, newName);
+    }
   );
 
   const handleOnUpload = async (file: ClientUploadedFileData<any>[]) => {
@@ -113,8 +117,12 @@ export const WorkspaceCover = ({ postId }: { postId: number }) => {
           placeholder="Untitled"
           value={workspaceNames.get(postId)}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            if (type === "new") {
+              setWorkspaceName(0, e.target.value);
+              return;
+            }
             setWorkspaceName(postId, e.target.value);
-            debouncedRenamePost(workspaceNames.get(postId), postId);
+            debouncedRenamePost(postId, workspaceNames.get(postId)!);
           }}
         />
       </div>

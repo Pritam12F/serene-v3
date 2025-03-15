@@ -12,15 +12,20 @@ import { useState } from "react";
 import { Button } from "@workspace/ui/components/button";
 import useStore from "@workspace/store";
 import { toast } from "sonner";
-import { createNewPost, deletePostById } from "@/server/actions";
-import { PostDialog } from "./post-dialog";
-import dynamic from "next/dynamic";
+import { deletePostById } from "@/server/actions";
+import { useRouter } from "next/navigation";
 
-export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
+export const WorkspaceActions = ({
+  documentId,
+  parentId,
+}: {
+  documentId: number;
+  parentId: string;
+}) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const { mutator, changeActiveWorkspaceId, removeWorkspaceName } = useStore();
-  const Editor = dynamic(() => import("./editor"), { ssr: false });
-
+  const router = useRouter();
+  const parentIdParams = encodeURIComponent(parentId.substring(11));
   const handleDelete = async () => {
     const { success, message } = await deletePostById(documentId);
     if (success) {
@@ -37,13 +42,9 @@ export const WorkspaceActions = ({ documentId }: { documentId: number }) => {
   return (
     <>
       <SidebarMenuAction className="mx-8">
-        <PostDialog
-          trigger={<Plus />}
-          content={
-            <Editor editable={true} styles="relative z-[9999] h-[500px] p-4" />
-          }
-          action={async () => {
-            createNewPost();
+        <Plus
+          onClick={() => {
+            router.push(`/documents/newPost?parentId=${parentIdParams}`);
           }}
         />
       </SidebarMenuAction>
