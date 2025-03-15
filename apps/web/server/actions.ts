@@ -7,7 +7,7 @@ import {
 } from "@workspace/common/types/db";
 import db from "@workspace/db";
 import { coverImages, posts, users } from "@workspace/db/schema";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 
 type ActionResponse<T = null> = {
@@ -140,6 +140,7 @@ export const fetchAllPostsByUserId = async (
   try {
     const postsFetched = await db.query.posts.findMany({
       where: eq(posts.userId, user_id),
+      orderBy: [asc(posts.createdAt)],
     });
 
     return {
@@ -318,6 +319,10 @@ export const updatePostContent = async (
   }
 
   try {
+    if (!newContent) {
+      return { success: false, message: "No data provided", data: null };
+    }
+
     const fetchedUser = await db.query.users.findFirst({
       where: eq(users.email, session.user.email),
       with: {
@@ -335,7 +340,7 @@ export const updatePostContent = async (
       };
     }
 
-    const res = await db
+    await db
       .update(posts)
       .set({
         content: newContent,

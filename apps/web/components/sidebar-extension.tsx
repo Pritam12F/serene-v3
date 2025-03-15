@@ -6,6 +6,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@workspace/ui/components/breadcrumb";
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
@@ -13,11 +14,11 @@ import { NavActions } from "./nav-actions";
 import dynamic from "next/dynamic";
 import { useWorkspaces } from "@/hooks/use-workspaces";
 import Loading from "@/app/(main)/documents/[[...slug]]/loading";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useSession } from "next-auth/react";
-import { store } from "@workspace/store";
+import useStore, { store } from "@workspace/store";
 import { createNewPost } from "@/server/actions";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 export const SidebarExtension = ({
@@ -32,6 +33,7 @@ export const SidebarExtension = ({
   });
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
   const params = useSearchParams().get("parentId");
+  const router = useRouter();
   const parentId = Number(
     decodeURIComponent(params ?? "")
       .split("/")
@@ -55,7 +57,7 @@ export const SidebarExtension = ({
   ) => {
     e.preventDefault();
 
-    const { success, message } = await createNewPost(
+    const { success, message, data } = await createNewPost(
       getWorkspaceName(0) ?? "Untitled",
       getWorkspaceContent(0),
       parentId
@@ -66,6 +68,8 @@ export const SidebarExtension = ({
         style: { backgroundColor: "#38b000" },
       });
 
+      router.push(decodeURIComponent(params ?? "").concat(`/${data}`));
+      store.getState().mutator?.();
       return;
     }
 
@@ -94,11 +98,17 @@ export const SidebarExtension = ({
                   }
 
                   return (
-                    <BreadcrumbItem key={index}>
-                      <BreadcrumbLink className="line-clamp-1">
-                        {post?.name}
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
+                    <Fragment key={index}>
+                      <BreadcrumbItem key={index}>
+                        <BreadcrumbLink
+                          className="line-clamp-1"
+                          href={`/documents/${post?.id}`}
+                        >
+                          {post?.name}
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                      <BreadcrumbSeparator />
+                    </Fragment>
                   );
                 })}
               </BreadcrumbList>
