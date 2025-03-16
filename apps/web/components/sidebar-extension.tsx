@@ -16,7 +16,7 @@ import { useWorkspaces } from "@/hooks/use-workspaces";
 import Loading from "@/app/(main)/documents/[[...slug]]/loading";
 import { Fragment, useState } from "react";
 import { useSession } from "next-auth/react";
-import useStore, { store } from "@workspace/store";
+import { store } from "@workspace/store";
 import { createNewPost } from "@/server/actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";

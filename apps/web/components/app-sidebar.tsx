@@ -1,16 +1,11 @@
 import * as React from "react";
 import {
   AudioWaveform,
-  Blocks,
-  Calendar,
   Command,
   Home,
   Inbox,
-  MessageCircleQuestion,
   Search,
-  Settings2,
   Sparkles,
-  Trash2,
 } from "lucide-react";
 import {
   Sidebar,
@@ -21,7 +16,6 @@ import {
 import { SidebarMain } from "./sidebar-main";
 import { SidebarFavorites } from "./sidebar-favorites";
 import { SidebarWorkspaces } from "./sidebar-workspaces";
-import { SidebarSecondary } from "./sidebar-secondary";
 import { SidebarUser } from "./sidebar-user";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
@@ -196,6 +190,7 @@ export async function AppSidebar({
             name: session?.user?.name ?? "Anonymous",
             email: session?.user?.email ?? "anonymous@example.com",
             avatar: session?.user?.image ?? "",
+            phone: session?.user.phone,
           }}
         />
         <SidebarMain items={data.navMain} />

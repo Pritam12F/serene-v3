@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { ChevronsUpDown, LogOut, SunDim, UserIcon } from "lucide-react";
 
 import {
   Avatar,
@@ -31,6 +24,9 @@ import {
 } from "@workspace/ui/components/sidebar";
 import { signOut } from "next-auth/react";
 import { ProfileDialog } from "./profile-dialog";
+import { Switch } from "@workspace/ui/components/switch";
+import { useState } from "react";
+import { useTheme } from "next-themes";
 
 export function SidebarUser({
   user,
@@ -39,9 +35,12 @@ export function SidebarUser({
     name: string;
     email: string;
     avatar: string;
+    phone?: number | null;
   };
 }) {
   const { isMobile } = useSidebar();
+  const [isOpen, setIsOpen] = useState(true);
+  const { setTheme, resolvedTheme } = useTheme();
 
   return (
     <SidebarMenu>
@@ -83,8 +82,33 @@ export function SidebarUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="cursor-pointer">
-                <ProfileDialog trigger={<BadgeCheck />} />
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+              >
+                <div className="flex flex-row justify-center items-center">
+                  <UserIcon className="w-4 h-4 -ml-0.5 mr-2" />
+                  Profile
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                <div className="flex flex-row justify-center items-center w-fit">
+                  <SunDim className="w-4 h-4 -ml-0.5 mr-2" />
+                  Dark Mode
+                  <Switch
+                    className="ml-28 -mr-2 md:ml-16 md:-mr-1"
+                    onClick={() =>
+                      setTheme(resolvedTheme === "dark" ? "light" : "dark")
+                    }
+                  />
+                </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -92,7 +116,7 @@ export function SidebarUser({
               onClick={() => {
                 signOut();
               }}
-              className="cursor-pointer"
+              className="cursor-pointer flex flex-row items-center"
             >
               <LogOut />
               Log out
@@ -100,6 +124,11 @@ export function SidebarUser({
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+      <ProfileDialog
+        isOpen={isOpen}
+        changeOpen={setIsOpen}
+        userDetails={user}
+      />
     </SidebarMenu>
   );
 }
