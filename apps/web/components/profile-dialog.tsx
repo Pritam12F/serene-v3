@@ -18,7 +18,6 @@ import {
   CardContent,
   CardFooter,
 } from "@workspace/ui/components/card";
-import { Label } from "@workspace/ui/components/label";
 import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -42,6 +41,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@workspace/ui/components/form";
+import axios, { isAxiosError } from "axios";
+import { toast } from "sonner";
 
 export const ProfileDialog = ({
   trigger,
@@ -103,8 +104,27 @@ function Tab({
     },
   });
 
-  function onSubmit1(values: z.infer<typeof UpdateUserSchema>) {
-    console.log(values);
+  async function onSubmit1(values: z.infer<typeof UpdateUserSchema>) {
+    try {
+      const res = await axios.post("/api/user", {
+        name: values.name,
+        phone: values.phone,
+      });
+
+      if (res.status === 200) {
+        toast.success("User details updated!", {
+          style: { backgroundColor: "#38b000" },
+        });
+      }
+    } catch (e) {
+      toast.error("Error updating user details", {
+        style: {
+          backgroundColor: "red",
+        },
+      });
+
+      console.error(e);
+    }
   }
 
   const form2 = useForm<z.infer<typeof UpdatePasswordSchema>>({
@@ -116,8 +136,42 @@ function Tab({
     },
   });
 
-  function onSubmit2(values: z.infer<typeof UpdatePasswordSchema>) {
-    console.log(values);
+  async function onSubmit2(values: z.infer<typeof UpdatePasswordSchema>) {
+    try {
+      const res = await axios.post("/api/user/changepassword", {
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+        confirmNewPassword: values.confirmNewPassword,
+      });
+
+      if (res.status === 200) {
+        toast.success("Password changed!", {
+          style: { backgroundColor: "#38b000" },
+        });
+      }
+    } catch (e) {
+      if (isAxiosError(e)) {
+        if (e.response?.status === 422) {
+          toast.error("Invalid inputs", {
+            style: { backgroundColor: "red" },
+          });
+        } else if (e.response?.status === 403) {
+          toast.error("User is not registered with credentials", {
+            style: { backgroundColor: "red" },
+          });
+        } else if (e.response?.status === 402) {
+          toast.error("Wrong password entered", {
+            style: { backgroundColor: "red" },
+          });
+        } else if (e.response?.status === 401) {
+          toast.error("User is not authorized", {
+            style: { backgroundColor: "red" },
+          });
+        }
+
+        console.error(e);
+      }
+    }
   }
 
   return (

@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       {
         error,
       },
-      { status: 403 }
+      { status: 405 }
     );
   }
 }
