@@ -31,6 +31,8 @@ export async function POST(req: NextRequest) {
         phone: data.phone,
       })
       .where(eq(users.id, session.user.id));
+
+    return NextResponse.json({ message: "Profile updated!" });
   } catch (err) {
     const error = err instanceof Error ? err.message : "Some error occured";
 

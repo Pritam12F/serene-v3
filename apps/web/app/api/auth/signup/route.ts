@@ -1,13 +1,13 @@
 import { InsertUserSchema } from "@workspace/common/types/db";
 import db from "@workspace/db";
 import { users } from "@workspace/db/schema";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
 import { createInitialPosts } from "@workspace/db/seed";
 import { v4 as uuid } from "uuid";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const body = await req.json();
 
   const { data, error } = InsertUserSchema.safeParse(body);
