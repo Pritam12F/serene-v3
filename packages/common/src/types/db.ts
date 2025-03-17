@@ -136,3 +136,34 @@ export const SignUpFormSchema = z
       path: ["confirmPassword"],
     }
   );
+
+export const UpdateUserSchema = z.object({
+  name: z.string().optional(),
+  phone: z.coerce
+    .number({ message: "Invalid phone number" })
+    .int()
+    .gte(1000000000, { message: "Invalid phone number" })
+    .lte(9999999999, { message: "Invalid phone number" }),
+});
+
+export const UpdatePasswordSchema = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(5, { message: "Password must be at least of length 5" }),
+    newPassword: z
+      .string()
+      .min(5, { message: "Password must be at least of length 5" }),
+    confirmNewPassword: z
+      .string()
+      .min(5, { message: "Password must be at least of length 5" }),
+  })
+  .refine(
+    (values) => {
+      return values.newPassword === values.confirmNewPassword;
+    },
+    {
+      message: "Passwords must match!",
+      path: ["confirmPassword"],
+    }
+  );

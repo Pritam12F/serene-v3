@@ -26,7 +26,22 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@workspace/ui/components/avatar";
-import { Mail, Paperclip, Pencil, Phone, Text } from "lucide-react";
+import { Mail, Pencil, Phone } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  UpdatePasswordSchema,
+  UpdateUserSchema,
+} from "@workspace/common/types/db";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@workspace/ui/components/form";
 
 export const ProfileDialog = ({
   trigger,
@@ -79,6 +94,31 @@ function Tab({
     }
     return color;
   })();
+
+  const form1 = useForm<z.infer<typeof UpdateUserSchema>>({
+    resolver: zodResolver(UpdateUserSchema),
+    defaultValues: {
+      name: userDetails.name,
+      phone: userDetails.phone ?? 0,
+    },
+  });
+
+  function onSubmit1(values: z.infer<typeof UpdateUserSchema>) {
+    console.log(values);
+  }
+
+  const form2 = useForm<z.infer<typeof UpdatePasswordSchema>>({
+    resolver: zodResolver(UpdatePasswordSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
+    },
+  });
+
+  function onSubmit2(values: z.infer<typeof UpdatePasswordSchema>) {
+    console.log(values);
+  }
 
   return (
     <Tabs defaultValue="account" className="w-[350px] lg:w-[400px]">
@@ -145,46 +185,54 @@ function Tab({
             </CardHeader>
             <CardContent className="space-y-5">
               {
-                <>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-x-2 font-semibold">
-                      <Pencil className="w-4 h-4" />
-                      Name
+                <Form {...form1}>
+                  <form
+                    onSubmit={form1.handleSubmit(onSubmit1)}
+                    className="space-y-8"
+                  >
+                    <FormField
+                      control={form1.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form1.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="flex flex-row space-x-3">
+                      <Button
+                        type="button"
+                        variant={"destructive"}
+                        onClick={() => setIsEditProfileOpen(false)}
+                        className="w-full"
+                      >
+                        Cancel
+                      </Button>
+                      <Button type="submit" className="w-full">
+                        Submit
+                      </Button>
                     </div>
-                    <Input defaultValue={userDetails.name} />
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-x-2 font-semibold">
-                      <Mail className="w-4 h-4" />
-                      Email
-                    </div>
-                    <Input defaultValue={userDetails.email} />
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-x-2 font-semibold">
-                      <Phone className="w-4 h-4" />
-                      Phone
-                    </div>
-                    <Input defaultValue={userDetails.phone ?? ""} />
-                  </div>
-                </>
+                  </form>
+                </Form>
               }
             </CardContent>
-            <CardFooter className="space-x-4">
-              <Button
-                onClick={() => setIsEditProfileOpen(false)}
-                className="w-full"
-                variant={"destructive"}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => setIsEditProfileOpen(true)}
-                className="w-full"
-              >
-                Confirm Changes
-              </Button>
-            </CardFooter>
           </Card>
         )}
       </TabsContent>
@@ -197,18 +245,56 @@ function Tab({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="space-y-3">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
-            </div>
-            <div className="space-y-3">
-              <Label htmlFor="new">New password</Label>
-              <Input id="new" type="password" />
-            </div>
+            <Form {...form2}>
+              <form
+                onSubmit={form2.handleSubmit(onSubmit2)}
+                className="space-y-8"
+              >
+                <FormField
+                  control={form2.control}
+                  name="currentPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Current Password</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form2.control}
+                  name="newPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>New Password</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form2.control}
+                  name="confirmNewPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full">
+                  Submit
+                </Button>
+              </form>
+            </Form>
           </CardContent>
-          <CardFooter className="flex justify-center">
-            <Button className="w-full">Change password</Button>
-          </CardFooter>
         </Card>
       </TabsContent>
     </Tabs>
