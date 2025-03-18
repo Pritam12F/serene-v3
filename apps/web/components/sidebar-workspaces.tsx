@@ -55,7 +55,7 @@ export function SidebarWorkspaces() {
         </SidebarMenu>
       </SidebarGroupContent>
       <Button
-        className="my-2 p-0.5 h-5 w-11/12 mx-auto"
+        className="my-2 p-0.5 h-5 w-1/6 mx-auto"
         variant={"ghost"}
         aria-label="Add new post"
         onClick={() => {
