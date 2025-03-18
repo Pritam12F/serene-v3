@@ -40,7 +40,7 @@ export const WorkspaceActions = ({
   };
 
   return (
-    <>
+    <div>
       <SidebarMenuAction
         className="mx-8"
         onClick={(e) => {
@@ -99,6 +99,6 @@ export const WorkspaceActions = ({
         actionHandler={handleDelete}
         documentId={documentId}
       />
-    </>
+    </div>
   );
 };

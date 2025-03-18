@@ -89,7 +89,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
         style={{ marginLeft: `${level * 5}px` }}
       >
         <div
-          className={`absolute inset-0 transition-opacity duration-400 ${
+          className={`absolute inset-0 transition-opacity duration-400 hover:bg-[#27272a] hover:not(:has(*:hover)) group rounded-sm ${
             data?.id === activeWorkspaceId
               ? "opacity-0 pointer-events-none"
               : "opacity-100"
@@ -115,7 +115,9 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
                 <ChevronRight />
               </SidebarMenuAction>
             </CollapsibleTrigger>
-            <WorkspaceActions documentId={data!.id} parentId={currentPath} />
+            <div className="transition-all hover:bg-[#27272a] duration-250">
+              <WorkspaceActions documentId={data!.id} parentId={currentPath} />
+            </div>
           </SidebarMenuItem>
         </div>
         <div

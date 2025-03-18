@@ -1,7 +1,7 @@
 "use client";
 
 import useStore from "@workspace/store";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Workspace } from "./workspace";
 import {
   SidebarGroup,
@@ -15,7 +15,6 @@ import { useWorkspaces } from "@/hooks/use-workspaces";
 import { useSession } from "next-auth/react";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Button } from "@workspace/ui/components/button";
 
 export function SidebarWorkspaces() {
   const { mutator, changeMutator, activeWorkspaceId, changeActiveWorkspaceId } =
@@ -25,6 +24,7 @@ export function SidebarWorkspaces() {
   const user_id = session.data?.user.id ?? "";
   const { postTree, mutate } = useWorkspaces(user_id);
   const router = useRouter();
+  const [isHovering, setIsHovering] = useState(false);
 
   useClickOutside(workspaceRef, () => {
     if (activeWorkspaceId) {
@@ -42,7 +42,22 @@ export function SidebarWorkspaces() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Workspaces</SidebarGroupLabel>
+      <SidebarGroupLabel
+        className={`flex justify-between items-center hover:bg-[#27272a]`}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
+        Workspaces
+        <SidebarMenuAction
+          className={`my-2 p-0.5 h-5 mx-2 opacity-${isHovering ? "100" : "0"} transition-all duration-75`}
+          aria-label="Add new post"
+          onClick={() => {
+            router.push("/documents/newPost");
+          }}
+        >
+          <Plus />
+        </SidebarMenuAction>
+      </SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu ref={workspaceRef}>
           {postTree?.map((workspace, idx) => (
@@ -54,16 +69,6 @@ export function SidebarWorkspaces() {
           ))}
         </SidebarMenu>
       </SidebarGroupContent>
-      <Button
-        className="my-2 p-0.5 h-5 w-1/6 mx-auto"
-        variant={"ghost"}
-        aria-label="Add new post"
-        onClick={() => {
-          router.push("/documents/newPost");
-        }}
-      >
-        <Plus />
-      </Button>
     </SidebarGroup>
   );
 }

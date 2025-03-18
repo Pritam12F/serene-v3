@@ -16,6 +16,8 @@ import { useWorkspaces } from "@/hooks/use-workspaces";
 import Loading from "@/app/(main)/documents/[[...slug]]/loading";
 import { Fragment, useState } from "react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Button } from "@workspace/ui/components/button";
 
 export const SidebarExtension = ({
   children,
@@ -74,17 +76,27 @@ export const SidebarExtension = ({
         </div>
         <NavActions />
       </header>
-      <Editor
-        editable={true}
-        postId={postList ? postList[postList.length - 1]?.id : null}
-        initialContent={
-          postList ? postList[postList.length - 1]?.content : null
-        }
-        onReady={setIsEditorReady}
-        isReady={isEditorReady}
-        type={postType}
-      />
-      {(!isEditorReady || isLoading) && <Loading />}
+      {!documentList && (
+        <div className="h-screen w-full flex flex-col items-center">
+          <div className="text-4xl my-48">No post selected...</div>
+          <Link href={"/documents/newPost"}>
+            <Button>Create new post</Button>
+          </Link>
+        </div>
+      )}
+      {documentList && (
+        <Editor
+          editable={true}
+          postId={postList ? postList[postList.length - 1]?.id : null}
+          initialContent={
+            postList ? postList[postList.length - 1]?.content : null
+          }
+          onReady={setIsEditorReady}
+          isReady={isEditorReady}
+          type={postType}
+        />
+      )}
+      {(!isEditorReady || isLoading) && documentList && <Loading />}
     </SidebarInset>
   );
 };
