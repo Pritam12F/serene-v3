@@ -25,7 +25,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@workspace/ui/components/avatar";
-import { Mail, Pencil, Phone } from "lucide-react";
+import { Mail, Pencil, Phone, User, Lock, X } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -43,12 +43,14 @@ import {
 } from "@workspace/ui/components/form";
 import axios, { isAxiosError } from "axios";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 export const ProfileDialog = ({
   trigger,
   isOpen,
   changeOpen,
   userDetails,
+  update,
 }: {
   trigger?: React.ReactNode;
   isOpen: boolean;
@@ -59,6 +61,7 @@ export const ProfileDialog = ({
     avatar?: string;
     phone?: number | null;
   };
+  update: () => void;
 }) => {
   return (
     <Dialog
@@ -68,8 +71,8 @@ export const ProfileDialog = ({
       }}
     >
       <DialogTrigger>{trigger}</DialogTrigger>
-      <DialogContent className="w-[400px] lg:w-[450px] rounded-md py-10">
-        <Tab userDetails={userDetails} />
+      <DialogContent className="w-[400px] lg:w-[500px] rounded-lg p-10 border-none bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+        <Tab userDetails={userDetails} update={update} />
       </DialogContent>
     </Dialog>
   );
@@ -77,6 +80,7 @@ export const ProfileDialog = ({
 
 function Tab({
   userDetails,
+  update,
 }: {
   userDetails: {
     name: string;
@@ -84,16 +88,19 @@ function Tab({
     avatar?: string;
     phone?: number | null;
   };
+  update: () => void;
 }) {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState<boolean>(false);
 
   const randomColor = (() => {
-    var letters = "0123456789abcdef";
-    var color = "#";
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+    const colors = [
+      "bg-blue-500",
+      "bg-green-500",
+      "bg-purple-500",
+      "bg-pink-500",
+      "bg-indigo-500",
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
   })();
 
   const form1 = useForm<z.infer<typeof UpdateUserSchema>>({
@@ -101,6 +108,15 @@ function Tab({
     defaultValues: {
       name: userDetails.name,
       phone: userDetails.phone ?? 0,
+    },
+  });
+
+  const form2 = useForm<z.infer<typeof UpdatePasswordSchema>>({
+    resolver: zodResolver(UpdatePasswordSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
     },
   });
 
@@ -112,197 +128,241 @@ function Tab({
       });
 
       if (res.status === 200) {
-        toast.success("User details updated!", {
-          style: { backgroundColor: "#38b000" },
+        toast.success("Profile updated successfully!", {
+          duration: 1000,
+          style: {
+            backgroundColor: "#38b000",
+          },
         });
+        setIsEditProfileOpen(false);
+
+        setTimeout(() => {
+          toast.success("New profile data will be shown on next sign in", {
+            style: {
+              backgroundColor: "#38b000",
+            },
+          });
+        }, 1500);
       }
     } catch (e) {
-      toast.error("Error updating user details", {
+      toast.error("Failed to update profile", {
+        duration: 3000,
         style: {
           backgroundColor: "red",
         },
       });
-
       console.error(e);
     }
   }
 
-  const form2 = useForm<z.infer<typeof UpdatePasswordSchema>>({
-    resolver: zodResolver(UpdatePasswordSchema),
-    defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
-    },
-  });
-
   async function onSubmit2(values: z.infer<typeof UpdatePasswordSchema>) {
     try {
-      const res = await axios.post("/api/user/changepassword", {
-        currentPassword: values.currentPassword,
-        newPassword: values.newPassword,
-        confirmNewPassword: values.confirmNewPassword,
-      });
+      const res = await axios.post("/api/user/changepassword", values);
 
       if (res.status === 200) {
-        toast.success("Password changed!", {
-          style: { backgroundColor: "#38b000" },
+        toast.success("Password changed successfully!", {
+          duration: 3000,
+          style: {
+            backgroundColor: "#38b000",
+          },
         });
+        form2.reset();
       }
     } catch (e) {
       if (isAxiosError(e)) {
-        if (e.response?.status === 422) {
-          toast.error("Invalid inputs", {
-            style: { backgroundColor: "red" },
-          });
-        } else if (e.response?.status === 403) {
-          toast.error("User is not registered with credentials", {
-            style: { backgroundColor: "red" },
-          });
-        } else if (e.response?.status === 402) {
-          toast.error("Wrong password entered", {
-            style: { backgroundColor: "red" },
-          });
-        } else if (e.response?.status === 401) {
-          toast.error("User is not authorized", {
-            style: { backgroundColor: "red" },
-          });
-        }
-
+        const errorMessages = {
+          422: "Invalid password format",
+          403: "Account not found",
+          402: "Current password is incorrect",
+          401: "Unauthorized access",
+        };
+        const status = e.response?.status as keyof typeof errorMessages;
+        toast.error(errorMessages[status] || "An error occurred", {
+          duration: 3000,
+          style: {
+            backgroundColor: "red",
+          },
+        });
         console.error(e);
       }
     }
   }
 
   return (
-    <Tabs defaultValue="account" className="w-[350px] lg:w-[400px]">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="profile">Profile</TabsTrigger>
-        <TabsTrigger value="password">Change Password</TabsTrigger>
+    <Tabs defaultValue="profile" className="w-full">
+      <TabsList className="grid w-full grid-cols-2 p-1 gap-1 bg-muted/20">
+        <TabsTrigger
+          value="profile"
+          className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 flex items-center gap-2"
+        >
+          <User className="w-4 h-4" />
+          Profile
+        </TabsTrigger>
+        <TabsTrigger
+          value="password"
+          className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800 flex items-center gap-2"
+        >
+          <Lock className="w-4 h-4" />
+          Password
+        </TabsTrigger>
       </TabsList>
-      <TabsContent value="profile" className="mt-8">
+
+      <TabsContent value="profile" className="mt-6">
         {!isEditProfileOpen ? (
-          <Card>
-            <CardHeader className="space-y-4">
-              <CardTitle className="text-2xl">Profile</CardTitle>
-              <CardDescription>These are your profile details</CardDescription>
-              <Avatar>
-                <AvatarImage src={userDetails.avatar} alt="@user_profile" />
-                <AvatarFallback style={{ backgroundColor: randomColor }}>
-                  {userDetails.name[0]?.toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+          <Card className="border-none shadow-none bg-transparent">
+            <CardHeader className="text-center pb-2">
+              <div className="mx-auto mb-4">
+                <Avatar className="w-24 h-24">
+                  <AvatarImage
+                    src={userDetails.avatar}
+                    alt={userDetails.name}
+                    className="object-cover"
+                  />
+                  <AvatarFallback
+                    className={`text-2xl ${randomColor} text-white`}
+                  >
+                    {userDetails.name[0]?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+              <CardTitle className="text-2xl font-bold">
+                {userDetails.name}
+              </CardTitle>
+              <CardDescription className="text-muted-foreground">
+                Manage your profile information
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-5 -mt-1">
-              {
-                <>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-x-2 font-semibold">
-                      <Pencil className="w-4 h-4" />
-                      Name
-                    </div>
-                    <Input value={userDetails.name} disabled />
+            <CardContent className="mt-5 space-y-4">
+              <div className="space-y-3">
+                <div className="group flex items-center gap-x-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-all duration-200 border border-border/5">
+                  <div className="flex-shrink-0 p-2.5 rounded-lg bg-primary/5 group-hover:bg-primary/10 transition-colors duration-200">
+                    <Mail className="w-5 h-5 text-primary" />
                   </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-x-2 font-semibold">
-                      <Mail className="w-4 h-4" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-muted-foreground/70">
                       Email
-                    </div>
-                    <Input value={userDetails.email} disabled />
+                    </p>
+                    <p className="mt-1 font-medium tracking-tight truncate">
+                      {userDetails.email}
+                    </p>
                   </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-x-2 font-semibold">
-                      <Phone className="w-4 h-4" />
+                </div>
+                <div className="group flex items-center gap-x-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-all duration-200 border border-border/5">
+                  <div className="flex-shrink-0 p-2.5 rounded-lg bg-primary/5 group-hover:bg-primary/10 transition-colors duration-200">
+                    <Phone className="w-5 h-5 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-muted-foreground/70">
                       Phone
-                    </div>
-                    <Input value={userDetails.phone ?? ""} disabled />
+                    </p>
+                    <p className="mt-1 font-medium tracking-tight truncate">
+                      {userDetails.phone || "Not set"}
+                    </p>
                   </div>
-                </>
-              }
+                </div>
+              </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="pt-2">
               <Button
                 onClick={() => setIsEditProfileOpen(true)}
                 className="w-full"
+                variant="outline"
               >
+                <Pencil className="w-4 h-4 mr-2" />
                 Edit Profile
               </Button>
             </CardFooter>
           </Card>
         ) : (
-          <Card>
+          <Card className="border-none shadow-none bg-transparent">
             <CardHeader>
-              <CardTitle className="text-2xl">Profile</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-2xl font-bold">
+                  Edit Profile
+                </CardTitle>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsEditProfileOpen(false)}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
               <CardDescription>
-                Make changes to your account here. Click save when you're done.
+                Update your profile information below
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-5">
-              {
-                <Form {...form1}>
-                  <form
-                    onSubmit={form1.handleSubmit(onSubmit1)}
-                    className="space-y-8"
-                  >
-                    <FormField
-                      control={form1.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form1.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Phone</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <div className="flex flex-row space-x-3">
-                      <Button
-                        type="button"
-                        variant={"destructive"}
-                        onClick={() => setIsEditProfileOpen(false)}
-                        className="w-full"
-                      >
-                        Cancel
-                      </Button>
-                      <Button type="submit" className="w-full">
-                        Submit
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              }
+            <CardContent>
+              <Form {...form1}>
+                <form
+                  onSubmit={form1.handleSubmit(onSubmit1)}
+                  className="space-y-6"
+                >
+                  <FormField
+                    control={form1.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} className="bg-muted/30" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form1.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="tel"
+                            className="bg-muted/30"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex gap-3 pt-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setIsEditProfileOpen(false)}
+                      className="w-full"
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" className="w-full">
+                      Save Changes
+                    </Button>
+                  </div>
+                </form>
+              </Form>
             </CardContent>
           </Card>
         )}
       </TabsContent>
-      <TabsContent value="password" className="mt-8">
-        <Card>
+
+      <TabsContent value="password" className="mt-6">
+        <Card className="border-none shadow-none bg-transparent">
           <CardHeader>
-            <CardTitle className="text-2xl">Password</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              Change Password
+            </CardTitle>
             <CardDescription>
-              Change your password here. After saving, you'll be logged out.
+              Update your password to keep your account secure
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent>
             <Form {...form2}>
               <form
                 onSubmit={form2.handleSubmit(onSubmit2)}
-                className="space-y-8"
+                className="space-y-6"
               >
                 <FormField
                   control={form2.control}
@@ -311,7 +371,11 @@ function Tab({
                     <FormItem>
                       <FormLabel>Current Password</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input
+                          type="password"
+                          {...field}
+                          className="bg-muted/30"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -324,7 +388,11 @@ function Tab({
                     <FormItem>
                       <FormLabel>New Password</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input
+                          type="password"
+                          {...field}
+                          className="bg-muted/30"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -335,16 +403,20 @@ function Tab({
                   name="confirmNewPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
+                      <FormLabel>Confirm New Password</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input
+                          type="password"
+                          {...field}
+                          className="bg-muted/30"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
-                  Submit
+                <Button type="submit" className="w-full mt-6">
+                  Update Password
                 </Button>
               </form>
             </Form>

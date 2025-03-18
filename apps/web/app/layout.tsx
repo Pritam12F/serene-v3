@@ -25,6 +25,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
+  const isAuthenticated = session?.user;
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -32,9 +33,9 @@ export default async function RootLayout({
         className={`${fontInter.variable} font-sans antialiased min-h-screen`}
       >
         <Providers>
-          {session?.user ? null : <Navbar />}
+          {!isAuthenticated && <Navbar />}
           {children}
-          {session?.user ? null : <Footer />}
+          {!isAuthenticated && <Footer />}
           <Toaster closeButton />
         </Providers>
       </body>

@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  AudioWaveform,
-  Command,
-  Home,
-  Inbox,
-  Search,
-  Sparkles,
-} from "lucide-react";
+import { AudioWaveform, Command, Home, Search } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -165,23 +158,14 @@ const data = {
 export async function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const session = await getServerSession(authOptions);
-
   return (
     <Sidebar
-      className="border-r-0 dark:bg-gray-900"
+      className="border-r-0 dark:bg-gray-950"
       {...props}
       variant="floating"
     >
       <SidebarHeader>
-        <SidebarUser
-          user={{
-            name: session?.user?.name ?? "Anonymous",
-            email: session?.user?.email ?? "anonymous@example.com",
-            avatar: session?.user?.image ?? "",
-            phone: session?.user.phone,
-          }}
-        />
+        <SidebarUser />
         <SidebarMain items={data.navMain} />
       </SidebarHeader>
       <SidebarContent className="overflow-x-hidden">

@@ -98,7 +98,7 @@ export const WorkspaceCover = ({
           />
         </>
       ) : (
-        <div className="absolute inset-0 dark:bg-gray-900">
+        <div className="absolute inset-0 dark:bg-gray-950">
           <UploadButton
             endpoint="coverImageUploader"
             className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"

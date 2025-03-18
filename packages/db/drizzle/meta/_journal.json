@@ -232,6 +232,13 @@
       "when": 1741510406162,
       "tag": "0032_silky_post",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1742293178553,
+      "tag": "0033_spotty_king_bedlam",
+      "breakpoints": true
     }
   ]
 }

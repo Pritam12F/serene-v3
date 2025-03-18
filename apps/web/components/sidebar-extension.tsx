@@ -10,7 +10,6 @@ import {
 } from "@workspace/ui/components/breadcrumb";
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
-import { NavActions } from "./nav-actions";
 import dynamic from "next/dynamic";
 import { useWorkspaces } from "@/hooks/use-workspaces";
 import Loading from "@/app/(main)/documents/[[...slug]]/loading";
@@ -18,6 +17,7 @@ import { Fragment, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
+import useStore from "@workspace/store";
 
 export const SidebarExtension = ({
   children,
@@ -37,9 +37,14 @@ export const SidebarExtension = ({
     session?.user.email!,
     documentList
   );
+  const lastUpdated = postList
+    ?.filter((el) => {
+      el?.id === documentList?.[documentList.length - 1];
+    })[0]
+    ?.updatedAt?.toDateString();
 
   return (
-    <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-gray-900">
+    <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-gray-950">
       <header className="flex h-12 shrink-0 items-center gap-2">
         <div className="flex flex-1 items-center gap-2 px-3">
           <SidebarTrigger />
@@ -74,7 +79,9 @@ export const SidebarExtension = ({
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        <NavActions />
+        {lastUpdated && (
+          <div className="mx-4 font-medium">Last updated on {lastUpdated}</div>
+        )}
       </header>
       {!documentList && (
         <div className="h-screen w-full flex flex-col items-center">

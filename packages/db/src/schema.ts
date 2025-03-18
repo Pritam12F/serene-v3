@@ -45,6 +45,7 @@ export const posts = pgTable("posts", {
     onDelete: "cascade",
   }),
   createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Images Table

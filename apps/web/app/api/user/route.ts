@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
         name: data.name,
         phone: data.phone,
       })
-      .where(eq(users.id, session.user.id));
+      .where(eq(users.email, session.user.email));
 
     return NextResponse.json({ message: "Profile updated!" });
   } catch (err) {
