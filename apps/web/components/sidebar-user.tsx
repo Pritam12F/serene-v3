@@ -1,7 +1,6 @@
 "use client";
 
 import { ChevronsUpDown, LogOut, SunDim, UserIcon } from "lucide-react";
-
 import {
   Avatar,
   AvatarFallback,
@@ -39,7 +38,7 @@ export function SidebarUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const { setTheme, resolvedTheme } = useTheme();
 
   return (

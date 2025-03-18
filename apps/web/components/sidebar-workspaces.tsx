@@ -8,10 +8,14 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuAction,
 } from "@workspace/ui/components/sidebar";
 import useClickOutside from "@/hooks/use-on-click-outside";
 import { useWorkspaces } from "@/hooks/use-workspaces";
 import { useSession } from "next-auth/react";
+import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Button } from "@workspace/ui/components/button";
 
 export function SidebarWorkspaces() {
   const { mutator, changeMutator, activeWorkspaceId, changeActiveWorkspaceId } =
@@ -20,6 +24,7 @@ export function SidebarWorkspaces() {
   const session = useSession();
   const user_id = session.data?.user.id ?? "";
   const { postTree, mutate } = useWorkspaces(user_id);
+  const router = useRouter();
 
   useClickOutside(workspaceRef, () => {
     if (activeWorkspaceId) {
@@ -49,6 +54,16 @@ export function SidebarWorkspaces() {
           ))}
         </SidebarMenu>
       </SidebarGroupContent>
+      <Button
+        className="my-2 p-0.5 h-5 w-11/12 mx-auto"
+        variant={"ghost"}
+        aria-label="Add new post"
+        onClick={() => {
+          router.push("/documents/newPost");
+        }}
+      >
+        <Plus />
+      </Button>
     </SidebarGroup>
   );
 }
