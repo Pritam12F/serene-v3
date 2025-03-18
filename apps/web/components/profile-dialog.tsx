@@ -242,8 +242,9 @@ function Tab({
                     <p className="text-sm font-medium text-muted-foreground/70">
                       Email
                     </p>
-                    <p className="mt-1 font-medium tracking-tight truncate">
-                      {userDetails.email}
+                    <p className="mt-1 font-medium text-sm tracking-tight truncate">
+                      {/* {userDetails.email} */}
+                      pritam.das.santu@gmail.com
                     </p>
                   </div>
                 </div>
