@@ -239,6 +239,13 @@
       "when": 1742293178553,
       "tag": "0033_spotty_king_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1742310913930,
+      "tag": "0034_yellow_phalanx",
+      "breakpoints": true
     }
   ]
 }

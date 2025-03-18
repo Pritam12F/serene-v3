@@ -89,7 +89,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
         style={{ marginLeft: `${level * 5}px` }}
       >
         <div
-          className={`absolute inset-0 transition-opacity duration-400 hover:bg-[#27272a] hover:not(:has(*:hover)) group rounded-sm ${
+          className={`absolute inset-0 transition-opacity duration-400 hover:bg-[#f4f4f5] dark:hover:bg-[#27272a] hover:not(:has(*:hover)) group rounded-sm ${
             data?.id === activeWorkspaceId
               ? "opacity-0 pointer-events-none"
               : "opacity-100"

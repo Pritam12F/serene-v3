@@ -43,7 +43,7 @@ export function SidebarWorkspaces() {
   return (
     <SidebarGroup>
       <SidebarGroupLabel
-        className={`flex justify-between items-center hover:bg-[#27272a]`}
+        className={`flex justify-between items-center hover:bg-[#f4f4f5] dark:hover:bg-[#27272a]`}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >

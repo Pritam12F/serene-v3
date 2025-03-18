@@ -10,6 +10,7 @@ import {
   AnyPgColumn,
   jsonb,
   pgEnum,
+  bigint,
 } from "drizzle-orm/pg-core";
 
 export const accountTypeEnum = pgEnum("account_type", [
@@ -24,7 +25,7 @@ export const users = pgTable("users", {
   name: text("name").notNull(),
   profilePic: text("profile_pic"),
   email: text("email").unique().notNull(),
-  phone: integer("phone").unique(),
+  phone: bigint({ mode: "number" }).unique(),
   accountType: accountTypeEnum("account_type").notNull(),
   hashedPassword: text("hashed_password"),
   createdAt: timestamp("created_at").defaultNow(),
