@@ -27,7 +27,6 @@ export async function POST(req: NextRequest) {
     await db
       .update(users)
       .set({
-        name: data.name,
         phone: data.phone,
       })
       .where(eq(users.email, session.user.email));

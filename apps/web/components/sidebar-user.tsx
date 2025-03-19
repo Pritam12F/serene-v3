@@ -28,7 +28,7 @@ import { useState } from "react";
 import { useTheme } from "next-themes";
 
 export function SidebarUser() {
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
   const { isMobile } = useSidebar();
   const [isOpen, setIsOpen] = useState(false);
   const { setTheme, resolvedTheme } = useTheme();
@@ -130,7 +130,6 @@ export function SidebarUser() {
           avatar: session?.user.image!,
           phone: session?.user.phone,
         }}
-        update={update}
       />
     </SidebarMenu>
   );

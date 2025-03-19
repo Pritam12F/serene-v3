@@ -138,7 +138,6 @@ export const SignUpFormSchema = z
   );
 
 export const UpdateUserSchema = z.object({
-  name: z.string().optional(),
   phone: z.coerce
     .number({ message: "Invalid phone number" })
     .int()

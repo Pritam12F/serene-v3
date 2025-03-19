@@ -3,7 +3,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@workspace/ui/components/dialog";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Tabs,
   TabsContent,
@@ -43,14 +43,13 @@ import {
 } from "@workspace/ui/components/form";
 import axios, { isAxiosError } from "axios";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
+import { fetchUserByEmail } from "@/server/actions";
 
 export const ProfileDialog = ({
   trigger,
   isOpen,
   changeOpen,
   userDetails,
-  update,
 }: {
   trigger?: React.ReactNode;
   isOpen: boolean;
@@ -61,7 +60,6 @@ export const ProfileDialog = ({
     avatar?: string;
     phone?: number | null;
   };
-  update: () => void;
 }) => {
   return (
     <Dialog
@@ -72,7 +70,7 @@ export const ProfileDialog = ({
     >
       <DialogTrigger>{trigger}</DialogTrigger>
       <DialogContent className="w-[400px] lg:w-[500px] rounded-lg p-10 border-none bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
-        <Tab userDetails={userDetails} update={update} />
+        <Tab userDetails={userDetails} />
       </DialogContent>
     </Dialog>
   );
@@ -80,7 +78,6 @@ export const ProfileDialog = ({
 
 function Tab({
   userDetails,
-  update,
 }: {
   userDetails: {
     name: string;
@@ -88,9 +85,20 @@ function Tab({
     avatar?: string;
     phone?: number | null;
   };
-  update: () => void;
 }) {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { success, data } = await fetchUserByEmail();
+
+      if (success) {
+        userDetails.phone = data?.phone;
+      }
+    };
+
+    fetch();
+  }, []);
 
   const randomColor = (() => {
     const colors = [
@@ -106,7 +114,6 @@ function Tab({
   const form1 = useForm<z.infer<typeof UpdateUserSchema>>({
     resolver: zodResolver(UpdateUserSchema),
     defaultValues: {
-      name: userDetails.name,
       phone: userDetails.phone ?? 0,
     },
   });
@@ -123,7 +130,6 @@ function Tab({
   async function onSubmit1(values: z.infer<typeof UpdateUserSchema>) {
     try {
       const res = await axios.post("/api/user", {
-        name: values.name,
         phone: values.phone,
       });
 
@@ -135,14 +141,7 @@ function Tab({
           },
         });
         setIsEditProfileOpen(false);
-
-        setTimeout(() => {
-          toast.success("New profile data will be shown on next sign in", {
-            style: {
-              backgroundColor: "#38b000",
-            },
-          });
-        }, 1500);
+        userDetails.phone = values.phone;
       }
     } catch (e) {
       toast.error("Failed to update profile", {
@@ -280,13 +279,6 @@ function Tab({
                 <CardTitle className="text-2xl font-bold">
                   Edit Profile
                 </CardTitle>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsEditProfileOpen(false)}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
               </div>
               <CardDescription>
                 Update your profile information below
@@ -298,19 +290,6 @@ function Tab({
                   onSubmit={form1.handleSubmit(onSubmit1)}
                   className="space-y-6"
                 >
-                  <FormField
-                    control={form1.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} className="bg-muted/30" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                   <FormField
                     control={form1.control}
                     name="phone"
@@ -331,7 +310,7 @@ function Tab({
                   <div className="flex gap-3 pt-4">
                     <Button
                       type="button"
-                      variant="outline"
+                      variant="destructive"
                       onClick={() => setIsEditProfileOpen(false)}
                       className="w-full"
                     >

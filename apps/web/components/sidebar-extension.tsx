@@ -17,13 +17,10 @@ import { Fragment, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
-import useStore from "@workspace/store";
 
 export const SidebarExtension = ({
-  children,
   documentList,
 }: {
-  children?: React.ReactNode;
   documentList?: string[];
 }) => {
   const Editor = dynamic(() => import("./editor"), {
@@ -39,7 +36,7 @@ export const SidebarExtension = ({
   );
   const lastUpdated = postList
     ?.filter((el) => {
-      el?.id === documentList?.[documentList.length - 1];
+      return el?.id === Number(documentList?.[documentList.length - 1]);
     })[0]
     ?.updatedAt?.toDateString();
 
@@ -52,6 +49,17 @@ export const SidebarExtension = ({
           <Breadcrumb>
             <BreadcrumbList>
               {postList?.map((post, index) => {
+                const urlIndex = documentList?.findIndex(
+                  (el) => el === String(post?.id)
+                );
+
+                const breadCrumbUrl = documentList
+                  ?.slice(0, urlIndex)
+                  .map((docu) => {
+                    return `/${docu}`;
+                  })
+                  .join("");
+
                 if (index === postList.length - 1) {
                   return (
                     <BreadcrumbItem key={index}>
@@ -67,7 +75,7 @@ export const SidebarExtension = ({
                     <BreadcrumbItem key={index}>
                       <BreadcrumbLink
                         className="line-clamp-1"
-                        href={`/documents/${post?.id}`}
+                        href={`/documents/${breadCrumbUrl}/${post?.id!}`}
                       >
                         {post?.name}
                       </BreadcrumbLink>
@@ -80,7 +88,7 @@ export const SidebarExtension = ({
           </Breadcrumb>
         </div>
         {lastUpdated && (
-          <div className="mx-4 font-medium">Last updated on {lastUpdated}</div>
+          <div className="mx-8 text-sm">Last updated on {lastUpdated}</div>
         )}
       </header>
       {!documentList && (
