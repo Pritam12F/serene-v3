@@ -1,0 +1,16 @@
+{
+  "name": "ws-backend",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "tsc -b && node dist/index.js"
+  },
+  "dependencies": {
+    "next-auth": "^4.24.11",
+    "ws": "^8.18.1"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.0"
+  }
+}
