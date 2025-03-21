@@ -230,3 +230,59 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
     references: [coverImages.id],
   }),
 }));
+
+// Workspace Images Table
+export const workspaceImages = pgTable("workspace_images", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("image_url").notNull(),
+  workspaceId: uuid("workspace_id")
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Workspace Audios Table
+export const workspaceAudios = pgTable("workspace_audios", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("audio_url").notNull(),
+  workspaceId: uuid("workspace_id")
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Workspace Videos Table
+export const workspaceVideos = pgTable("workspace_videos", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("video_url").notNull(),
+  workspaceId: uuid("workspace_id")
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Workspace Other Files Table
+export const workspaceOtherFiles = pgTable("workspace_other_files", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("otherfile_url").notNull(),
+  workspaceId: uuid("workspace_id")
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Workspace Cover Images Table
+export const workspaceCoverImages = pgTable("workspace_cover_images", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("cover_image_url").notNull(),
+  workspaceId: uuid("workspace_id")
+    .unique()
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});

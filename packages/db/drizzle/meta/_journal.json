@@ -260,6 +260,13 @@
       "when": 1742567821802,
       "tag": "0036_freezing_forge",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1742568301861,
+      "tag": "0037_rich_alex_wilder",
+      "breakpoints": true
     }
   ]
 }
