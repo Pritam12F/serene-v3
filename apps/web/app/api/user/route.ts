@@ -1,4 +1,4 @@
-import { UpdateUserSchema } from "@workspace/common/types/db";
+import { UpdateUserSchema } from "@workspace/common/types/forms";
 import db from "@workspace/db";
 import { users } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";

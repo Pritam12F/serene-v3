@@ -1,4 +1,4 @@
-import { UpdatePasswordSchema } from "@workspace/common/types/db";
+import { UpdatePasswordSchema } from "@workspace/common/types/forms";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";

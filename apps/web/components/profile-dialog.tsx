@@ -31,7 +31,7 @@ import { useForm } from "react-hook-form";
 import {
   UpdatePasswordSchema,
   UpdateUserSchema,
-} from "@workspace/common/types/db";
+} from "@workspace/common/types/forms";
 import { z } from "zod";
 import {
   Form,
