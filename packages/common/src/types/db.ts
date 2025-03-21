@@ -7,14 +7,22 @@ import {
   posts,
   users,
   videos,
+  workspaces,
+  workspaceImages,
+  workspaceAudios,
+  workspaceVideos,
+  workspaceOtherFiles,
+  workspaceCoverImages,
+  secdondaryWorkspacesOnUsers,
 } from "@workspace/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
 
 // User Types
 export type SelectUserType =
   | (typeof users.$inferSelect & {
       posts?: SelectManyPostType;
+      mainWorkspaces?: SelectManyWorkspaceType;
+      secondaryWorkspaces?: SelectManySecondaryWorkspaceUserType;
     })
   | undefined;
 export type SelectManyUserType = SelectUserType[];
@@ -37,6 +45,36 @@ export type SelectPostType =
 export type SelectManyPostType = SelectPostType[];
 export type InsertPostType = typeof posts.$inferInsert;
 export type InsertManyPostType = InsertPostType[];
+
+// Workspace Types
+export type SelectWorkspaceType =
+  | (typeof workspaces.$inferSelect & {
+      owner?: SelectUserType;
+      members?: SelectManySecondaryWorkspaceUserType;
+      images?: SelectManyWorkspaceImageType;
+      audios?: SelectManyWorkspaceAudioType;
+      videos?: SelectManyWorkspaceVideoType;
+      otherFiles?: SelectManyWorkspaceOtherFileType;
+      coverImage?: SelectWorkspaceCoverImageType | null;
+    })
+  | undefined;
+export type SelectManyWorkspaceType = SelectWorkspaceType[];
+export type InsertWorkspaceType = typeof workspaces.$inferInsert;
+export type InsertManyWorkspaceType = InsertWorkspaceType[];
+
+// Secondary Workspace Users (Join Table)
+export type SelectSecondaryWorkspaceUserType =
+  | (typeof secdondaryWorkspacesOnUsers.$inferSelect & {
+      workspace?: SelectWorkspaceType;
+      member?: SelectUserType;
+    })
+  | undefined;
+export type SelectManySecondaryWorkspaceUserType =
+  SelectSecondaryWorkspaceUserType[];
+export type InsertSecondaryWorkspaceUserType =
+  typeof secdondaryWorkspacesOnUsers.$inferInsert;
+export type InsertManySecondaryWorkspaceUserType =
+  InsertSecondaryWorkspaceUserType[];
 
 // Image Types
 export type SelectImageType =
@@ -88,12 +126,74 @@ export type SelectManyCoverImageType = SelectCoverImageType[];
 export type InsertCoverImageType = typeof coverImages.$inferInsert;
 export type InsertManyCoverImageType = InsertCoverImageType[];
 
+// Workspace Image Types
+export type SelectWorkspaceImageType =
+  | (typeof workspaceImages.$inferSelect & {
+      workspace?: SelectWorkspaceType;
+    })
+  | undefined;
+export type SelectManyWorkspaceImageType = SelectWorkspaceImageType[];
+export type InsertWorkspaceImageType = typeof workspaceImages.$inferInsert;
+export type InsertManyWorkspaceImageType = InsertWorkspaceImageType[];
+
+// Workspace Audio Types
+export type SelectWorkspaceAudioType =
+  | (typeof workspaceAudios.$inferSelect & {
+      workspace?: SelectWorkspaceType;
+    })
+  | undefined;
+export type SelectManyWorkspaceAudioType = SelectWorkspaceAudioType[];
+export type InsertWorkspaceAudioType = typeof workspaceAudios.$inferInsert;
+export type InsertManyWorkspaceAudioType = InsertWorkspaceAudioType[];
+
+// Workspace Video Types
+export type SelectWorkspaceVideoType =
+  | (typeof workspaceVideos.$inferSelect & {
+      workspace?: SelectWorkspaceType;
+    })
+  | undefined;
+export type SelectManyWorkspaceVideoType = SelectWorkspaceVideoType[];
+export type InsertWorkspaceVideoType = typeof workspaceVideos.$inferInsert;
+export type InsertManyWorkspaceVideoType = InsertWorkspaceVideoType[];
+
+// Workspace Other Files Types
+export type SelectWorkspaceOtherFileType =
+  | (typeof workspaceOtherFiles.$inferSelect & {
+      workspace?: SelectWorkspaceType;
+    })
+  | undefined;
+export type SelectManyWorkspaceOtherFileType = SelectWorkspaceOtherFileType[];
+export type InsertWorkspaceOtherFileType =
+  typeof workspaceOtherFiles.$inferInsert;
+export type InsertManyWorkspaceOtherFileType = InsertWorkspaceOtherFileType[];
+
+// Workspace Cover Image Types
+export type SelectWorkspaceCoverImageType =
+  | (typeof workspaceCoverImages.$inferSelect & {
+      workspace?: SelectWorkspaceType;
+    })
+  | undefined;
+export type SelectManyWorkspaceCoverImageType = SelectWorkspaceCoverImageType[];
+export type InsertWorkspaceCoverImageType =
+  typeof workspaceCoverImages.$inferInsert;
+export type InsertManyWorkspaceCoverImageType = InsertWorkspaceCoverImageType[];
+
 // Zod Schemas
 export const SelectUserSchema = createSelectSchema(users);
 export const InsertUserSchema = createInsertSchema(users);
 
 export const SelectPostSchema = createSelectSchema(posts);
 export const InsertPostSchema = createInsertSchema(posts);
+
+export const SelectWorkspaceSchema = createSelectSchema(workspaces);
+export const InsertWorkspaceSchema = createInsertSchema(workspaces);
+
+export const SelectSecondaryWorkspaceUserSchema = createSelectSchema(
+  secdondaryWorkspacesOnUsers
+);
+export const InsertSecondaryWorkspaceUserSchema = createInsertSchema(
+  secdondaryWorkspacesOnUsers
+);
 
 export const SelectImageSchema = createSelectSchema(images);
 export const InsertImageSchema = createInsertSchema(images);
@@ -110,59 +210,21 @@ export const InsertOtherFileSchema = createInsertSchema(otherFiles);
 export const SelectCoverImageSchema = createSelectSchema(coverImages);
 export const InsertCoverImageSchema = createInsertSchema(coverImages);
 
-//Form Schema
-export const SignInFormSchema = z.object({
-  email: z.string().email({ message: "Not a valid email address" }),
-  password: z.string().min(5, { message: "Password must be of length 5" }),
-});
+export const SelectWorkspaceImageSchema = createSelectSchema(workspaceImages);
+export const InsertWorkspaceImageSchema = createInsertSchema(workspaceImages);
 
-export const SignUpFormSchema = z
-  .object({
-    email: z.string().email({ message: "Not a valid email address" }),
-    name: z.string().min(1, { message: "Name must be not empty" }),
-    password: z
-      .string()
-      .min(5, { message: "Password must be at least of length 5" }),
-    confirmPassword: z
-      .string()
-      .min(5, { message: "Password must be at least of length 5" }),
-  })
-  .refine(
-    (values) => {
-      return values.password === values.confirmPassword;
-    },
-    {
-      message: "Passwords must match!",
-      path: ["confirmPassword"],
-    }
-  );
+export const SelectWorkspaceAudioSchema = createSelectSchema(workspaceAudios);
+export const InsertWorkspaceAudioSchema = createInsertSchema(workspaceAudios);
 
-export const UpdateUserSchema = z.object({
-  phone: z.coerce
-    .number({ message: "Invalid phone number" })
-    .int()
-    .gte(1000000000, { message: "Invalid phone number" })
-    .lte(9999999999, { message: "Invalid phone number" }),
-});
+export const SelectWorkspaceVideoSchema = createSelectSchema(workspaceVideos);
+export const InsertWorkspaceVideoSchema = createInsertSchema(workspaceVideos);
 
-export const UpdatePasswordSchema = z
-  .object({
-    currentPassword: z
-      .string()
-      .min(5, { message: "Password must be at least of length 5" }),
-    newPassword: z
-      .string()
-      .min(5, { message: "Password must be at least of length 5" }),
-    confirmNewPassword: z
-      .string()
-      .min(5, { message: "Password must be at least of length 5" }),
-  })
-  .refine(
-    (values) => {
-      return values.newPassword === values.confirmNewPassword;
-    },
-    {
-      message: "Passwords must match!",
-      path: ["confirmPassword"],
-    }
-  );
+export const SelectWorkspaceOtherFileSchema =
+  createSelectSchema(workspaceOtherFiles);
+export const InsertWorkspaceOtherFileSchema =
+  createInsertSchema(workspaceOtherFiles);
+
+export const SelectWorkspaceCoverImageSchema =
+  createSelectSchema(workspaceCoverImages);
+export const InsertWorkspaceCoverImageSchema =
+  createInsertSchema(workspaceCoverImages);
