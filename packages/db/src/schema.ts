@@ -11,6 +11,7 @@ import {
   jsonb,
   pgEnum,
   bigint,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 
 export const accountTypeEnum = pgEnum("account_type", [
@@ -48,6 +49,34 @@ export const posts = pgTable("posts", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+//Workspace Table
+export const workspaces = pgTable("workspaces", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  content: jsonb("workspace_content").notNull(),
+  ownerId: uuid("owner_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+//JOIN TABLE
+export const secdondaryWorkspacesOnUsers = pgTable(
+  "workspaces_secondary_users",
+  {
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.workspaceId, t.userId] }),
+  })
+);
 
 // Images Table
 export const images = pgTable("images", {
@@ -110,7 +139,28 @@ export const coverImages = pgTable("cover_images", {
 // Users to Posts
 export const usersRelations = relations(users, ({ many }) => ({
   posts: many(posts),
+  mainWorkspaces: many(workspaces),
+  secondaryWorkspaces: many(secdondaryWorkspacesOnUsers),
 }));
+
+//Workspace Relations
+export const workspaceRelations = relations(workspaces, ({ many }) => ({
+  members: many(secdondaryWorkspacesOnUsers),
+}));
+
+export const secdondaryWorksacesOnUsersRelations = relations(
+  secdondaryWorkspacesOnUsers,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [secdondaryWorkspacesOnUsers.workspaceId],
+      references: [workspaces.id],
+    }),
+    member: one(users, {
+      fields: [secdondaryWorkspacesOnUsers.userId],
+      references: [users.id],
+    }),
+  })
+);
 
 // Images to Posts
 export const imagesRelations = relations(images, ({ one }) => ({
