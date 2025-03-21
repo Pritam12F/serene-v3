@@ -54,7 +54,8 @@ export const posts = pgTable("posts", {
 export const workspaces = pgTable("workspaces", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
-  content: jsonb("workspace_content").notNull(),
+  content: jsonb("workspace_content"),
+  inviteId: varchar("invite_id", { length: 5 }),
   ownerId: uuid("owner_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),

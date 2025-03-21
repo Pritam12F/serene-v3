@@ -1,5 +1,5 @@
 import express from "express";
-import { WebSocketServer } from "ws";
+import WebSocket, { WebSocketServer } from "ws";
 import * as jose from "jose";
 import { createSecretKey } from "crypto";
 import dotenv from "dotenv";
@@ -29,6 +29,12 @@ const verifyUser = async (tk: string) => {
   }
 };
 
+interface Workspace {
+  id: string;
+  sockets?: WebSocket[];
+}
+const workspaces: Workspace[] = [];
+
 wss.on("connection", async function connection(ws) {
   ws.on("error", console.error);
 
@@ -40,12 +46,24 @@ wss.on("connection", async function connection(ws) {
     }
   }
 
-  ws.on("message", function message(data, isBinary) {
-    wss.clients.forEach(function each(client) {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(data);
-      }
-    });
+  ws.on("message", function message(data) {
+    const { type, payload } = JSON.parse(data.toString());
+
+    if (type === "join") {
+      const workspace = workspaces.find((x) => x.id === payload.workspaceId);
+
+      workspace?.sockets?.push(ws);
+
+      ws.send(`Joined workspace ${payload.workspaceId}`);
+    } else if (type === "update") {
+      const workspace = workspaces.find((x) => x.id === payload.workspaceId);
+
+      workspace?.sockets?.forEach((socket) => {
+        if (socket !== ws && socket.readyState === WebSocket.OPEN) {
+          socket.send(payload.content);
+        }
+      });
+    }
   });
 
   ws.send("Hello! Message From Server!!");
