@@ -3,11 +3,12 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { getJWT } from "@/server/auth";
+import { useWebsocket } from "@/hooks/use-websocket";
 
 export default function Workspaces() {
-  const [ws, setWs] = useState<WebSocket>();
   const { data: session } = useSession();
-  const [token, setToken] = useState<string | null>(null);
+  const [_token, setToken] = useState<string | null>(null);
+  const { isReady, ws } = useWebsocket("ws://localhost:8080", [_token]);
 
   useEffect(() => {
     const setJwt = async () => {
@@ -27,14 +28,9 @@ export default function Workspaces() {
     setJwt();
   }, [session?.user.email]);
 
-  useEffect(() => {
-    const websocket = new WebSocket(
-      "ws://localhost:8080",
-      localStorage.getItem("ws.backend")!
-    );
-
-    setWs(websocket);
-  }, [token]);
-
-  return <div></div>;
+  return (
+    <div>
+      <div>{!isReady && <div>Loading...</div>}</div>
+    </div>
+  );
 }
