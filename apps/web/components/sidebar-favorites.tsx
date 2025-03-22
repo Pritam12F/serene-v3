@@ -24,20 +24,8 @@ import {
   useSidebar,
 } from "@workspace/ui/components/sidebar";
 
-export function SidebarFavorites({
-  favorites,
-}: {
-  favorites: {
-    name: string;
-    url: string;
-    emoji: string;
-  }[];
-}) {
+export function SidebarCollaborativeWorkspaces() {
   const { isMobile } = useSidebar();
-
-  if (favorites.length === 0) {
-    return null;
-  }
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">

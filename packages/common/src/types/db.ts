@@ -62,6 +62,13 @@ export type SelectManyWorkspaceType = SelectWorkspaceType[];
 export type InsertWorkspaceType = typeof workspaces.$inferInsert;
 export type InsertManyWorkspaceType = InsertWorkspaceType[];
 
+export type SelectWorkspaceByUserId =
+  | {
+      mainWorkspaces?: SelectManyWorkspaceType;
+      secondaryWorkspaces?: SelectManySecondaryWorkspaceUserType;
+    }
+  | undefined;
+
 // Secondary Workspace Users (Join Table)
 export type SelectSecondaryWorkspaceUserType =
   | (typeof secdondaryWorkspacesOnUsers.$inferSelect & {
