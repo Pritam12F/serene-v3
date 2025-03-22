@@ -1,4 +1,4 @@
-import { fetchAllPostsByUserId, fetchUserByEmail } from "@/server/actions";
+import { fetchAllPostsByUserId, fetchUserByEmail } from "@/server";
 import { SelectManyPostType } from "@workspace/common/types/db";
 import arrayToTree from "array-to-tree";
 import { useCallback, useEffect, useState } from "react";

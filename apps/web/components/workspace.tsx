@@ -15,7 +15,7 @@ import Link from "next/link";
 import useStore from "@workspace/store";
 import { ChangeEvent, useEffect, useMemo, useRef } from "react";
 import { Input } from "@workspace/ui/components/input";
-import { changePostNameById } from "@/server/actions";
+import { changePostNameById } from "@/server";
 import useDebounce from "@/hooks/use-debounce";
 import { toast } from "sonner";
 

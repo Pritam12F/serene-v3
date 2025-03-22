@@ -1,6 +1,6 @@
 "use client";
 
-import { createNewPost } from "@/server/actions";
+import { createNewPost } from "@/server";
 import { store } from "@workspace/store";
 import { Dialog, DialogContent } from "@workspace/ui/components/dialog";
 import dynamic from "next/dynamic";

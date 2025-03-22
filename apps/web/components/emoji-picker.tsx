@@ -1,4 +1,4 @@
-import { addOrUpdatePostEmoji } from "@/server/actions";
+import { addOrUpdatePostEmoji } from "@/server";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { Button } from "@workspace/ui/components/button";

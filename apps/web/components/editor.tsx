@@ -10,10 +10,10 @@ import { BlockNoteEditor } from "@blocknote/core";
 import { uploadFiles } from "@/lib/uploadthing";
 import { blueTheme } from "@/lib/themes";
 import { WorkspaceCover } from "./workspace-cover";
-import { updatePostContent } from "@/server/actions";
 import useDebounce from "@/hooks/use-debounce";
 import { cn } from "@workspace/ui/lib/utils";
 import useStore from "@workspace/store";
+import { updatePostContent } from "@/server";
 
 interface EditorProps {
   editable: boolean;

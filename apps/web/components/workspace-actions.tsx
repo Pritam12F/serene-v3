@@ -12,7 +12,7 @@ import { useState } from "react";
 import { Button } from "@workspace/ui/components/button";
 import useStore from "@workspace/store";
 import { toast } from "sonner";
-import { deletePostById } from "@/server/actions";
+import { deletePostById } from "@/server";
 import { useRouter } from "next/navigation";
 
 export const WorkspaceActions = ({

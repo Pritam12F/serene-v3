@@ -43,7 +43,7 @@ import {
 } from "@workspace/ui/components/form";
 import axios, { isAxiosError } from "axios";
 import { toast } from "sonner";
-import { fetchUserByEmail } from "@/server/actions";
+import { fetchUserByEmail } from "@/server";
 
 export const ProfileDialog = ({
   trigger,

@@ -7,7 +7,7 @@ import {
   addOrUpdateCoverImage,
   changePostNameById,
   fetchSinglePostById,
-} from "@/server/actions";
+} from "@/server";
 import useStore from "@workspace/store";
 import { ClientUploadedFileData } from "uploadthing/types";
 import { EmojiPicker } from "./emoji-picker";
