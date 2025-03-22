@@ -7,7 +7,7 @@ import {
   SidebarRail,
 } from "@workspace/ui/components/sidebar";
 import { SidebarMain } from "./sidebar-main";
-import { SidebarCollaborativeWorkspaces } from "./sidebar-favorites";
+import { SidebarCollaborativeWorkspaces } from "./sidebar-collab-workspaces";
 import { SidebarWorkspaces } from "./sidebar-workspaces";
 import { SidebarUser } from "./sidebar-user";
 

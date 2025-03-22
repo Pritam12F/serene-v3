@@ -47,7 +47,7 @@ export function SidebarWorkspaces() {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
-        Workspaces
+        Posts
         <SidebarMenuAction
           className={`my-2 p-0.5 h-5 mx-2 opacity-${isHovering ? "100" : "0"} transition-all duration-75`}
           aria-label="Add new post"
