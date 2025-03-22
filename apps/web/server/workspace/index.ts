@@ -51,16 +51,16 @@ export const createWorkspace = async (
   }
 };
 
-export const fetchAllUserWorkspaces = async (): Promise<
-  ActionResponse<SelectWorkspaceByUserId | null>
-> => {
+export const fetchAllUserWorkspaces = async (
+  user_id?: string
+): Promise<ActionResponse<SelectWorkspaceByUserId | null>> => {
   const session = await getServerSession();
 
   if (!session?.user) {
     throw new Error("User is not authorized");
   }
   try {
-    const userId = (await fetchUserByEmail()).data?.id;
+    const userId = user_id ?? (await fetchUserByEmail()).data?.id;
     const allWorkspaces = await db.query.users.findFirst({
       where: eq(users.id, userId!),
       with: {
