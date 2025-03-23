@@ -18,7 +18,7 @@ export const WorkspaceCover = ({
   type,
   isEditorReady,
 }: {
-  postId: number;
+  postId: string;
   type: "existing" | "new";
   isEditorReady: boolean;
 }) => {
@@ -44,7 +44,7 @@ export const WorkspaceCover = ({
   }, []);
 
   const debouncedRenamePost = useDebounce(
-    async (postId: number, newName: string) => {
+    async (postId: string, newName: string) => {
       await changePostNameById(postId, newName);
     }
   );
@@ -124,7 +124,7 @@ export const WorkspaceCover = ({
           value={postNames.get(postId)}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             if (type === "new") {
-              setPostName(0, e.target.value);
+              setPostName("0", e.target.value);
               return;
             }
             setPostName(postId, e.target.value);

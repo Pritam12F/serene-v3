@@ -9,7 +9,7 @@ import { SelectManyPostType, SelectPostType } from "@workspace/common/types/db";
 import { authOptions } from "@/lib/auth";
 
 export const changePostNameById = async (
-  postId: number,
+  postId: string,
   newName: string
 ): Promise<ActionResponse<null>> => {
   const session = await getServerSession(authOptions);
@@ -53,7 +53,7 @@ export const changePostNameById = async (
 };
 
 export const deletePostById = async (
-  postId: number
+  postId: string
 ): Promise<ActionResponse<null>> => {
   const session = await getServerSession(authOptions);
 
@@ -121,7 +121,7 @@ export const fetchAllPostsByUserId = async (): Promise<
 };
 
 export const fetchSinglePostById = async (
-  postId: number
+  postId: string
 ): Promise<ActionResponse<SelectPostType | null>> => {
   const session = await getServerSession(authOptions);
 
@@ -170,8 +170,8 @@ export const fetchSinglePostById = async (
 export const createNewPost = async (
   title: string,
   content: any,
-  parentId?: number | null
-): Promise<ActionResponse<number | null>> => {
+  parentId?: string | null
+): Promise<ActionResponse<string | null>> => {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {

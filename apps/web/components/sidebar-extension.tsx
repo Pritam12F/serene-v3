@@ -33,7 +33,7 @@ export const SidebarExtension = ({
   const { postList, isLoading } = usePosts(session?.user.email!, documentList);
   const lastUpdated = postList
     ?.filter((el) => {
-      return el?.id === Number(documentList?.[documentList.length - 1]);
+      return el?.id === documentList![documentList!.length - 1];
     })[0]
     ?.updatedAt?.toDateString();
 

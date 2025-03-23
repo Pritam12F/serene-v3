@@ -18,7 +18,7 @@ import { updatePostContent } from "@/server";
 interface EditorProps {
   editable: boolean;
   initialContent?: unknown;
-  postId?: number | null;
+  postId?: string | null;
   onReady?: Dispatch<SetStateAction<boolean>>;
   isReady: boolean;
   styles?: string;
@@ -92,7 +92,7 @@ const Editor = ({
         editor={editor}
         onChange={async () => {
           if (type === "new") {
-            setPostContent(0, editor.document);
+            setPostContent("0", editor.document);
             return;
           }
           setCurrentContent(editor.document);

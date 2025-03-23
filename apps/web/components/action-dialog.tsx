@@ -19,7 +19,7 @@ export const ActionDialog = ({
 }: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  documentId: number;
+  documentId: string;
   title: string;
   content?: string | React.ReactNode;
   actionTitle?: string;

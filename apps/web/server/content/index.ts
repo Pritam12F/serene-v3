@@ -9,7 +9,7 @@ import { authOptions } from "@/lib/auth";
 
 export const addOrUpdateCoverImage = async (
   coverUrl: string,
-  postId: number
+  postId: string
 ): Promise<ActionResponse<null>> => {
   const session = await getServerSession(authOptions);
 
@@ -67,7 +67,7 @@ export const addOrUpdateCoverImage = async (
 };
 
 export const addOrUpdatePostEmoji = async (
-  postId: number,
+  postId: string,
   emoji: string
 ): Promise<ActionResponse<null>> => {
   const session = await getServerSession(authOptions);
@@ -113,7 +113,7 @@ export const addOrUpdatePostEmoji = async (
 };
 
 export const updatePostContent = async (
-  postId: number,
+  postId: string,
   newContent: unknown
 ): Promise<ActionResponse<null>> => {
   const session = await getServerSession(authOptions);

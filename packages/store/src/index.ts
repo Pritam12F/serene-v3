@@ -4,23 +4,23 @@ interface StoreType {
   mutator: (() => void) | null;
   changeMutator: (myMutator: () => void) => void;
 
-  activePostId: number | null;
-  changeActivePostId: (id?: number | null) => void;
+  activePostId: string | null;
+  changeActivePostId: (id?: string | null) => void;
 
-  postNames: Map<number, string>;
-  setPostName: (id: number, newName: string) => void;
-  getPostName: (id: number) => string | undefined;
-  removePostName: (id: number) => void;
+  postNames: Map<string, string>;
+  setPostName: (id: string, newName: string) => void;
+  getPostName: (id: string) => string | undefined;
+  removePostName: (id: string) => void;
 
-  postContent: Map<number, any>;
-  setPostContent: (id: number, newContent: any) => void;
-  getPostContent: (id: number) => any;
-  removePostContent: (id: number) => void;
+  postContent: Map<string, any>;
+  setPostContent: (id: string, newContent: any) => void;
+  getPostContent: (id: string) => any;
+  removePostContent: (id: string) => void;
 }
 
 export const store = create<StoreType>((set, get) => ({
   mutator: null,
-  changeMutator: (myMutator: () => void) => set({ mutator: myMutator }),
+  changeMutator: (myMutator) => set({ mutator: myMutator }),
 
   activePostId: null,
   changeActivePostId: (id) => set({ activePostId: id }),
@@ -36,7 +36,7 @@ export const store = create<StoreType>((set, get) => ({
   getPostName: (postId) => {
     return get().postNames.get(postId);
   },
-  removePostName: (postId: number) => {
+  removePostName: (postId) => {
     set((state) => {
       const updatedRecord = new Map(state.postNames);
       updatedRecord.delete(postId);
@@ -55,7 +55,7 @@ export const store = create<StoreType>((set, get) => ({
   getPostContent: (postId) => {
     return get().postContent.get(postId);
   },
-  removePostContent: (postId: number) => {
+  removePostContent: (postId) => {
     set((state) => {
       const updatedRecord = new Map(state.postContent);
       updatedRecord.delete(postId);

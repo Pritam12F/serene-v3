@@ -14,7 +14,7 @@ export function EmojiPicker({
 }: {
   isPickerOpen: boolean;
   setIsPickerOpen: Dispatch<SetStateAction<boolean>>;
-  postId: number;
+  postId: string;
   setChangeEmoji: Dispatch<SetStateAction<string | null | undefined>>;
 }) {
   const [lastSelectedEmoji, setLastSelectedEmoji] = useState<string | null>();

@@ -31,7 +31,7 @@ export const Post = ({ data, level = 0, parentUrl }: PostProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const debouncedRenamePost = useDebounce(
-    async (postId: number, newName: string) => {
+    async (postId: string, newName: string) => {
       await changePostNameById(postId, newName);
     },
     5000

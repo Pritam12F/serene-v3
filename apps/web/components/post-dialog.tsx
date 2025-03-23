@@ -14,20 +14,19 @@ export default function PostDialog() {
   const Editor = dynamic(() => import("@/components/editor"), { ssr: false });
   const params = useSearchParams().get("parentId");
   const router = useRouter();
-  const parentId = Number(
-    decodeURIComponent(params ?? "")
-      .split("/")
-      .at(-1)
-  );
-  const getPostName = (id: number) => store.getState().getPostName(id);
-  const getWorkspaceContent = (id: number) =>
+  const parentId = decodeURIComponent(params ?? "")
+    .split("/")
+    .at(-1);
+
+  const getPostName = (id: string) => store.getState().getPostName(id);
+  const getWorkspaceContent = (id: string) =>
     store.getState().getPostContent(id);
 
   const createPostHandler = async () => {
     const { success, message, data } = await createNewPost(
-      getPostName(0) ?? "Untitled",
-      getWorkspaceContent(0),
-      parentId === 0 ? undefined : parentId
+      getPostName("0") ?? "Untitled",
+      getWorkspaceContent("0"),
+      parentId === "0" ? undefined : parentId
     );
 
     if (success) {
@@ -35,8 +34,8 @@ export default function PostDialog() {
         style: { backgroundColor: "#38b000" },
       });
 
-      store.getState().setPostName(0, "");
-      store.getState().setPostContent(0, {});
+      store.getState().setPostName("0", "");
+      store.getState().setPostContent("0", {});
       router.push(
         decodeURIComponent(params ?? "/documents").concat(`/${data}`)
       );

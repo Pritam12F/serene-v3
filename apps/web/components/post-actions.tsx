@@ -19,7 +19,7 @@ export const PostActions = ({
   documentId,
   parentId,
 }: {
-  documentId: number;
+  documentId: string;
   parentId: string;
 }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);

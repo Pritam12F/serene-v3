@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
 import { createInitialPosts } from "@workspace/db/seed";
-import { v4 as uuid } from "uuid";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -35,14 +34,15 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const userId = uuid();
   data.hashedPassword = await bcrypt.hash(data.hashedPassword, 10);
-  data.id = userId;
 
   try {
-    await db.insert(users).values(data);
+    const userId = await db
+      .insert(users)
+      .values(data)
+      .returning({ userId: users.id });
 
-    await createInitialPosts(userId);
+    await createInitialPosts(userId[0]!.userId);
 
     return NextResponse.json({
       message: "User signed up successfully",
