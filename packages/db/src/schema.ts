@@ -54,6 +54,7 @@ export const posts = pgTable("posts", {
 export const workspaces = pgTable("workspaces", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
+  emoji: text("emoji"),
   content: jsonb("workspace_content"),
   inviteId: varchar("invite_id", { length: 5 }),
   ownerId: uuid("owner_id")
@@ -64,7 +65,7 @@ export const workspaces = pgTable("workspaces", {
 });
 
 //JOIN TABLE
-export const secdondaryWorkspacesOnUsers = pgTable(
+export const secondaryWorkspacesUsers = pgTable(
   "workspaces_secondary_users",
   {
     workspaceId: uuid("workspace_id")
@@ -74,9 +75,11 @@ export const secdondaryWorkspacesOnUsers = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.workspaceId, t.userId] }),
-  })
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.userId, table.workspaceId] }),
+    };
+  }
 );
 
 // Images Table
@@ -141,23 +144,23 @@ export const coverImages = pgTable("cover_images", {
 export const usersRelations = relations(users, ({ many }) => ({
   posts: many(posts),
   mainWorkspaces: many(workspaces),
-  secondaryWorkspaces: many(secdondaryWorkspacesOnUsers),
+  secondaryWorkspaces: many(secondaryWorkspacesUsers),
 }));
 
 //Workspace Relations
 export const workspaceRelations = relations(workspaces, ({ many }) => ({
-  members: many(secdondaryWorkspacesOnUsers),
+  members: many(secondaryWorkspacesUsers),
 }));
 
-export const secdondaryWorksacesOnUsersRelations = relations(
-  secdondaryWorkspacesOnUsers,
+export const secondaryWorksacesOnUsersRelations = relations(
+  secondaryWorkspacesUsers,
   ({ one }) => ({
     workspace: one(workspaces, {
-      fields: [secdondaryWorkspacesOnUsers.workspaceId],
+      fields: [secondaryWorkspacesUsers.workspaceId],
       references: [workspaces.id],
     }),
     member: one(users, {
-      fields: [secdondaryWorkspacesOnUsers.userId],
+      fields: [secondaryWorkspacesUsers.userId],
       references: [users.id],
     }),
   })

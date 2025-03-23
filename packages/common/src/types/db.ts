@@ -13,7 +13,7 @@ import {
   workspaceVideos,
   workspaceOtherFiles,
   workspaceCoverImages,
-  secdondaryWorkspacesOnUsers,
+  secondaryWorkspacesUsers,
 } from "@workspace/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
@@ -65,13 +65,19 @@ export type InsertManyWorkspaceType = InsertWorkspaceType[];
 export type SelectWorkspaceByUserId =
   | {
       mainWorkspaces?: SelectManyWorkspaceType;
-      secondaryWorkspaces?: SelectManySecondaryWorkspaceUserType;
+      secondaryWorkspaces?: SelectManyWorkspaceType;
     }
   | undefined;
 
+export type SelectSecondaryWorkspace = {
+  userId: string;
+  workspaceId: string;
+  workspace: SelectWorkspaceType;
+}[];
+
 // Secondary Workspace Users (Join Table)
 export type SelectSecondaryWorkspaceUserType =
-  | (typeof secdondaryWorkspacesOnUsers.$inferSelect & {
+  | (typeof secondaryWorkspacesUsers.$inferSelect & {
       workspace?: SelectWorkspaceType;
       member?: SelectUserType;
     })
@@ -79,7 +85,7 @@ export type SelectSecondaryWorkspaceUserType =
 export type SelectManySecondaryWorkspaceUserType =
   SelectSecondaryWorkspaceUserType[];
 export type InsertSecondaryWorkspaceUserType =
-  typeof secdondaryWorkspacesOnUsers.$inferInsert;
+  typeof secondaryWorkspacesUsers.$inferInsert;
 export type InsertManySecondaryWorkspaceUserType =
   InsertSecondaryWorkspaceUserType[];
 
@@ -196,10 +202,10 @@ export const SelectWorkspaceSchema = createSelectSchema(workspaces);
 export const InsertWorkspaceSchema = createInsertSchema(workspaces);
 
 export const SelectSecondaryWorkspaceUserSchema = createSelectSchema(
-  secdondaryWorkspacesOnUsers
+  secondaryWorkspacesUsers
 );
 export const InsertSecondaryWorkspaceUserSchema = createInsertSchema(
-  secdondaryWorkspacesOnUsers
+  secondaryWorkspacesUsers
 );
 
 export const SelectImageSchema = createSelectSchema(images);

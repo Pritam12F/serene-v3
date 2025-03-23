@@ -7,11 +7,7 @@ import {
   SelectWorkspaceByUserId,
 } from "@workspace/common/types/db";
 import db from "@workspace/db";
-import {
-  secdondaryWorkspacesOnUsers,
-  users,
-  workspaces,
-} from "@workspace/db/schema";
+import { secondaryWorkspacesUsers, workspaces } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import { authOptions } from "@/lib/auth";
 
@@ -67,29 +63,29 @@ export const fetchAllUserWorkspaces = async (): Promise<
   }
   try {
     const userId = session.user.id;
-    const allWorkspaces = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-      with: {
-        mainWorkspaces: true,
-        secondaryWorkspaces: true,
-      },
-      columns: {
-        id: false,
-        name: false,
-        email: false,
-        profilePic: false,
-        phone: false,
-        accountType: false,
-        hashedPassword: false,
-        updatedAt: false,
-        createdAt: false,
-      },
+    const mainWorkspaces = await db.query.workspaces.findMany({
+      where: eq(workspaces.ownerId, userId),
     });
+
+    const secondaryWorkspaces =
+      await db.query.secondaryWorkspacesUsers.findMany({
+        where: eq(secondaryWorkspacesUsers.userId, session.user.id),
+        with: {
+          workspace: true,
+        },
+        columns: {
+          userId: false,
+          workspaceId: false,
+        },
+      });
 
     return {
       success: true,
       message: "All workspaces fetched!",
-      data: allWorkspaces,
+      data: {
+        mainWorkspaces,
+        secondaryWorkspaces: secondaryWorkspaces.map((x) => x.workspace),
+      },
     };
   } catch (e) {
     const errorMessage =
@@ -132,7 +128,7 @@ export const joinWorkspaceById = async (
     }
 
     await db
-      .insert(secdondaryWorkspacesOnUsers)
+      .insert(secondaryWorkspacesUsers)
       .values({ userId: userId, workspaceId: fetchedWorkspace.id });
 
     return {

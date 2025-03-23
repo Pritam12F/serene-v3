@@ -7,10 +7,14 @@ import {
 import { Input } from "@workspace/ui/components/input";
 import { CircleCheck, UserRoundPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 
-export function JoinWorkspace() {
+export function JoinWorkspace({
+  setHovering,
+}: {
+  setHovering: Dispatch<SetStateAction<boolean>>;
+}) {
   const [inviteID, setInviteID] = useState("");
   const router = useRouter();
 
@@ -36,7 +40,13 @@ export function JoinWorkspace() {
       <DropdownMenuTrigger asChild>
         <UserRoundPlus className="opacity-70 hover:opacity-100 transition-all duration-250 w-4 h-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="flex px-3 space-x-4 items-center w-56">
+      <DropdownMenuContent
+        className="flex px-3 space-x-4 items-center w-56"
+        onMouseEnter={(e) => {
+          e.stopPropagation();
+          setHovering(false);
+        }}
+      >
         <Input
           placeholder="Enter invite id"
           onChange={(e) => setInviteID(e.target.value)}
