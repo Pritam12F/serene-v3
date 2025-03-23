@@ -35,7 +35,7 @@ export const users = pgTable("users", {
 
 // Posts Table
 export const posts = pgTable("posts", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 255 }),
   content: jsonb("content").notNull(),
   emoji: text("emoji"),
@@ -43,7 +43,7 @@ export const posts = pgTable("posts", {
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  parentId: integer("parent_id").references((): AnyPgColumn => posts.id, {
+  parentId: uuid("parent_id").references((): AnyPgColumn => posts.id, {
     onDelete: "cascade",
   }),
   createdAt: timestamp("created_at").defaultNow(),
@@ -87,7 +87,7 @@ export const images = pgTable("images", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
   url: text("image_url").notNull(),
-  postId: integer("post_id")
+  postId: uuid("post_id")
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
@@ -98,7 +98,7 @@ export const audios = pgTable("audios", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
   url: text("audio_url").notNull(),
-  postId: integer("post_id")
+  postId: uuid("post_id")
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
@@ -109,7 +109,7 @@ export const videos = pgTable("videos", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
   url: text("video_url").notNull(),
-  postId: integer("post_id")
+  postId: uuid("post_id")
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
@@ -120,7 +120,7 @@ export const otherFiles = pgTable("other_files", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
   url: text("otherfile_url").notNull(),
-  postId: integer("post_id")
+  postId: uuid("post_id")
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
@@ -131,7 +131,7 @@ export const coverImages = pgTable("cover_images", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }),
   url: text("cover_image_url").notNull(),
-  postId: integer("post_id")
+  postId: uuid("post_id")
     .unique()
     .notNull()
     .references(() => posts.id, { onDelete: "cascade" }),

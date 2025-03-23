@@ -288,6 +288,20 @@
       "when": 1742728704251,
       "tag": "0040_little_domino",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1742731315150,
+      "tag": "0041_lucky_namorita",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1742731588170,
+      "tag": "0042_short_lady_bullseye",
+      "breakpoints": true
     }
   ]
 }
