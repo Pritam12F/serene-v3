@@ -7,7 +7,6 @@ import db from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { users } from "@workspace/db/schema";
 import { createInitialPosts } from "@workspace/db/seed";
-import { v4 as uuid } from "uuid";
 
 export const authOptions = {
   providers: [
@@ -100,16 +99,16 @@ export const authOptions = {
         });
 
         if (!isUserInDB) {
-          const userId = uuid();
+          const userId = await db
+            .insert(users)
+            .values({
+              name: user.name,
+              email: user.email,
+              accountType: account.provider,
+            })
+            .returning({ userId: users.id });
 
-          await db.insert(users).values({
-            id: userId,
-            name: user.name,
-            email: user.email,
-            accountType: account.provider,
-          });
-
-          await createInitialPosts(userId);
+          await createInitialPosts(userId[0]!.userId);
         } else if (isUserInDB && isUserInDB.accountType !== account.provider) {
           return `/sign-in?error=${encodeURIComponent("User is already registered with other method")}`;
         }
