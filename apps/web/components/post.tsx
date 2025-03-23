@@ -9,7 +9,6 @@ import {
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar";
 import { ChevronRight } from "lucide-react";
-import { WorkspaceActions } from "./workspace-actions";
 import { type SelectPostType } from "@workspace/common/types/db";
 import Link from "next/link";
 import useStore from "@workspace/store";
@@ -18,21 +17,17 @@ import { Input } from "@workspace/ui/components/input";
 import { changePostNameById } from "@/server";
 import useDebounce from "@/hooks/use-debounce";
 import { toast } from "sonner";
+import { PostActions } from "./post-actions";
 
-interface WorkspaceProps {
+interface PostProps {
   data: SelectPostType;
   level?: number;
   parentUrl?: string;
 }
 
-export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
-  const {
-    activeWorkspaceId,
-    workspaceNames,
-    mutator,
-    changeActiveWorkspaceId,
-    setWorkspaceName,
-  } = useStore();
+export const Post = ({ data, level = 0, parentUrl }: PostProps) => {
+  const { activePostId, postNames, mutator, changeActivePostId, setPostName } =
+    useStore();
   const ref = useRef<HTMLDivElement>(null);
 
   const debouncedRenamePost = useDebounce(
@@ -43,7 +38,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
   );
 
   const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    setWorkspaceName(data!.id, e.target?.value ?? "Unknown");
+    setPostName(data!.id, e.target?.value ?? "Unknown");
     debouncedRenamePost(data!.id, e.target.value);
     data!.name = e.target.value;
   };
@@ -51,19 +46,16 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
   const handleOnEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      const res = await changePostNameById(
-        data!.id,
-        workspaceNames.get(data!.id)!
-      );
+      const res = await changePostNameById(data!.id, postNames.get(data!.id)!);
 
       if (res.success) {
         toast.success("Post renamed successfully", {
           style: { backgroundColor: "#38b000" },
         });
       }
-      data!.name = workspaceNames.get(data!.id) ?? "Unknown";
+      data!.name = postNames.get(data!.id) ?? "Unknown";
       mutator?.();
-      changeActiveWorkspaceId(null);
+      changeActivePostId(null);
     }
   };
 
@@ -79,8 +71,8 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
 
   useEffect(() => {
     mutator?.();
-    setWorkspaceName(data!.id, data?.name ?? "Untitled");
-  }, [activeWorkspaceId]);
+    setPostName(data!.id, data?.name ?? "Untitled");
+  }, [activePostId]);
 
   return (
     <Collapsible id={data?.id as unknown as string} ref={ref}>
@@ -90,7 +82,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
       >
         <div
           className={`absolute inset-0 transition-opacity duration-400 hover:bg-[#f4f4f5] dark:hover:bg-[#27272a] hover:not(:has(*:hover)) group rounded-sm ${
-            data?.id === activeWorkspaceId
+            data?.id === activePostId
               ? "opacity-0 pointer-events-none"
               : "opacity-100"
           }`}
@@ -100,10 +92,10 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
               <Link className="ml-7" href={currentPath}>
                 {data?.emoji ? <span>{data.emoji}</span> : <span>📝</span>}
                 <span>
-                  {workspaceNames.get(data!.id) &&
-                  workspaceNames.get(data!.id)!.length > 11
-                    ? workspaceNames.get(data!.id)?.substring(0, 11) + "..."
-                    : workspaceNames.get(data!.id)!}
+                  {postNames.get(data!.id) &&
+                  postNames.get(data!.id)!.length > 11
+                    ? postNames.get(data!.id)?.substring(0, 11) + "..."
+                    : postNames.get(data!.id)!}
                 </span>
               </Link>
             </SidebarMenuButton>
@@ -116,13 +108,13 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
               </SidebarMenuAction>
             </CollapsibleTrigger>
             <div className="transition-all hover:bg-[#27272a] duration-250">
-              <WorkspaceActions documentId={data!.id} parentId={currentPath} />
+              <PostActions documentId={data!.id} parentId={currentPath} />
             </div>
           </SidebarMenuItem>
         </div>
         <div
           className={`flex justify-center absolute inset-0 transition-opacity duration-400 ${
-            data?.id === activeWorkspaceId
+            data?.id === activePostId
               ? "opacity-100"
               : "opacity-0 pointer-events-none"
           }`}
@@ -130,7 +122,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
           <Input
             className="h-8 w-11/12 border-none transition-shadow/scale duration-500 bg-background shadow-[0_0_15px_10px] shadow-blue-500/50 focus-visible:scale-105 focus-visible:shadow-[0_0_15px_13px] focus-visible:shadow-blue-500/50 focus-visible:ring-0"
             placeholder="Rename..."
-            value={workspaceNames.get(data!.id) ?? "Untitled"}
+            value={postNames.get(data!.id) ?? "Untitled"}
             onChange={handleOnChange}
             onKeyDown={handleOnEnter}
           />
@@ -139,7 +131,7 @@ export const Workspace = ({ data, level = 0, parentUrl }: WorkspaceProps) => {
       <CollapsibleContent>
         {data?.children &&
           data.children.map((post) => (
-            <Workspace
+            <Post
               data={post}
               parentUrl={currentPath}
               key={post?.id}

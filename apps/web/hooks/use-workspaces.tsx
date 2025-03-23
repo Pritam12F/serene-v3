@@ -1,61 +1,34 @@
-import { fetchAllPostsByUserId, fetchUserByEmail } from "@/server";
-import { SelectManyPostType } from "@workspace/common/types/db";
-import arrayToTree from "array-to-tree";
+import { fetchAllUserWorkspaces } from "@/server/workspace";
+import {
+  SelectManySecondaryWorkspaceUserType,
+  SelectManyWorkspaceType,
+} from "@workspace/common/types/db";
 import { useCallback, useEffect, useState } from "react";
 
-export const useWorkspaces = (user_email: string, documentList?: string[]) => {
-  const [postData, setPostData] = useState<{
-    tree: arrayToTree.Tree<SelectManyPostType>;
-    list: SelectManyPostType | undefined;
-  }>();
-  const [postList, setPostList] = useState<SelectManyPostType | undefined>();
-  const [postTree, setPostTree] =
-    useState<arrayToTree.Tree<SelectManyPostType>>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
+export const useCollabWorkspace = () => {
+  const [mainWorkspaces, setMainWorkspaces] = useState<SelectManyWorkspaceType>(
+    []
+  );
+  const [secondaryWorkspaces, setSecondaryWorkspaces] =
+    useState<SelectManySecondaryWorkspaceUserType>([]);
 
-  const fetchWorkspaces = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const fetchedUser = await fetchUserByEmail();
-      const fetchedPosts = await fetchAllPostsByUserId(fetchedUser.data?.id!);
+  const mutator = useCallback(async () => {
+    const work_spaces = await fetchAllUserWorkspaces();
 
-      if (fetchedUser.success && fetchedPosts.success && fetchedPosts.data) {
-        const tree = arrayToTree(fetchedPosts.data, {
-          parentProperty: "parentId",
-        });
-        setPostData({ tree, list: fetchedPosts.data });
-      }
+    setMainWorkspaces((prev) => [
+      ...prev,
+      ...(work_spaces.data?.mainWorkspaces ?? []),
+    ]);
 
-      setIsLoading(false);
-    } catch (err) {
-      setIsLoading(false);
-      const error =
-        err instanceof Error
-          ? err.message
-          : "Error occured trying to fetch posts";
-      setError(error);
-    }
-  }, [user_email]);
-
-  useEffect(() => {
-    fetchWorkspaces();
-  }, [user_email]);
-
-  const mutate = useCallback(async () => {
-    await fetchWorkspaces();
+    setSecondaryWorkspaces((prev) => [
+      ...prev,
+      ...(work_spaces.data?.secondaryWorkspaces ?? []),
+    ]);
   }, []);
 
   useEffect(() => {
-    setPostTree(postData?.tree);
-    if (documentList && postData?.list) {
-      const filtered = postData?.list.filter((x) =>
-        documentList.includes(x!.id.toString())
-      );
+    mutator();
+  }, []);
 
-      setPostList(filtered);
-    }
-  }, [documentList, postData?.tree, postData?.list]);
-
-  return { postTree, postList, isLoading, error, mutate };
+  return { mainWorkspaces, secondaryWorkspaces, mutator };
 };

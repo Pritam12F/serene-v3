@@ -5,9 +5,10 @@ import bcrypt from "bcrypt";
 import db from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { users } from "@workspace/db/schema";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     return NextResponse.json(
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.email, session.user.email),
+      where: eq(users.id, session.user.id),
     });
 
     if (

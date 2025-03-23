@@ -6,12 +6,13 @@ import { posts, users } from "@workspace/db/schema";
 import { asc, eq } from "drizzle-orm";
 import db from "@workspace/db";
 import { SelectManyPostType, SelectPostType } from "@workspace/common/types/db";
+import { authOptions } from "@/lib/auth";
 
 export const changePostNameById = async (
   postId: number,
   newName: string
 ): Promise<ActionResponse<null>> => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     throw new Error("You must be signed in to change the name of a post");
@@ -19,7 +20,7 @@ export const changePostNameById = async (
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.email, session.user.email),
+      where: eq(users.id, session.user.id),
       with: {
         posts: true,
       },
@@ -54,14 +55,14 @@ export const changePostNameById = async (
 export const deletePostById = async (
   postId: number
 ): Promise<ActionResponse<null>> => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     throw new Error("You must be signed delete a post");
   }
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.email, session.user.email),
+      where: eq(users.id, session.user.id),
       with: {
         posts: true,
       },
@@ -90,10 +91,10 @@ export const deletePostById = async (
   }
 };
 
-export const fetchAllPostsByUserId = async (
-  user_id: string
-): Promise<ActionResponse<SelectManyPostType | null>> => {
-  const session = await getServerSession();
+export const fetchAllPostsByUserId = async (): Promise<
+  ActionResponse<SelectManyPostType | null>
+> => {
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     throw new Error("You must be signed in to fetch users from the db");
@@ -101,7 +102,7 @@ export const fetchAllPostsByUserId = async (
 
   try {
     const postsFetched = await db.query.posts.findMany({
-      where: eq(posts.userId, user_id),
+      where: eq(posts.userId, session.user.id),
       orderBy: [asc(posts.createdAt)],
     });
 
@@ -122,7 +123,7 @@ export const fetchAllPostsByUserId = async (
 export const fetchSinglePostById = async (
   postId: number
 ): Promise<ActionResponse<SelectPostType | null>> => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     throw new Error("You must be signed in to fetch users from the db");
@@ -130,7 +131,7 @@ export const fetchSinglePostById = async (
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.email, session.user.email),
+      where: eq(users.id, session.user.id),
       with: {
         posts: true,
       },
@@ -171,7 +172,7 @@ export const createNewPost = async (
   content: any,
   parentId?: number | null
 ): Promise<ActionResponse<number | null>> => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     throw new Error("You must be signed in to create a new post");
@@ -179,7 +180,7 @@ export const createNewPost = async (
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.email, session.user.email),
+      where: eq(users.id, session.user.id),
     });
 
     if (!fetchedUser) {
@@ -195,7 +196,7 @@ export const createNewPost = async (
       .values({
         name: title,
         content,
-        userId: fetchedUser.id,
+        userId: session.user.id,
         parentId,
       })
       .returning({ id: posts.id });

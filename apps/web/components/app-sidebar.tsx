@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AudioWaveform, Command, Home, Search } from "lucide-react";
+import { Home, Search } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -7,8 +7,8 @@ import {
   SidebarRail,
 } from "@workspace/ui/components/sidebar";
 import { SidebarMain } from "./sidebar-main";
-import { SidebarCollaborativeWorkspaces } from "./sidebar-collab-workspaces";
 import { SidebarWorkspaces } from "./sidebar-workspaces";
+import { SidebarPosts } from "./sidebar-posts";
 import { SidebarUser } from "./sidebar-user";
 
 const data = {
@@ -41,8 +41,8 @@ export async function AppSidebar({
         <SidebarMain items={data.navMain} />
       </SidebarHeader>
       <SidebarContent className="overflow-x-hidden">
+        <SidebarPosts />
         <SidebarWorkspaces />
-        <SidebarCollaborativeWorkspaces />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

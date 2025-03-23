@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 import { BlockNoteEditor } from "@blocknote/core";
 import { uploadFiles } from "@/lib/uploadthing";
 import { blueTheme } from "@/lib/themes";
-import { WorkspaceCover } from "./workspace-cover";
+import { WorkspaceCover } from "./cover";
 import useDebounce from "@/hooks/use-debounce";
 import { cn } from "@workspace/ui/lib/utils";
 import useStore from "@workspace/store";
@@ -36,7 +36,7 @@ const Editor = ({
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
   const [currentContent, setCurrentContent] = useState<any>();
-  const { setWorkspaceContent } = useStore();
+  const { setPostContent } = useStore();
 
   const debouncedCallback = useDebounce(async () => {
     await updatePostContent(postId!, currentContent);
@@ -92,7 +92,7 @@ const Editor = ({
         editor={editor}
         onChange={async () => {
           if (type === "new") {
-            setWorkspaceContent(0, editor.document);
+            setPostContent(0, editor.document);
             return;
           }
           setCurrentContent(editor.document);

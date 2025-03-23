@@ -112,6 +112,8 @@ export function SidebarUser() {
             <DropdownMenuItem
               onClick={() => {
                 signOut();
+
+                localStorage.removeItem("ws.backend");
               }}
               className="cursor-pointer flex flex-row items-center"
             >

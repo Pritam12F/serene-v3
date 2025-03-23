@@ -1,3 +1,4 @@
+import { authOptions } from "@/lib/auth";
 import { UpdateUserSchema } from "@workspace/common/types/forms";
 import db from "@workspace/db";
 import { users } from "@workspace/db/schema";
@@ -6,7 +7,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     return NextResponse.json(
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
       .set({
         phone: data.phone,
       })
-      .where(eq(users.email, session.user.email));
+      .where(eq(users.id, session.user.id));
 
     return NextResponse.json({ message: "Profile updated!" });
   } catch (err) {

@@ -4,62 +4,62 @@ interface StoreType {
   mutator: (() => void) | null;
   changeMutator: (myMutator: () => void) => void;
 
-  activeWorkspaceId: number | null;
-  changeActiveWorkspaceId: (id?: number | null) => void;
+  activePostId: number | null;
+  changeActivePostId: (id?: number | null) => void;
 
-  workspaceNames: Map<number, string>;
-  setWorkspaceName: (id: number, newName: string) => void;
-  getWorkspaceName: (id: number) => string | undefined;
-  removeWorkspaceName: (id: number) => void;
+  postNames: Map<number, string>;
+  setPostName: (id: number, newName: string) => void;
+  getPostName: (id: number) => string | undefined;
+  removePostName: (id: number) => void;
 
-  workspaceContent: Map<number, any>;
-  setWorkspaceContent: (id: number, newContent: any) => void;
-  getWorkspaceContent: (id: number) => any;
-  removeWorkspaceContent: (id: number) => void;
+  postContent: Map<number, any>;
+  setPostContent: (id: number, newContent: any) => void;
+  getPostContent: (id: number) => any;
+  removePostContent: (id: number) => void;
 }
 
 export const store = create<StoreType>((set, get) => ({
   mutator: null,
   changeMutator: (myMutator: () => void) => set({ mutator: myMutator }),
 
-  activeWorkspaceId: null,
-  changeActiveWorkspaceId: (id) => set({ activeWorkspaceId: id }),
+  activePostId: null,
+  changeActivePostId: (id) => set({ activePostId: id }),
 
-  workspaceNames: new Map(),
-  setWorkspaceName: (postId, newName) => {
+  postNames: new Map(),
+  setPostName: (postId, newName) => {
     set((state) => {
-      const updatedRecord = new Map(state.workspaceNames); // Ensure immutability
+      const updatedRecord = new Map(state.postNames);
       updatedRecord.set(postId, newName);
-      return { workspaceNames: updatedRecord };
+      return { postNames: updatedRecord };
     });
   },
-  getWorkspaceName: (postId) => {
-    return get().workspaceNames.get(postId);
+  getPostName: (postId) => {
+    return get().postNames.get(postId);
   },
-  removeWorkspaceName: (postId: number) => {
+  removePostName: (postId: number) => {
     set((state) => {
-      const updatedRecord = new Map(state.workspaceNames);
+      const updatedRecord = new Map(state.postNames);
       updatedRecord.delete(postId);
-      return { workspaceNames: updatedRecord };
+      return { postNames: updatedRecord };
     });
   },
 
-  workspaceContent: new Map(),
-  setWorkspaceContent: (postId, newContent) => {
+  postContent: new Map(),
+  setPostContent: (postId, newContent) => {
     set((state) => {
-      const updatedRecord = new Map(state.workspaceContent);
+      const updatedRecord = new Map(state.postContent);
       updatedRecord.set(postId, newContent);
-      return { workspaceContent: updatedRecord };
+      return { postContent: updatedRecord };
     });
   },
-  getWorkspaceContent: (postId) => {
-    return get().workspaceContent.get(postId);
+  getPostContent: (postId) => {
+    return get().postContent.get(postId);
   },
-  removeWorkspaceContent: (postId: number) => {
+  removePostContent: (postId: number) => {
     set((state) => {
-      const updatedRecord = new Map(state.workspaceContent);
+      const updatedRecord = new Map(state.postContent);
       updatedRecord.delete(postId);
-      return { workspaceContent: updatedRecord };
+      return { postContent: updatedRecord };
     });
   },
 }));

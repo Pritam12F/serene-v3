@@ -11,10 +11,12 @@ import {
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
 import dynamic from "next/dynamic";
-import { useWorkspaces } from "@/hooks/use-workspaces";
+import { usePosts } from "@/hooks/use-posts";
 import Loading from "@/app/(main)/documents/[[...slug]]/loading";
 import { Fragment, useState } from "react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Button } from "@workspace/ui/components/button";
 
 export const SidebarExtension = ({
   documentList,
@@ -28,10 +30,7 @@ export const SidebarExtension = ({
   const postType =
     !documentList || documentList[0] === "newPost" ? "new" : "existing";
   const { data: session } = useSession();
-  const { postList, isLoading } = useWorkspaces(
-    session?.user.email!,
-    documentList
-  );
+  const { postList, isLoading } = usePosts(session?.user.email!, documentList);
   const lastUpdated = postList
     ?.filter((el) => {
       return el?.id === Number(documentList?.[documentList.length - 1]);
@@ -89,6 +88,14 @@ export const SidebarExtension = ({
           <div className="mx-8 text-sm">Last edited on {lastUpdated}</div>
         )}
       </header>
+      {!documentList && (
+        <div className="h-screen w-full flex flex-col items-center">
+          <div className="text-4xl my-48">No post selected...</div>
+          <Link href={"/documents/newPost"}>
+            <Button>Create new post</Button>
+          </Link>
+        </div>
+      )}
       {documentList && (
         <Editor
           editable={true}

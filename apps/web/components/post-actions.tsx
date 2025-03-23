@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { deletePostById } from "@/server";
 import { useRouter } from "next/navigation";
 
-export const WorkspaceActions = ({
+export const PostActions = ({
   documentId,
   parentId,
 }: {
@@ -23,7 +23,7 @@ export const WorkspaceActions = ({
   parentId: string;
 }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
-  const { mutator, changeActiveWorkspaceId, removeWorkspaceName } = useStore();
+  const { mutator, changeActivePostId, removePostName } = useStore();
   const router = useRouter();
   const parentIdParams = encodeURIComponent(parentId.substring(11));
   const handleDelete = async () => {
@@ -31,7 +31,7 @@ export const WorkspaceActions = ({
     if (success) {
       mutator?.();
       setIsDeleteOpen(false);
-      removeWorkspaceName(documentId);
+      removePostName(documentId);
       toast(message);
     } else {
       setIsDeleteOpen(false);
@@ -65,7 +65,7 @@ export const WorkspaceActions = ({
               variant="ghost"
               className="w-full focus-visible:ring-0 px-2 justify-normal"
               onClick={() => {
-                changeActiveWorkspaceId(documentId);
+                changeActivePostId(documentId);
               }}
             >
               <Edit className="h-4 w-4" />

@@ -31,6 +31,7 @@ export default function Workspaces() {
   return (
     <div>
       <div>{!isReady && <div>Loading...</div>}</div>
+      <div></div>
     </div>
   );
 }

@@ -5,12 +5,13 @@ import { ActionResponse } from "../types";
 import db from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { coverImages, posts, users } from "@workspace/db/schema";
+import { authOptions } from "@/lib/auth";
 
 export const addOrUpdateCoverImage = async (
   coverUrl: string,
   postId: number
 ): Promise<ActionResponse<null>> => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     throw new Error("You must be signed in to change cover image");
@@ -18,7 +19,7 @@ export const addOrUpdateCoverImage = async (
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.email, session.user.email),
+      where: eq(users.id, session.user.id),
       with: {
         posts: true,
       },
@@ -69,7 +70,7 @@ export const addOrUpdatePostEmoji = async (
   postId: number,
   emoji: string
 ): Promise<ActionResponse<null>> => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     throw new Error("You must be signed in to change cover image");
@@ -77,7 +78,7 @@ export const addOrUpdatePostEmoji = async (
 
   try {
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.email, session.user.email),
+      where: eq(users.id, session.user.id),
       with: {
         posts: true,
       },
@@ -115,7 +116,7 @@ export const updatePostContent = async (
   postId: number,
   newContent: unknown
 ): Promise<ActionResponse<null>> => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (!session?.user) {
     throw new Error("You must be signed in to change post content");
   }
@@ -126,7 +127,7 @@ export const updatePostContent = async (
     }
 
     const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.email, session.user.email),
+      where: eq(users.id, session.user.id),
       with: {
         posts: true,
       },

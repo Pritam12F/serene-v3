@@ -7,7 +7,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Toaster } from "@workspace/ui/components/sonner";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/options";
+import { authOptions } from "@/lib/auth";
 
 const fontInter = Inter({
   subsets: ["latin"],

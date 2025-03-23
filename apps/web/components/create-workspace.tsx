@@ -13,6 +13,7 @@ import { Label } from "@workspace/ui/components/label";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import { CodeBlock } from "@workspace/ui/components/code-block";
+import { useRouter } from "next/navigation";
 
 export const NewWorkspace = ({
   isOpen,
@@ -24,8 +25,12 @@ export const NewWorkspace = ({
   const [isPostCreated, setIsPostCreated] = useState(false);
   const [name, setName] = useState("");
   const [inviteId, setInviteId] = useState("");
+  const router = useRouter();
 
-  const handleCreatePost = async () => {
+  const handleCreatePost = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
     const { success, data } = await createWorkspace(name);
 
     if (success) {
@@ -34,6 +39,7 @@ export const NewWorkspace = ({
       });
       setInviteId(data?.inviteId!);
       setIsPostCreated(true);
+      router.push(`/workspaces/${data?.inviteId}`);
     } else {
       toast.error("Couldn't create workspace", {
         style: {

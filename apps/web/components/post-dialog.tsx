@@ -19,14 +19,13 @@ export default function PostDialog() {
       .split("/")
       .at(-1)
   );
-  const getWorkspaceName = (id: number) =>
-    store.getState().getWorkspaceName(id);
+  const getPostName = (id: number) => store.getState().getPostName(id);
   const getWorkspaceContent = (id: number) =>
-    store.getState().getWorkspaceContent(id);
+    store.getState().getPostContent(id);
 
   const createPostHandler = async () => {
     const { success, message, data } = await createNewPost(
-      getWorkspaceName(0) ?? "Untitled",
+      getPostName(0) ?? "Untitled",
       getWorkspaceContent(0),
       parentId === 0 ? undefined : parentId
     );
@@ -36,8 +35,8 @@ export default function PostDialog() {
         style: { backgroundColor: "#38b000" },
       });
 
-      store.getState().setWorkspaceName(0, "");
-      store.getState().setWorkspaceContent(0, {});
+      store.getState().setPostName(0, "");
+      store.getState().setPostContent(0, {});
       router.push(
         decodeURIComponent(params ?? "/documents").concat(`/${data}`)
       );

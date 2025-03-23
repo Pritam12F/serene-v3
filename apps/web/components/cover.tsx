@@ -22,7 +22,7 @@ export const WorkspaceCover = ({
   type: "existing" | "new";
   isEditorReady: boolean;
 }) => {
-  const { workspaceNames, setWorkspaceName } = useStore();
+  const { postNames, setPostName } = useStore();
   const [coverLink, setCoverLink] = useState<string | null>();
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<string | null>();
@@ -34,8 +34,8 @@ export const WorkspaceCover = ({
       setCoverLink(data?.coverImage?.url!);
       setEmoji(data?.emoji);
     }
-    if (!workspaceNames.get(postId)) {
-      workspaceNames.set(postId, data?.name!);
+    if (!postNames.get(postId)) {
+      postNames.set(postId, data?.name!);
     }
   }, [postId]);
 
@@ -121,14 +121,14 @@ export const WorkspaceCover = ({
         <TextareaAutosize
           className="w-fit mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
           placeholder="Untitled"
-          value={workspaceNames.get(postId)}
+          value={postNames.get(postId)}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             if (type === "new") {
-              setWorkspaceName(0, e.target.value);
+              setPostName(0, e.target.value);
               return;
             }
-            setWorkspaceName(postId, e.target.value);
-            debouncedRenamePost(postId, workspaceNames.get(postId)!);
+            setPostName(postId, e.target.value);
+            debouncedRenamePost(postId, postNames.get(postId)!);
           }}
         />
       </div>

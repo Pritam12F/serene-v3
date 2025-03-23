@@ -6,11 +6,12 @@ import { getServerSession } from "next-auth";
 import db from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { users } from "@workspace/db/schema";
+import { authOptions } from "@/lib/auth";
 
 export const fetchUserByEmail = async (): Promise<
   ActionResponse<SelectUserType | null>
 > => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     throw new Error("You must be signed in to fetch users from the db");
@@ -18,7 +19,7 @@ export const fetchUserByEmail = async (): Promise<
 
   try {
     const userFetched = await db.query.users.findFirst({
-      where: eq(users.email, session.user.email),
+      where: eq(users.id, session.user.id),
     });
 
     return {
