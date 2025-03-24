@@ -23,13 +23,13 @@ export function JoinWorkspace({
   ) => {
     e.preventDefault();
 
-    const { success, message } = await joinWorkspaceById(inviteID);
+    const { success, message, data } = await joinWorkspaceById(inviteID);
 
     if (success) {
       toast.success("Joined workspace!", {
         style: { backgroundColor: "#38b000" },
       });
-      router.push(`/workspaces/${inviteID}`);
+      router.push(`/workspaces/${data}`);
     } else {
       toast.error(message, { style: { backgroundColor: "reds" } });
     }

@@ -3,9 +3,6 @@ import WebSocket, { WebSocketServer } from "ws";
 import * as jose from "jose";
 import { createSecretKey } from "crypto";
 import dotenv from "dotenv";
-import db from "@workspace/db";
-import { eq } from "drizzle-orm";
-import { workspaces } from "@workspace/db/schema";
 
 dotenv.config();
 
@@ -36,10 +33,7 @@ interface Workspace {
   id: string;
   sockets?: WebSocket[];
 }
-
-// const workspaces: Workspace[] = await db.query.workspaces.findMany({
-//   where: eq(workspaces.id),
-// });
+const workspaces: Workspace[] = [];
 
 wss.on("connection", async function connection(ws) {
   ws.on("error", console.error);

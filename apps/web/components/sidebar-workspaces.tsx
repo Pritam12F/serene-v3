@@ -48,7 +48,7 @@ export function SidebarWorkspaces() {
         <SidebarMenu className="max-h-36 overflow-y-scroll">
           {[...mainWorkspaces, ...secondaryWorkspaces].map((x) => {
             return (
-              <Link href={`/workspaces/${x?.id}`}>
+              <Link href={`/workspaces/${x?.id}`} key={x?.id}>
                 <SidebarMenuItem className="rounded-sm hover:bg-[#f4f4f5] dark:hover:bg-[#27272a]">
                   <SidebarMenuButton className="px-9">
                     <span>{x?.emoji ?? "📓"}</span>

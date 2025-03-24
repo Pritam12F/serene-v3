@@ -99,7 +99,7 @@ export const fetchAllUserWorkspaces = async (): Promise<
 
 export const joinWorkspaceById = async (
   inviteId: string
-): Promise<ActionResponse<null>> => {
+): Promise<ActionResponse<string | null>> => {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
@@ -127,14 +127,15 @@ export const joinWorkspaceById = async (
       };
     }
 
-    await db
+    const secondaryWorkspaceId = await db
       .insert(secondaryWorkspacesUsers)
-      .values({ userId: userId, workspaceId: fetchedWorkspace.id });
+      .values({ userId: userId, workspaceId: fetchedWorkspace.id })
+      .returning({ id: secondaryWorkspacesUsers.workspaceId });
 
     return {
       success: true,
       message: "Added user as member to workspace",
-      data: null,
+      data: secondaryWorkspaceId[0]?.id,
     };
   } catch (e) {
     const errorMessage =

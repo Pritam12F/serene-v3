@@ -39,7 +39,7 @@ export const NewWorkspace = ({
       });
       setInviteId(data?.inviteId!);
       setIsPostCreated(true);
-      router.push(`/workspaces/${data?.inviteId}`);
+      router.push(`/workspaces/${data?.id}`);
     } else {
       toast.error("Couldn't create workspace", {
         style: {
