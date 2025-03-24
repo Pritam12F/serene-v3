@@ -7,7 +7,9 @@
     "dev": "tsc -b && node dist/index.js"
   },
   "dependencies": {
+    "@workspace/db": "workspace:*",
     "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.40.0",
     "express": "^4.21.2",
     "jose": "^6.0.10",
     "jsonwebtoken": "^9.0.2",
