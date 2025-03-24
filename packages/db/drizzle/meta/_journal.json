@@ -302,6 +302,13 @@
       "when": 1742731588170,
       "tag": "0042_short_lady_bullseye",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1742814603792,
+      "tag": "0043_high_fat_cobra",
+      "breakpoints": true
     }
   ]
 }

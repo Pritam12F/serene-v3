@@ -1,4 +1,4 @@
-import { addOrUpdatePostEmoji } from "@/server";
+import { addOrUpdateWorkspaceEmoji } from "@/server/workspace";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { Button } from "@workspace/ui/components/button";
@@ -6,15 +6,15 @@ import { Smile } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 
-export function EmojiPicker({
+export function WorkspaceEmojiPicker({
   isPickerOpen,
   setIsPickerOpen,
-  postId,
+  workspaceId,
   setChangeEmoji,
 }: {
   isPickerOpen: boolean;
   setIsPickerOpen: Dispatch<SetStateAction<boolean>>;
-  postId: string;
+  workspaceId: string;
   setChangeEmoji: Dispatch<SetStateAction<string | null | undefined>>;
 }) {
   const [lastSelectedEmoji, setLastSelectedEmoji] = useState<string | null>();
@@ -29,8 +29,8 @@ export function EmojiPicker({
         return;
       }
 
-      const { success } = await addOrUpdatePostEmoji(
-        postId,
+      const { success } = await addOrUpdateWorkspaceEmoji(
+        workspaceId,
         lastSelectedEmoji ?? ""
       );
 

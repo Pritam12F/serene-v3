@@ -5,9 +5,15 @@ import { ActionResponse } from "../types";
 import {
   InsertWorkspaceType,
   SelectWorkspaceByUserId,
+  SelectWorkspaceType,
 } from "@workspace/common/types/db";
 import db from "@workspace/db";
-import { secondaryWorkspacesUsers, workspaces } from "@workspace/db/schema";
+import {
+  secondaryWorkspacesUsers,
+  users,
+  workspaceCoverImages,
+  workspaces,
+} from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import { authOptions } from "@/lib/auth";
 
@@ -142,6 +148,209 @@ export const joinWorkspaceById = async (
       e instanceof Error
         ? e.message
         : "Something happened trying to fetch user";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const fetchSingleWorkspace = async (
+  id: string
+): Promise<ActionResponse<SelectWorkspaceType | null>> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("User is not authorized");
+  }
+
+  try {
+    const userFetched = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      columns: {
+        hashedPassword: false,
+      },
+      with: {
+        mainWorkspaces: {
+          with: {
+            coverImage: true,
+          },
+        },
+        secondaryWorkspaces: {
+          with: {
+            workspace: {
+              with: {
+                coverImage: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const isInMainWorkspaces = userFetched?.mainWorkspaces.find(
+      (x) => x.id === id
+    );
+
+    const isInSecondaryWorkspaces = userFetched?.secondaryWorkspaces.find(
+      (x) => x.workspaceId === id
+    );
+
+    if (!isInMainWorkspaces && !isInSecondaryWorkspaces) {
+      return {
+        success: false,
+        message: "User has not joined this workspace",
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Workspace fetched",
+      data: isInMainWorkspaces
+        ? isInMainWorkspaces
+        : isInSecondaryWorkspaces?.workspace,
+    };
+  } catch (e) {
+    const errorMessage =
+      e instanceof Error
+        ? e.message
+        : "Something happened trying to fetch user";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const addOrUpdateWorkspaceCoverImage = async (
+  coverUrl: string,
+  workspaceId: string
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to change cover image");
+  }
+
+  try {
+    const userFetched = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      columns: {
+        hashedPassword: false,
+      },
+      with: {
+        mainWorkspaces: true,
+        secondaryWorkspaces: {
+          with: {
+            workspace: {
+              with: {
+                coverImage: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const isInMainWorkspaces = userFetched?.mainWorkspaces.find(
+      (x) => x.id === workspaceId
+    );
+
+    const isInSecondaryWorkspaces = userFetched?.secondaryWorkspaces.find(
+      (x) => x.workspaceId === workspaceId
+    );
+
+    if (!isInMainWorkspaces && !isInSecondaryWorkspaces) {
+      return {
+        success: false,
+        message: "User has not joined this workspace",
+        data: null,
+      };
+    }
+
+    const insertedCoverImage = await db
+      .insert(workspaceCoverImages)
+      .values({ url: coverUrl, workspaceId })
+      .onConflictDoUpdate({
+        target: workspaceCoverImages.workspaceId,
+        set: { url: coverUrl },
+      })
+      .returning({ id: workspaceCoverImages.id });
+
+    await db
+      .update(workspaces)
+      .set({
+        coverImageId: insertedCoverImage[0]?.id,
+      })
+      .where(eq(workspaces.id, workspaceId));
+
+    return {
+      success: true,
+      message: "Successfully added cover image",
+      data: null,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to add cover image";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const addOrUpdateWorkspaceEmoji = async (
+  workspaceId: string,
+  emoji: string
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to change cover image");
+  }
+
+  try {
+    const userFetched = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      columns: {
+        hashedPassword: false,
+      },
+      with: {
+        mainWorkspaces: true,
+        secondaryWorkspaces: {
+          with: {
+            workspace: true,
+          },
+        },
+      },
+    });
+
+    const isInMainWorkspaces = userFetched?.mainWorkspaces.find(
+      (x) => x.id === workspaceId
+    );
+
+    const isInSecondaryWorkspaces = userFetched?.secondaryWorkspaces.find(
+      (x) => x.workspaceId === workspaceId
+    );
+
+    if (!isInMainWorkspaces && !isInSecondaryWorkspaces) {
+      return {
+        success: false,
+        message: "User has not joined this workspace",
+        data: null,
+      };
+    }
+
+    await db
+      .update(workspaces)
+      .set({
+        emoji,
+      })
+      .where(eq(workspaces.id, workspaceId));
+
+    return { success: true, message: "Emoji updated successfully", data: null };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to add cover image";
 
     return { success: false, message: errorMessage, data: null };
   }

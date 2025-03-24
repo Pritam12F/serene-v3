@@ -3,54 +3,46 @@ import Image from "next/image";
 import { ImageIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import {
-  addOrUpdateCoverImage,
-  changePostNameById,
-  fetchSinglePostById,
-} from "@/server";
-import useStore from "@workspace/store";
 import { ClientUploadedFileData } from "uploadthing/types";
-import { EmojiPicker } from "./emoji-picker";
-import useDebounce from "@/hooks/use-debounce";
+import {
+  addOrUpdateWorkspaceCoverImage,
+  fetchSingleWorkspace,
+} from "@/server/workspace";
+import { WorkspaceEmojiPicker } from "./workspace-emoji-picker";
 
-export const PostCover = ({
-  postId,
-  type,
+export const WorkspaceCover = ({
+  workspaceId,
   isEditorReady,
+  coverImage,
 }: {
-  postId: string;
-  type: "existing" | "new" | "workspace";
+  workspaceId: string;
   isEditorReady: boolean;
+  coverImage?: string;
 }) => {
-  const { postNames, setPostName } = useStore();
-  const [coverLink, setCoverLink] = useState<string | null>();
+  const [coverLink, setCoverLink] = useState<string | null>(coverImage ?? "");
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<string | null>();
 
   const fetchCover = useCallback(async () => {
-    const { success, data } = await fetchSinglePostById(postId);
+    const { success, data } = await fetchSingleWorkspace(workspaceId.trim());
+
+    console.log(data);
 
     if (success) {
       setCoverLink(data?.coverImage?.url!);
-      setEmoji(data?.emoji);
+      setEmoji(data?.emoji!);
     }
-    if (!postNames.get(postId)) {
-      postNames.set(postId, data?.name!);
-    }
-  }, [postId]);
+  }, [workspaceId]);
 
   useEffect(() => {
     fetchCover();
   }, []);
 
-  const debouncedRenamePost = useDebounce(
-    async (postId: string, newName: string) => {
-      await changePostNameById(postId, newName);
-    }
-  );
-
   const handleOnUpload = async (file: ClientUploadedFileData<any>[]) => {
-    const { success } = await addOrUpdateCoverImage(file[0]!.ufsUrl, postId);
+    const { success } = await addOrUpdateWorkspaceCoverImage(
+      file[0]!.ufsUrl,
+      workspaceId
+    );
 
     if (success) {
       setCoverLink(file[0]?.ufsUrl!);
@@ -90,10 +82,10 @@ export const PostCover = ({
             priority
           />
           <div className="text-8xl absolute left-14 top-16">{emoji}</div>
-          <EmojiPicker
+          <WorkspaceEmojiPicker
             isPickerOpen={isEmojiPickerOpen}
             setIsPickerOpen={setIsEmojiPickerOpen}
-            postId={postId}
+            workspaceId={workspaceId}
             setChangeEmoji={setEmoji}
           />
         </>
@@ -121,15 +113,7 @@ export const PostCover = ({
         <TextareaAutosize
           className="w-fit mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
           placeholder="Untitled"
-          value={postNames.get(postId)}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            if (type === "new") {
-              setPostName("0", e.target.value);
-              return;
-            }
-            setPostName(postId, e.target.value);
-            debouncedRenamePost(postId, postNames.get(postId)!);
-          }}
+          onChange={() => {}}
         />
       </div>
     </div>

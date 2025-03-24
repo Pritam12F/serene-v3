@@ -2,45 +2,37 @@
 
 import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
 import { BlockNoteEditor } from "@blocknote/core";
 import { uploadFiles } from "@/lib/uploadthing";
 import { blueTheme } from "@/lib/themes";
-import { PostCover } from "./cover";
-import useDebounce from "@/hooks/use-debounce";
 import { cn } from "@workspace/ui/lib/utils";
-import useStore from "@workspace/store";
-import { updatePostContent } from "@/server";
+import { WorkspaceCover } from "./workspace-cover";
 
 interface EditorProps {
   editable: boolean;
   initialContent?: unknown;
-  postId?: string | null;
+  workspaceId?: string | null;
   onReady?: Dispatch<SetStateAction<boolean>>;
   isReady: boolean;
   styles?: string;
-  type?: "new" | "existing";
+  socket?: WebSocket;
+  coverImage?: string;
 }
 
 const Editor = ({
   editable,
   initialContent,
-  postId,
+  workspaceId,
   isReady,
   onReady,
   styles,
-  type = "existing",
+  coverImage,
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
-  const [currentContent, setCurrentContent] = useState<any>();
-  const { setPostContent } = useStore();
-
-  const debouncedCallback = useDebounce(async () => {
-    await updatePostContent(postId!, currentContent);
-  }, 5000);
 
   const uploadFile = async (file: File) => {
     switch (true) {
@@ -76,10 +68,6 @@ const Editor = ({
     onReady?.(true);
   }, [editor.document]);
 
-  useEffect(() => {
-    debouncedCallback();
-  }, [currentContent]);
-
   return (
     <div
       className={cn(
@@ -87,16 +75,14 @@ const Editor = ({
         styles
       )}
     >
-      <PostCover postId={postId!} type={type} isEditorReady={isReady} />
+      <WorkspaceCover
+        workspaceId={workspaceId!}
+        isEditorReady={isReady}
+        coverImage={coverImage}
+      />
       <BlockNoteView
         editor={editor}
-        onChange={async () => {
-          if (type === "new") {
-            setPostContent("0", editor.document);
-            return;
-          }
-          setCurrentContent(editor.document);
-        }}
+        onChange={() => {}}
         editable={editable}
         theme={resolvedTheme === "dark" ? blueTheme.dark : blueTheme.light}
       />

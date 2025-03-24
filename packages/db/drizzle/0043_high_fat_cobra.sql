@@ -1,0 +1,1 @@
+ALTER TABLE "workspaces" ADD COLUMN "cover_id" integer;

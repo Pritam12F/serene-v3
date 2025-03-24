@@ -19,7 +19,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 // User Types
 export type SelectUserType =
-  | (typeof users.$inferSelect & {
+  | (Omit<typeof users.$inferSelect, "hashedPassword"> & {
       posts?: SelectManyPostType;
       mainWorkspaces?: SelectManyWorkspaceType;
       secondaryWorkspaces?: SelectManySecondaryWorkspaceUserType;

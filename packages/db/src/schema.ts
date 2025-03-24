@@ -50,11 +50,12 @@ export const posts = pgTable("posts", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-//Workspace Table
+// Workspace Table
 export const workspaces = pgTable("workspaces", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   emoji: text("emoji"),
+  coverImageId: integer("cover_id"),
   content: jsonb("workspace_content"),
   inviteId: varchar("invite_id", { length: 5 }),
   ownerId: uuid("owner_id")
@@ -64,7 +65,7 @@ export const workspaces = pgTable("workspaces", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-//JOIN TABLE
+// JOIN TABLE
 export const secondaryWorkspacesUsers = pgTable(
   "workspaces_secondary_users",
   {
@@ -138,6 +139,62 @@ export const coverImages = pgTable("cover_images", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Workspace Images Table
+export const workspaceImages = pgTable("workspace_images", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("image_url").notNull(),
+  workspaceId: uuid("workspace_id")
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Workspace Audios Table
+export const workspaceAudios = pgTable("workspace_audios", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("audio_url").notNull(),
+  workspaceId: uuid("workspace_id")
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Workspace Videos Table
+export const workspaceVideos = pgTable("workspace_videos", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("video_url").notNull(),
+  workspaceId: uuid("workspace_id")
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Workspace Other Files Table
+export const workspaceOtherFiles = pgTable("workspace_other_files", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("otherfile_url").notNull(),
+  workspaceId: uuid("workspace_id")
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Workspace Cover Images Table
+export const workspaceCoverImages = pgTable("workspace_cover_images", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  url: text("cover_image_url").notNull(),
+  workspaceId: uuid("workspace_id")
+    .unique()
+    .notNull()
+    .references(() => workspaces.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Relations
 
 // Users to Posts
@@ -148,20 +205,83 @@ export const usersRelations = relations(users, ({ many }) => ({
 }));
 
 //Workspace Relations
-export const workspaceRelations = relations(workspaces, ({ many }) => ({
+export const workspaceRelations = relations(workspaces, ({ one, many }) => ({
+  owner: one(users, {
+    fields: [workspaces.ownerId],
+    references: [users.id],
+  }),
   members: many(secondaryWorkspacesUsers),
+  coverImage: one(workspaceCoverImages, {
+    fields: [workspaces.coverImageId],
+    references: [workspaceCoverImages.id],
+  }),
+  images: many(workspaceImages),
+  audios: many(workspaceAudios),
+  videos: many(workspaceVideos),
+  otherFiles: many(workspaceOtherFiles),
 }));
 
-export const secondaryWorksacesOnUsersRelations = relations(
+export const secondaryWorkspacesUsersRelations = relations(
   secondaryWorkspacesUsers,
   ({ one }) => ({
     workspace: one(workspaces, {
       fields: [secondaryWorkspacesUsers.workspaceId],
       references: [workspaces.id],
     }),
-    member: one(users, {
+    user: one(users, {
       fields: [secondaryWorkspacesUsers.userId],
       references: [users.id],
+    }),
+  })
+);
+
+// Workspace media relations
+export const workspaceImagesRelations = relations(
+  workspaceImages,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [workspaceImages.workspaceId],
+      references: [workspaces.id],
+    }),
+  })
+);
+
+export const workspaceAudiosRelations = relations(
+  workspaceAudios,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [workspaceAudios.workspaceId],
+      references: [workspaces.id],
+    }),
+  })
+);
+
+export const workspaceVideosRelations = relations(
+  workspaceVideos,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [workspaceVideos.workspaceId],
+      references: [workspaces.id],
+    }),
+  })
+);
+
+export const workspaceOtherFilesRelations = relations(
+  workspaceOtherFiles,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [workspaceOtherFiles.workspaceId],
+      references: [workspaces.id],
+    }),
+  })
+);
+
+export const workspaceCoverImagesRelations = relations(
+  workspaceCoverImages,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [workspaceCoverImages.workspaceId],
+      references: [workspaces.id],
     }),
   })
 );
@@ -234,59 +354,3 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
     references: [coverImages.id],
   }),
 }));
-
-// Workspace Images Table
-export const workspaceImages = pgTable("workspace_images", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 256 }),
-  url: text("image_url").notNull(),
-  workspaceId: uuid("workspace_id")
-    .notNull()
-    .references(() => workspaces.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-// Workspace Audios Table
-export const workspaceAudios = pgTable("workspace_audios", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 256 }),
-  url: text("audio_url").notNull(),
-  workspaceId: uuid("workspace_id")
-    .notNull()
-    .references(() => workspaces.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-// Workspace Videos Table
-export const workspaceVideos = pgTable("workspace_videos", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 256 }),
-  url: text("video_url").notNull(),
-  workspaceId: uuid("workspace_id")
-    .notNull()
-    .references(() => workspaces.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-// Workspace Other Files Table
-export const workspaceOtherFiles = pgTable("workspace_other_files", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 256 }),
-  url: text("otherfile_url").notNull(),
-  workspaceId: uuid("workspace_id")
-    .notNull()
-    .references(() => workspaces.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-// Workspace Cover Images Table
-export const workspaceCoverImages = pgTable("workspace_cover_images", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 256 }),
-  url: text("cover_image_url").notNull(),
-  workspaceId: uuid("workspace_id")
-    .unique()
-    .notNull()
-    .references(() => workspaces.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow(),
-});

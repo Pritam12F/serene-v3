@@ -20,6 +20,17 @@ export const fetchUserByEmail = async (): Promise<
   try {
     const userFetched = await db.query.users.findFirst({
       where: eq(users.id, session.user.id),
+      columns: {
+        hashedPassword: false,
+      },
+      with: {
+        mainWorkspaces: true,
+        secondaryWorkspaces: {
+          with: {
+            workspace: true,
+          },
+        },
+      },
     });
 
     return {

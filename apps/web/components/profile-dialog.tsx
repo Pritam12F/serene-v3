@@ -92,6 +92,8 @@ function Tab({
     const fetch = async () => {
       const { success, data } = await fetchUserByEmail();
 
+      console.log(data);
+
       if (success) {
         userDetails.phone = data?.phone;
       }
