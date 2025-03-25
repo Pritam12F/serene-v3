@@ -17,14 +17,12 @@ import { Fragment, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
-import { useJWT } from "@/hooks/useJWT";
 
 export const SidebarExtension = ({
   documentList,
 }: {
   documentList?: string[];
 }) => {
-  useJWT();
   const Editor = dynamic(() => import("./editor"), {
     ssr: false,
   });

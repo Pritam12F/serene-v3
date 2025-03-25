@@ -12,8 +12,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
 import { useWorkspace } from "@/hooks/use-workspaces";
-import { useWebsocket } from "@/hooks/use-websocket";
 import { usePathname } from "next/navigation";
+import { Room } from "./room";
 
 export const SidebarExtensionWorkspaces = () => {
   const Editor = dynamic(() => import("./workspace-editor"), {
@@ -26,7 +26,6 @@ export const SidebarExtensionWorkspaces = () => {
   const workspace =
     mainWorkspaces.find((x) => x?.id === path.split("/")[2]) ??
     secondaryWorkspaces.find((x) => x?.id === path.split("/")[2]);
-  const { isReady, content, ws } = useWebsocket(path.split("/")[2]!);
 
   const workspaceName = workspace?.name;
   const editedAt = workspace?.updatedAt?.toDateString();
@@ -54,17 +53,18 @@ export const SidebarExtensionWorkspaces = () => {
         </div>
       )}
       {workspace && (
-        <Editor
-          editable={true}
-          workspaceId={workspace?.id}
-          initialContent={workspace?.content}
-          onReady={setIsEditorReady}
-          isReady={isEditorReady}
-          socket={ws}
-          coverImage={workspace.coverImage?.url}
-        />
+        <Room>
+          <Editor
+            editable={true}
+            workspaceId={workspace?.id}
+            initialContent={workspace?.content}
+            onReady={setIsEditorReady}
+            isReady={isEditorReady}
+            coverImage={workspace.coverImage?.url}
+          />
+        </Room>
       )}
-      {(!isEditorReady || !isReady || !workspace) && <Loading />}
+      {(!isEditorReady || !workspace) && <Loading />}
     </SidebarInset>
   );
 };

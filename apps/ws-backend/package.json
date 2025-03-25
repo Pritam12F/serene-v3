@@ -3,9 +3,7 @@
   "version": "0.0.1",
   "type": "module",
   "private": true,
-  "scripts": {
-    "dev": "tsc -b && node dist/index.js"
-  },
+  "scripts": {},
   "dependencies": {
     "@workspace/db": "workspace:*",
     "dotenv": "^16.4.5",

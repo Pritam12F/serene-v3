@@ -1,16 +1,15 @@
 "use client";
 
 import { BlockNoteView } from "@blocknote/mantine";
-import { useCreateBlockNote } from "@blocknote/react";
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
-import { BlockNoteEditor } from "@blocknote/core";
 import { uploadFiles } from "@/lib/uploadthing";
 import { blueTheme } from "@/lib/themes";
 import { cn } from "@workspace/ui/lib/utils";
 import { WorkspaceCover } from "./workspace-cover";
+import { useCreateBlockNoteWithLiveblocks } from "@liveblocks/react-blocknote";
 
 interface EditorProps {
   editable: boolean;
@@ -62,22 +61,10 @@ const Editor = ({
     }
   };
 
-  const editor: BlockNoteEditor = useCreateBlockNote({
+  const editor = useCreateBlockNoteWithLiveblocks({
     initialContent: initialContent as unknown as any,
     uploadFile,
   });
-
-  const onChangeHandler = () => {
-    socket?.send(
-      JSON.stringify({
-        type: "updateContent",
-        payload: {
-          workspaceId,
-          content: editor.document,
-        },
-      })
-    );
-  };
 
   useEffect(() => {
     onReady?.(true);
@@ -97,7 +84,6 @@ const Editor = ({
       />
       <BlockNoteView
         editor={editor}
-        onChange={onChangeHandler}
         editable={editable}
         theme={resolvedTheme === "dark" ? blueTheme.dark : blueTheme.light}
       />
