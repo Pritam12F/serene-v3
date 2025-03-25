@@ -14,22 +14,19 @@ import { Button } from "@workspace/ui/components/button";
 import { useWorkspace } from "@/hooks/use-workspaces";
 import { useWebsocket } from "@/hooks/use-websocket";
 import { usePathname } from "next/navigation";
-import { useJWT } from "@/hooks/useJWT";
 
 export const SidebarExtensionWorkspaces = () => {
   const Editor = dynamic(() => import("./workspace-editor"), {
     ssr: false,
   });
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
-  const { token } = useJWT();
-  const { isReady, ws } = useWebsocket([token]);
   const path = usePathname();
-  const pathName = path.split("/");
 
   const { mainWorkspaces, secondaryWorkspaces } = useWorkspace();
   const workspace =
-    mainWorkspaces.find((x) => x?.id === pathName[pathName.length - 1]) ??
-    secondaryWorkspaces.find((x) => x?.id === pathName![pathName!.length - 1]);
+    mainWorkspaces.find((x) => x?.id === path.split("/")[2]) ??
+    secondaryWorkspaces.find((x) => x?.id === path.split("/")[2]);
+  const { isReady, content, ws } = useWebsocket(path.split("/")[2]!);
 
   const workspaceName = workspace?.name;
   const editedAt = workspace?.updatedAt?.toDateString();
@@ -67,7 +64,7 @@ export const SidebarExtensionWorkspaces = () => {
           coverImage={workspace.coverImage?.url}
         />
       )}
-      {(!isEditorReady || !isReady) && workspace && <Loading />}
+      {(!isEditorReady || !isReady || !workspace) && <Loading />}
     </SidebarInset>
   );
 };

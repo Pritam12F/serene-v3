@@ -12,15 +12,9 @@ export const useWorkspace = () => {
   const mutator = useCallback(async () => {
     const work_spaces = await fetchAllUserWorkspaces();
 
-    setMainWorkspaces((prev) => [
-      ...prev,
-      ...(work_spaces.data?.mainWorkspaces ?? []),
-    ]);
+    setMainWorkspaces([...work_spaces.data?.mainWorkspaces!]);
 
-    setSecondaryWorkspaces((prev) => [
-      ...prev,
-      ...(work_spaces.data?.secondaryWorkspaces ?? []),
-    ]);
+    setSecondaryWorkspaces([...work_spaces.data?.secondaryWorkspaces!]);
   }, []);
 
   useEffect(() => {

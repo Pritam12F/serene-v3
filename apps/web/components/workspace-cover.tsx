@@ -26,8 +26,6 @@ export const WorkspaceCover = ({
   const fetchCover = useCallback(async () => {
     const { success, data } = await fetchSingleWorkspace(workspaceId.trim());
 
-    console.log(data);
-
     if (success) {
       setCoverLink(data?.coverImage?.url!);
       setEmoji(data?.emoji!);

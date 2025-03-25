@@ -7,7 +7,6 @@ import {
   timestamp,
   uuid,
   varchar,
-  AnyPgColumn,
   jsonb,
   pgEnum,
   bigint,
@@ -43,7 +42,7 @@ export const posts = pgTable("posts", {
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  parentId: uuid("parent_id").references((): AnyPgColumn => posts.id, {
+  parentId: uuid("parent_id").references((): any => posts.id, {
     onDelete: "cascade",
   }),
   createdAt: timestamp("created_at").defaultNow(),

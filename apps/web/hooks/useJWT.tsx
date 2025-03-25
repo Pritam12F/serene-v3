@@ -18,6 +18,7 @@ export const useJWT = () => {
       const jwt = await getJWT(session?.data?.user.email);
 
       localStorage.setItem("ws.backend", jwt!);
+      setToken(token);
     };
 
     setJwt();

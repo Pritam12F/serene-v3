@@ -15,6 +15,7 @@ import { WorkspaceCover } from "./workspace-cover";
 interface EditorProps {
   editable: boolean;
   initialContent?: unknown;
+  updatedContent?: unknown;
   workspaceId?: string | null;
   onReady?: Dispatch<SetStateAction<boolean>>;
   isReady: boolean;
@@ -26,11 +27,13 @@ interface EditorProps {
 const Editor = ({
   editable,
   initialContent,
+  updatedContent,
   workspaceId,
   isReady,
   onReady,
   styles,
   coverImage,
+  socket,
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
 
@@ -64,6 +67,18 @@ const Editor = ({
     uploadFile,
   });
 
+  const onChangeHandler = () => {
+    socket?.send(
+      JSON.stringify({
+        type: "updateContent",
+        payload: {
+          workspaceId,
+          content: editor.document,
+        },
+      })
+    );
+  };
+
   useEffect(() => {
     onReady?.(true);
   }, [editor.document]);
@@ -82,7 +97,7 @@ const Editor = ({
       />
       <BlockNoteView
         editor={editor}
-        onChange={() => {}}
+        onChange={onChangeHandler}
         editable={editable}
         theme={resolvedTheme === "dark" ? blueTheme.dark : blueTheme.light}
       />

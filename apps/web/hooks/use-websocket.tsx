@@ -1,26 +1,52 @@
 import { useEffect, useState } from "react";
 
 export const useWebsocket = (
-  dependencies: any[],
+  workspaceId: string,
   wsUrl = "ws://localhost:8080"
 ) => {
   const [ws, setWs] = useState<WebSocket>();
   const [isReady, setIsReady] = useState(false);
+  const [name, setName] = useState("");
+  const [content, setContent] = useState<any>();
+  const [coverImage, setCoverImage] = useState("");
+  const [emoji, setEmoji] = useState("");
 
   useEffect(() => {
-    const websocket = new WebSocket(wsUrl, localStorage.getItem("ws.backend")!);
+    const token = localStorage.getItem("ws.backend");
+    const websocket = new WebSocket(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}?token=${token}`
+    );
 
     setWs(websocket);
 
-    websocket.onopen = () => setIsReady(true);
-    websocket.onclose = () => setIsReady(false);
-    websocket.onmessage = (event) => {
-      ws?.send(event.data);
+    websocket.onopen = () => {
+      setIsReady(true);
+      websocket.send(
+        JSON.stringify({
+          type: "join",
+          payload: {
+            workspaceId,
+          },
+        })
+      );
     };
     websocket.onclose = () => {
-      ws?.close();
+      setIsReady(false);
+      websocket.send(
+        JSON.stringify({
+          type: "leave",
+          payload: {
+            workspaceId,
+          },
+        })
+      );
     };
-  }, [...dependencies]);
+    websocket.onmessage = (event) => {
+      if (event.data.payload === "uploadContent") {
+        setContent(event.data);
+      }
+    };
+  }, [workspaceId]);
 
-  return { ws, isReady };
+  return { ws, content, isReady };
 };

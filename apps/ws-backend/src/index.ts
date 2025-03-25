@@ -3,6 +3,8 @@ import WebSocket, { WebSocketServer } from "ws";
 import * as jose from "jose";
 import { createSecretKey } from "crypto";
 import dotenv from "dotenv";
+import { updateContent } from "./db.js";
+import url from "url";
 
 dotenv.config();
 
@@ -35,13 +37,13 @@ interface Workspace {
 }
 const workspaces: Workspace[] = [];
 
-wss.on("connection", async function connection(ws) {
+wss.on("connection", async function connection(ws, req) {
   ws.on("error", console.error);
-
-  if (!ws.protocol) {
+  const token = url.parse(req.url!, true).query.token;
+  if (!token) {
     ws.close();
   } else {
-    if (!(await verifyUser(ws.protocol))) {
+    if (!(await verifyUser(token as string))) {
       ws.close();
     }
   }
@@ -51,20 +53,56 @@ wss.on("connection", async function connection(ws) {
 
     if (type === "join") {
       const workspace = workspaces.find((x) => x.id === payload.workspaceId);
+      if (!workspace) {
+        workspaces.push({ id: payload.workspaceId, sockets: [] });
+
+        workspaces.find((x) => x.id === payload.workspaceId)?.sockets?.push(ws);
+        ws.send(`Joined workspace ${payload.workspaceId}`);
+        return;
+      }
 
       workspace?.sockets?.push(ws);
 
       ws.send(`Joined workspace ${payload.workspaceId}`);
-    } else if (type === "update") {
+    } else if (type === "leave") {
       const workspace = workspaces.find((x) => x.id === payload.workspaceId);
 
-      workspace?.sockets?.forEach((socket) => {
+      if (!workspace) {
+        ws.send(`Workspace with id ${payload.workspaceId} doesn't exist`);
+
+        return;
+      }
+
+      const newSockets = workspace.sockets?.filter((x) => x !== ws);
+
+      workspace.sockets = newSockets;
+
+      ws.send(`Left workspace with id ${payload.workspaceId}`);
+    } else if (type === "updateContent") {
+      const content = payload.content;
+      updateContent(payload.workspaceId, content);
+      const workspace = workspaces.find((x) => x.id === payload.workspaceId);
+
+      if (!workspace) {
+        ws.send(`Workspace with id ${payload.workspaceId} doesn't exist`);
+
+        return;
+      }
+
+      workspace.sockets?.forEach((socket) => {
         if (socket !== ws && socket.readyState === WebSocket.OPEN) {
-          socket.send(payload.content);
+          socket.send(
+            JSON.stringify({
+              type: "updateContent",
+              payload: {
+                content,
+              },
+            })
+          );
         }
       });
     }
   });
 
-  ws.send("Hello! Message From Server!!");
+  ws.send("Connected to server!!");
 });
