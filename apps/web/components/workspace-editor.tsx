@@ -5,7 +5,6 @@ import React, { Dispatch, SetStateAction, useEffect } from "react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
-import { uploadFiles } from "@/lib/uploadthing";
 import { blueTheme } from "@/lib/themes";
 import { cn } from "@workspace/ui/lib/utils";
 import { WorkspaceCover } from "./workspace-cover";
@@ -25,8 +24,6 @@ interface EditorProps {
 
 const Editor = ({
   editable,
-  initialContent,
-  updatedContent,
   workspaceId,
   isReady,
   onReady,
@@ -36,35 +33,7 @@ const Editor = ({
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
 
-  const uploadFile = async (file: File) => {
-    switch (true) {
-      case file.type.startsWith("image"):
-        const [res] = await uploadFiles("imageUploader", { files: [file] });
-        return res?.url!;
-
-      case file.type.startsWith("video"): {
-        const [res] = await uploadFiles("videoUploader", { files: [file] });
-        return res?.url!;
-      }
-
-      case file.type.startsWith("audio"): {
-        const [res] = await uploadFiles("audioUploader", { files: [file] });
-        return res?.url!;
-      }
-
-      default: {
-        const [res] = await uploadFiles("otherTypeUploader", {
-          files: [file],
-        });
-        return res?.url!;
-      }
-    }
-  };
-
-  const editor = useCreateBlockNoteWithLiveblocks({
-    initialContent: initialContent as unknown as any,
-    uploadFile,
-  });
+  const editor = useCreateBlockNoteWithLiveblocks({});
 
   useEffect(() => {
     onReady?.(true);

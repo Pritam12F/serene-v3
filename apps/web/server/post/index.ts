@@ -7,6 +7,7 @@ import { asc, eq } from "drizzle-orm";
 import db from "@workspace/db";
 import { SelectManyPostType, SelectPostType } from "@workspace/common/types/db";
 import { authOptions } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export const changePostNameById = async (
   postId: string,
@@ -79,6 +80,8 @@ export const deletePostById = async (
     }
 
     await db.delete(posts).where(eq(posts.id, postId));
+
+    revalidatePath("/");
 
     return { success: true, message: "Post deleted successfully", data: null };
   } catch (err) {

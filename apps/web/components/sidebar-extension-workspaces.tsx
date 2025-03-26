@@ -6,19 +6,15 @@ import {
 } from "@workspace/ui/components/breadcrumb";
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
-import dynamic from "next/dynamic";
-import Loading from "@/app/(main)/documents/[[...slug]]/loading";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
 import { useWorkspace } from "@/hooks/use-workspaces";
 import { usePathname } from "next/navigation";
-import { Room } from "./room";
+import { CollaborativeRoom } from "./room";
+import Loading from "./loading";
 
 export const SidebarExtensionWorkspaces = () => {
-  const Editor = dynamic(() => import("./workspace-editor"), {
-    ssr: false,
-  });
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
   const path = usePathname();
 
@@ -29,6 +25,12 @@ export const SidebarExtensionWorkspaces = () => {
 
   const workspaceName = workspace?.name;
   const editedAt = workspace?.updatedAt?.toDateString();
+
+  useEffect(() => {
+    if (!workspace) {
+      setIsEditorReady(true);
+    }
+  }, [workspace]);
 
   return (
     <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-gray-950">
@@ -53,18 +55,12 @@ export const SidebarExtensionWorkspaces = () => {
         </div>
       )}
       {workspace && (
-        <Room>
-          <Editor
-            editable={true}
-            workspaceId={workspace?.id}
-            initialContent={workspace?.content}
-            onReady={setIsEditorReady}
-            isReady={isEditorReady}
-            coverImage={workspace.coverImage?.url}
-          />
-        </Room>
+        <CollaborativeRoom
+          isReady={isEditorReady}
+          onReadyAction={setIsEditorReady}
+        />
       )}
-      {(!isEditorReady || !workspace) && <Loading />}
+      {!isEditorReady && <Loading />}
     </SidebarInset>
   );
 };

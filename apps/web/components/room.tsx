@@ -1,22 +1,24 @@
 "use client";
 
-import { ReactNode } from "react";
-import {
-  LiveblocksProvider,
-  RoomProvider,
-  ClientSideSuspense,
-} from "@liveblocks/react/suspense";
+import { Dispatch, SetStateAction } from "react";
+import { RoomProvider, ClientSideSuspense } from "@liveblocks/react/suspense";
+import dynamic from "next/dynamic";
 
-export function Room({ children }: { children: ReactNode }) {
+export function CollaborativeRoom({
+  isReady,
+  onReadyAction,
+}: {
+  isReady: boolean;
+  onReadyAction: Dispatch<SetStateAction<boolean>>;
+}) {
+  const Editor = dynamic(() => import("./workspace-editor"), {
+    ssr: false,
+  });
   return (
-    <LiveblocksProvider
-      publicApiKey={process.env.NEXT_PUBLIC_LIVEBLOCK_KEY ?? ""}
-    >
-      <RoomProvider id="my-room">
-        <ClientSideSuspense fallback={<div>Loading…</div>}>
-          {children}
-        </ClientSideSuspense>
-      </RoomProvider>
-    </LiveblocksProvider>
+    <RoomProvider id="my-room">
+      <ClientSideSuspense fallback={<div>Loading…</div>}>
+        <Editor editable={true} isReady={isReady} onReady={onReadyAction} />
+      </ClientSideSuspense>
+    </RoomProvider>
   );
 }

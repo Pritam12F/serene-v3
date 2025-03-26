@@ -309,6 +309,13 @@
       "when": 1742814603792,
       "tag": "0043_high_fat_cobra",
       "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1742990897810,
+      "tag": "0044_hot_marten_broadcloak",
+      "breakpoints": true
     }
   ]
 }

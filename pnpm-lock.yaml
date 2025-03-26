@@ -47,6 +47,9 @@ importers:
       '@liveblocks/client':
         specifier: ^2.22.1
         version: 2.22.1
+      '@liveblocks/node':
+        specifier: ^2.22.1
+        version: 2.22.1
       '@liveblocks/react':
         specifier: ^2.22.1
         version: 2.22.1(react@19.0.0)
@@ -1717,6 +1720,9 @@ packages:
 
   '@liveblocks/core@2.22.1':
     resolution: {integrity: sha512-WESI78vsXKf6asVZjJNwqlovALYyK13bTzYIvJpha5L7jh6WOfU5ayQH3YF+2du7SktHmxMHByLxRDUWb2lgdw==}
+
+  '@liveblocks/node@2.22.1':
+    resolution: {integrity: sha512-OotQvCqRNx17VkaWyWB7hqSsy7SJJO8eYl+JJ1GAqeqoV191PVCUDLKDP3AlygP1jRWl9Zwl9p3nJ3u+NwnTnQ==}
 
   '@liveblocks/react-blocknote@2.22.1':
     resolution: {integrity: sha512-35SUMCCNMSShAatCYOup0l/2cUCCAajo5zwZH42QX31BqAgkMP8+Rq3UzAx9kUqui5A3wsrbr0bcOXyzf+XyIA==}
@@ -10230,6 +10236,15 @@ snapshots:
       '@liveblocks/core': 2.22.1
 
   '@liveblocks/core@2.22.1': {}
+
+  '@liveblocks/node@2.22.1':
+    dependencies:
+      '@liveblocks/core': 2.22.1
+      '@stablelib/base64': 1.0.1
+      fast-sha256: 1.3.0
+      node-fetch: 2.7.0
+    transitivePeerDependencies:
+      - encoding
 
   '@liveblocks/react-blocknote@2.22.1(neydb2eovec7qpsn5egv3gk3qa)':
     dependencies:

@@ -12,11 +12,11 @@ import { Separator } from "@workspace/ui/components/separator";
 import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
 import dynamic from "next/dynamic";
 import { usePosts } from "@/hooks/use-posts";
-import Loading from "@/app/(main)/documents/[[...slug]]/loading";
 import { Fragment, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
+import Loading from "./loading";
 
 export const SidebarExtension = ({
   documentList,

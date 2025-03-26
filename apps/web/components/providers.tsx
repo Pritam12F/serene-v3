@@ -7,6 +7,8 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { HeroUIProvider } from "@heroui/react";
 import { SessionProvider } from "next-auth/react";
+import { ClientSideSuspense, LiveblocksProvider } from "@liveblocks/react";
+import Loading from "./loading";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -28,7 +30,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
              */
             routerConfig={extractRouterConfig(ourFileRouter)}
           />
-          {children}
+          <LiveblocksProvider authEndpoint="/api/liveblocks-auth">
+            <ClientSideSuspense fallback={<Loading />}>
+              {children}
+            </ClientSideSuspense>
+          </LiveblocksProvider>
         </NextThemesProvider>
       </HeroUIProvider>
     </SessionProvider>

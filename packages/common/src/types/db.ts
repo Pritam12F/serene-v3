@@ -8,10 +8,6 @@ import {
   users,
   videos,
   workspaces,
-  workspaceImages,
-  workspaceAudios,
-  workspaceVideos,
-  workspaceOtherFiles,
   workspaceCoverImages,
   secondaryWorkspacesUsers,
 } from "@workspace/db/schema";
@@ -51,10 +47,6 @@ export type SelectWorkspaceType =
   | (typeof workspaces.$inferSelect & {
       owner?: SelectUserType;
       members?: SelectManySecondaryWorkspaceUserType;
-      images?: SelectManyWorkspaceImageType;
-      audios?: SelectManyWorkspaceAudioType;
-      videos?: SelectManyWorkspaceVideoType;
-      otherFiles?: SelectManyWorkspaceOtherFileType;
       coverImage?: SelectWorkspaceCoverImageType | null;
     })
   | undefined;
@@ -139,47 +131,6 @@ export type SelectManyCoverImageType = SelectCoverImageType[];
 export type InsertCoverImageType = typeof coverImages.$inferInsert;
 export type InsertManyCoverImageType = InsertCoverImageType[];
 
-// Workspace Image Types
-export type SelectWorkspaceImageType =
-  | (typeof workspaceImages.$inferSelect & {
-      workspace?: SelectWorkspaceType;
-    })
-  | undefined;
-export type SelectManyWorkspaceImageType = SelectWorkspaceImageType[];
-export type InsertWorkspaceImageType = typeof workspaceImages.$inferInsert;
-export type InsertManyWorkspaceImageType = InsertWorkspaceImageType[];
-
-// Workspace Audio Types
-export type SelectWorkspaceAudioType =
-  | (typeof workspaceAudios.$inferSelect & {
-      workspace?: SelectWorkspaceType;
-    })
-  | undefined;
-export type SelectManyWorkspaceAudioType = SelectWorkspaceAudioType[];
-export type InsertWorkspaceAudioType = typeof workspaceAudios.$inferInsert;
-export type InsertManyWorkspaceAudioType = InsertWorkspaceAudioType[];
-
-// Workspace Video Types
-export type SelectWorkspaceVideoType =
-  | (typeof workspaceVideos.$inferSelect & {
-      workspace?: SelectWorkspaceType;
-    })
-  | undefined;
-export type SelectManyWorkspaceVideoType = SelectWorkspaceVideoType[];
-export type InsertWorkspaceVideoType = typeof workspaceVideos.$inferInsert;
-export type InsertManyWorkspaceVideoType = InsertWorkspaceVideoType[];
-
-// Workspace Other Files Types
-export type SelectWorkspaceOtherFileType =
-  | (typeof workspaceOtherFiles.$inferSelect & {
-      workspace?: SelectWorkspaceType;
-    })
-  | undefined;
-export type SelectManyWorkspaceOtherFileType = SelectWorkspaceOtherFileType[];
-export type InsertWorkspaceOtherFileType =
-  typeof workspaceOtherFiles.$inferInsert;
-export type InsertManyWorkspaceOtherFileType = InsertWorkspaceOtherFileType[];
-
 // Workspace Cover Image Types
 export type SelectWorkspaceCoverImageType =
   | (typeof workspaceCoverImages.$inferSelect & {
@@ -222,20 +173,6 @@ export const InsertOtherFileSchema = createInsertSchema(otherFiles);
 
 export const SelectCoverImageSchema = createSelectSchema(coverImages);
 export const InsertCoverImageSchema = createInsertSchema(coverImages);
-
-export const SelectWorkspaceImageSchema = createSelectSchema(workspaceImages);
-export const InsertWorkspaceImageSchema = createInsertSchema(workspaceImages);
-
-export const SelectWorkspaceAudioSchema = createSelectSchema(workspaceAudios);
-export const InsertWorkspaceAudioSchema = createInsertSchema(workspaceAudios);
-
-export const SelectWorkspaceVideoSchema = createSelectSchema(workspaceVideos);
-export const InsertWorkspaceVideoSchema = createInsertSchema(workspaceVideos);
-
-export const SelectWorkspaceOtherFileSchema =
-  createSelectSchema(workspaceOtherFiles);
-export const InsertWorkspaceOtherFileSchema =
-  createInsertSchema(workspaceOtherFiles);
 
 export const SelectWorkspaceCoverImageSchema =
   createSelectSchema(workspaceCoverImages);
