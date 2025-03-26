@@ -16,7 +16,7 @@ const lightBlueTheme = {
     },
     hovered: {
       text: "black",
-      background: "#ebeeff",
+      background: "lightgray",
     },
     selected: {
       text: "white",
@@ -24,7 +24,7 @@ const lightBlueTheme = {
     },
     disabled: {
       text: "black",
-      background: "#ebeeff",
+      background: "lightgray",
     },
     shadow: "#0d1c2f",
     border: "#1c3a5f",
@@ -45,15 +45,15 @@ const darkBlueTheme = {
     },
     menu: {
       text: "#ffffff",
-      background: "#454653",
+      background: "black",
     },
     tooltip: {
       text: "#ffffff",
-      background: "#00c6c1",
+      background: "black",
     },
     hovered: {
       text: "#ffffff",
-      background: "#757684",
+      background: "#323232",
     },
     sideMenu: "#ffffff",
     highlights: darkDefaultTheme.colors!.highlights,
