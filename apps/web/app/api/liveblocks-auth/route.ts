@@ -1,34 +1,46 @@
-// import { Liveblocks } from "@liveblocks/node";
-// import { getServerSession } from "next-auth";
-// import { NextResponse } from "next/server";
+import { liveblocks } from "@/lib/liveblocks";
+import { getUserColor } from "@/lib/random-color";
 
-// const liveblocks = new Liveblocks({
-//   secret: process.env.NEXT_PUBLIC_LIVEBLOCK_SECRET ?? "",
-// });
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 
-// export async function POST() {
-//   const sessionData = await getServerSession();
+export async function POST() {
+  const sessionData = await getServerSession();
 
-//   if (!sessionData?.user) {
-//     return NextResponse.json(
-//       {
-//         message: "Not authorized",
-//       },
-//       { status: 401 }
-//     );
-//   }
+  if (!sessionData?.user) {
+    NextResponse.json(
+      {
+        message: "Not authorized",
+      },
+      { status: 401 }
+    );
 
-//   const user = sessionData.user;
+    redirect("/sign-in");
+  }
 
-//   // Start an auth session inside your endpoint
-//   const session = liveblocks.prepareSession(user.id);
+  const { id, name, email, image } = sessionData.user;
 
-//   // Use a naming pattern to allow access to rooms with wildcards
-//   // Giving the user read access on their org, and write access on their group
-//   session.allow(`${user.organization}:*`, session.READ_ACCESS);
-//   session.allow(`${user.organization}:${user.group}:*`, session.FULL_ACCESS);
+  const user = {
+    id,
+    info: {
+      id,
+      name: name ?? "Anonymous",
+      email,
+      image: image ?? "",
+      color: getUserColor(id)!,
+    },
+  };
 
-//   // Authorize the user and return the result
-//   const { status, body } = await session.authorize();
-//   return new Response(body, { status });
-// }
+  const { body, status } = await liveblocks.identifyUser(
+    {
+      userId: user.info.email,
+      groupIds: [],
+    },
+    {
+      userInfo: user.info,
+    }
+  );
+
+  return new Response(body, { status });
+}

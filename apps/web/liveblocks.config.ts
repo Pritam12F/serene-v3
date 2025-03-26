@@ -19,9 +19,10 @@ declare global {
       id: string;
       info: {
         id: string;
-        name?: string;
+        name: string;
         email: string;
-        image?: string;
+        image: string;
+        color: string;
       };
     };
 
