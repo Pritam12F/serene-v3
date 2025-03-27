@@ -7,12 +7,12 @@ import {
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
 import { useWorkspace } from "@/hooks/use-workspaces";
 import { usePathname } from "next/navigation";
 import { CollaborativeRoom } from "./room";
 import Loading from "./loading";
+import { client } from "@/lib/liveblocks";
 
 export const SidebarExtensionWorkspaces = () => {
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
@@ -22,6 +22,8 @@ export const SidebarExtensionWorkspaces = () => {
   const workspace =
     mainWorkspaces.find((x) => x?.id === path.split("/")[2]) ??
     secondaryWorkspaces.find((x) => x?.id === path.split("/")[2]);
+  const room = client.getRoom(workspace?.id!);
+  const userAccess = room?.getSelf();
 
   const workspaceName = workspace?.name;
   const editedAt = workspace?.updatedAt?.toDateString();
@@ -46,12 +48,24 @@ export const SidebarExtensionWorkspaces = () => {
           <div className="mx-8 text-sm">Last edited on {editedAt}</div>
         )}
       </header>
-      {!workspace && (
+      {room && !userAccess && (
         <div className="h-screen w-full flex flex-col items-center">
-          <div className="text-4xl my-48">No workspace selected...</div>
-          <Link href={"/documents/newPost"}>
+          <div className="text-4xl my-48">
+            You have not joined this workspace...
+          </div>
+          <div className="flex space-x-6">
+            <Button>Join workspace</Button>
             <Button>Create new workspace</Button>
-          </Link>
+          </div>
+        </div>
+      )}
+      {!workspace && !room && (
+        <div className="h-screen w-full flex flex-col items-center">
+          <div className="text-4xl my-48">Workspace doesn't exist...</div>
+          <div className="flex space-x-6">
+            <Button>Join workspace</Button>
+            <Button>Create new workspace</Button>
+          </div>
         </div>
       )}
       {workspace && (
