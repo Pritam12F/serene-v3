@@ -58,6 +58,7 @@ export const SidebarExtensionWorkspaces = () => {
         <CollaborativeRoom
           isReady={isEditorReady}
           onReadyAction={setIsEditorReady}
+          roomId={workspace.id}
         />
       )}
       {!isEditorReady && <Loading />}

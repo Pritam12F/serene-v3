@@ -152,6 +152,11 @@ export const joinWorkspaceById = async (
       [session.user.email]: ["room:write"],
     });
 
+    await db.insert(secondaryWorkspacesUsers).values({
+      userId: session.user.id,
+      workspaceId: fetchedWorkspace.id,
+    });
+
     return {
       success: true,
       message: "Joined room",

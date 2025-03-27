@@ -12,8 +12,10 @@ import { toast } from "sonner";
 
 export function JoinWorkspace({
   setHovering,
+  mutator,
 }: {
   setHovering: Dispatch<SetStateAction<boolean>>;
+  mutator: () => {};
 }) {
   const [inviteID, setInviteID] = useState("");
   const router = useRouter();
@@ -29,6 +31,7 @@ export function JoinWorkspace({
       toast.success("Joined workspace!", {
         style: { backgroundColor: "#38b000" },
       });
+      mutator();
       router.push(`/workspaces/${data}`);
     } else {
       toast.error(message, { style: { backgroundColor: "reds" } });

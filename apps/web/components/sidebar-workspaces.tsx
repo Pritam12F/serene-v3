@@ -20,7 +20,7 @@ import Link from "next/link";
 export function SidebarWorkspaces() {
   const session = useSession();
   const [isHovering, setIsHovering] = useState(false);
-  const { mainWorkspaces, secondaryWorkspaces } = useWorkspace();
+  const { mainWorkspaces, secondaryWorkspaces, mutator } = useWorkspace();
   const [IsNewDialogOpen, setIsNewDailogOpen] = useState(false);
 
   return (
@@ -40,7 +40,7 @@ export function SidebarWorkspaces() {
               className="opacity-70 hover:opacity-100 transition-all duration-250 w-4 h-4"
               onClick={() => setIsNewDailogOpen(true)}
             />
-            <JoinWorkspace setHovering={setIsHovering} />
+            <JoinWorkspace setHovering={setIsHovering} mutator={mutator} />
           </div>
         </SidebarMenuAction>
       </SidebarGroupLabel>
@@ -60,7 +60,11 @@ export function SidebarWorkspaces() {
           })}
         </SidebarMenu>
       </SidebarGroupContent>
-      <NewWorkspace isOpen={IsNewDialogOpen} setIsOpen={setIsNewDailogOpen} />
+      <NewWorkspace
+        isOpen={IsNewDialogOpen}
+        setIsOpen={setIsNewDailogOpen}
+        mutator={mutator}
+      />
     </SidebarGroup>
   );
 }

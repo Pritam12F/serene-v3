@@ -18,9 +18,11 @@ import { useRouter } from "next/navigation";
 export const NewWorkspace = ({
   isOpen,
   setIsOpen,
+  mutator,
 }: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  mutator: () => {};
 }) => {
   const [isPostCreated, setIsPostCreated] = useState(false);
   const [name, setName] = useState("");
@@ -39,6 +41,7 @@ export const NewWorkspace = ({
       });
       setInviteId(data?.inviteId!);
       setIsPostCreated(true);
+      mutator();
       router.push(`/workspaces/${data?.id}`);
     } else {
       toast.error("Couldn't create workspace", {
