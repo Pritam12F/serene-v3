@@ -1,7 +1,7 @@
 import { UploadButton } from "@/lib/uploadthing";
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { ClientUploadedFileData } from "uploadthing/types";
 import {
@@ -9,19 +9,20 @@ import {
   fetchSingleWorkspace,
 } from "@/server/workspace";
 import { WorkspaceEmojiPicker } from "./workspace-emoji-picker";
+import { useWebsocket } from "@/hooks/use-websocket";
 
 export const WorkspaceCover = ({
   workspaceId,
   isEditorReady,
-  coverImage,
 }: {
   workspaceId: string;
   isEditorReady: boolean;
   coverImage?: string;
 }) => {
-  const [coverLink, setCoverLink] = useState<string | null>(coverImage ?? "");
+  const [coverLink, setCoverLink] = useState<string | null>("");
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<string | null>();
+  const { ws } = useWebsocket(workspaceId);
 
   const fetchCover = useCallback(async () => {
     const { success, data } = await fetchSingleWorkspace(workspaceId?.trim());

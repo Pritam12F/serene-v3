@@ -190,6 +190,14 @@ export const fetchSingleWorkspace = async (
       where: eq(users.id, session.user.id),
       columns: {
         hashedPassword: false,
+        id: false,
+        name: false,
+        email: false,
+        profilePic: false,
+        phone: false,
+        accountType: false,
+        createdAt: false,
+        updatedAt: false,
       },
       with: {
         mainWorkspaces: {

@@ -74,7 +74,7 @@ const Editor = ({
 
   useEffect(() => {
     onReady?.(true);
-  }, [editor.document]);
+  }, []);
 
   useEffect(() => {
     debouncedCallback();

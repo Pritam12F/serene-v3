@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+enum MessageType {
+  UPDATE_COVER = "UPDATE_COVER",
+  UPDATE_NAME = "UPDATE_NAME",
+  UPDATE_EMOJI = "UPDATE_EMOJI",
+  JOIN_WORKSPACE = "JOIN",
+  LEAVE_WORKSPACE = "LEAVE",
+}
+
 export const useWebsocket = (
   workspaceId: string,
   wsUrl = "ws://localhost:8080"
@@ -23,7 +31,7 @@ export const useWebsocket = (
       setIsReady(true);
       websocket.send(
         JSON.stringify({
-          type: "join",
+          type: MessageType.JOIN_WORKSPACE,
           payload: {
             workspaceId,
           },
@@ -34,18 +42,24 @@ export const useWebsocket = (
       setIsReady(false);
       websocket.send(
         JSON.stringify({
-          type: "leave",
+          type: MessageType.LEAVE_WORKSPACE,
           payload: {
             workspaceId,
           },
         })
       );
     };
+
     websocket.onmessage = (event) => {
-      if (event.data.payload === "uploadContent") {
-        setContent(event.data);
+      const data = JSON.parse(event.data);
+
+      if (data.type === MessageType.UPDATE_COVER) {
+      } else if (data.type === MessageType.UPDATE_EMOJI) {
+      } else if (data.type === MessageType.UPDATE_NAME) {
       }
     };
+
+    return () => websocket?.close();
   }, [workspaceId]);
 
   return { ws, content, isReady };

@@ -17,6 +17,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
 import Loading from "./loading";
+import { useJWT } from "@/hooks/useJWT";
 
 export const SidebarExtension = ({
   documentList,
@@ -26,6 +27,7 @@ export const SidebarExtension = ({
   const Editor = dynamic(() => import("./editor"), {
     ssr: false,
   });
+  useJWT();
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
   const postType =
     !documentList || documentList[0] === "newPost" ? "new" : "existing";

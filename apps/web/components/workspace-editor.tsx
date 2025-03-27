@@ -29,7 +29,6 @@ const Editor = ({
   onReady,
   styles,
   coverImage,
-  socket,
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
 
@@ -37,7 +36,7 @@ const Editor = ({
 
   useEffect(() => {
     onReady?.(true);
-  }, [editor.document]);
+  }, []);
 
   return (
     <div

@@ -19,7 +19,12 @@ export function CollaborativeRoom({
   return (
     <RoomProvider id={roomId}>
       <ClientSideSuspense fallback={<div>Loading…</div>}>
-        <Editor editable={true} isReady={isReady} onReady={onReadyAction} />
+        <Editor
+          editable={true}
+          isReady={isReady}
+          onReady={onReadyAction}
+          workspaceId={roomId}
+        />
       </ClientSideSuspense>
     </RoomProvider>
   );
