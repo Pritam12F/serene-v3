@@ -1,5 +1,4 @@
 import { liveblocks } from "@/lib/liveblocks";
-import { getUserColor } from "@/lib/random-color";
 
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
