@@ -16,6 +16,10 @@ import {
 } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import { authOptions } from "@/lib/auth";
+import { liveblocks } from "@/lib/liveblocks";
+import { v4 as uuid } from "uuid";
+import { RoomAccesses, RoomData } from "@liveblocks/node";
+import { revalidatePath } from "next/cache";
 
 export const createWorkspace = async (
   name: string
@@ -26,14 +30,31 @@ export const createWorkspace = async (
     throw new Error("User is not authorized");
   }
 
+  const { id, email } = session.user;
   try {
+    const roomId = uuid();
+    const metadata = {
+      creatorId: session.user.id,
+      email,
+      title: name,
+    };
+    const usersAccesses: RoomAccesses = {
+      [email]: ["room:write"],
+    };
+    await liveblocks.createRoom(roomId, {
+      metadata,
+      defaultAccesses: [],
+      usersAccesses,
+    });
+
+    revalidatePath("/");
     const randomNumber = String(Math.floor(Math.random() * 100000) + 1);
-    const userId = session.user.id;
     const res = await db
       .insert(workspaces)
       .values({
+        id: roomId,
         name,
-        ownerId: userId,
+        ownerId: id,
         inviteId: randomNumber,
       })
       .returning({
@@ -44,11 +65,7 @@ export const createWorkspace = async (
       })
       .onConflictDoNothing();
 
-    return {
-      success: true,
-      message: "Workspace added successfully",
-      data: res[0]!,
-    };
+    return { success: true, message: "Room created", data: res?.[0] };
   } catch (e) {
     const errorMessage =
       e instanceof Error
@@ -115,33 +132,30 @@ export const joinWorkspaceById = async (
   try {
     const fetchedWorkspace = await db.query.workspaces.findFirst({
       where: eq(workspaces.inviteId, inviteId),
+      columns: {
+        name: false,
+        emoji: false,
+        createdAt: false,
+        updatedAt: false,
+        coverImageId: false,
+        inviteId: false,
+        ownerId: false,
+      },
     });
 
     if (!fetchedWorkspace) {
-      return {
-        success: false,
-        message: "This workspace doesn't exits",
-        data: null,
-      };
+      return { success: false, message: "No such workspace", data: null };
     }
-    const userId = session.user.id;
-    if (fetchedWorkspace.ownerId === userId) {
-      return {
-        success: false,
-        message: "You are the owner of this workspace, can't join as member",
-        data: null,
-      };
-    }
-
-    const secondaryWorkspaceId = await db
-      .insert(secondaryWorkspacesUsers)
-      .values({ userId: userId, workspaceId: fetchedWorkspace.id })
-      .returning({ id: secondaryWorkspacesUsers.workspaceId });
+    const currentUsers = await liveblocks.getRoom(fetchedWorkspace?.id);
+    const updatedUsers = liveblocks.updateRoom(fetchedWorkspace.id, {
+      ...currentUsers,
+      [session.user.email]: ["room:write"],
+    });
 
     return {
       success: true,
-      message: "Added user as member to workspace",
-      data: secondaryWorkspaceId[0]?.id,
+      message: "Joined room",
+      data: fetchedWorkspace.id,
     };
   } catch (e) {
     const errorMessage =

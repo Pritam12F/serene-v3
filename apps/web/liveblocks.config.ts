@@ -22,7 +22,6 @@ declare global {
         name: string;
         email: string;
         image: string;
-        color: string;
       };
     };
 

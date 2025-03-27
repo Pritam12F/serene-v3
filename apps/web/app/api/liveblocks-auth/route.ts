@@ -28,7 +28,6 @@ export async function POST() {
       name: name ?? "Anonymous",
       email,
       image: image ?? "",
-      color: getUserColor(id)!,
     },
   };
 
