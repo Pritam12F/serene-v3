@@ -27,6 +27,9 @@ export function JoinWorkspace({
 
     const { success, message, data } = await joinWorkspaceById(inviteID);
 
+    console.log(success);
+    console.log(message);
+
     if (success) {
       toast.success("Joined workspace!", {
         style: { backgroundColor: "#38b000" },
