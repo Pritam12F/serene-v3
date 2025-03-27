@@ -18,7 +18,7 @@ import { eq } from "drizzle-orm";
 import { authOptions } from "@/lib/auth";
 import { liveblocks } from "@/lib/liveblocks";
 import { v4 as uuid } from "uuid";
-import { RoomAccesses, RoomData } from "@liveblocks/node";
+import { RoomAccesses } from "@liveblocks/node";
 import { revalidatePath } from "next/cache";
 
 export const createWorkspace = async (
@@ -148,8 +148,12 @@ export const joinWorkspaceById = async (
     }
     const currentUsers = await liveblocks.getRoom(fetchedWorkspace?.id);
     const updatedUsers = liveblocks.updateRoom(fetchedWorkspace.id, {
-      ...currentUsers,
-      [session.user.email]: ["room:write"],
+      defaultAccesses: [],
+      groupsAccesses: {},
+      usersAccesses: {
+        ...currentUsers.usersAccesses,
+        [session.user.email]: ["room:write"],
+      },
     });
 
     await db.insert(secondaryWorkspacesUsers).values({
