@@ -53,7 +53,15 @@ export const NewWorkspace = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(e) => {
+        if (!e) {
+          setIsOpen(false);
+        }
+        setIsPostCreated(false);
+      }}
+    >
       {isPostCreated ? (
         <DialogContent className="flex flex-col space-y-2 z-[9999] w-10/12 rounded-md md:w-2/4 xl:w-2/6">
           Your invite id is{" "}
