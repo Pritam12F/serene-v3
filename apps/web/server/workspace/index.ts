@@ -386,3 +386,63 @@ export const addOrUpdateWorkspaceEmoji = async (
     return { success: false, message: errorMessage, data: null };
   }
 };
+
+export const addOrUpdateWorkspaceName = async (
+  newName: string,
+  workspaceId: string
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to change cover image");
+  }
+
+  try {
+    const userFetched = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      columns: {
+        hashedPassword: false,
+      },
+      with: {
+        mainWorkspaces: true,
+        secondaryWorkspaces: {
+          with: {
+            workspace: true,
+          },
+        },
+      },
+    });
+
+    const isInMainWorkspaces = userFetched?.mainWorkspaces.find(
+      (x) => x.id === workspaceId
+    );
+
+    const isInSecondaryWorkspaces = userFetched?.secondaryWorkspaces.find(
+      (x) => x.workspaceId === workspaceId
+    );
+
+    if (!isInMainWorkspaces && !isInSecondaryWorkspaces) {
+      return {
+        success: false,
+        message: "User has not joined this workspace",
+        data: null,
+      };
+    }
+
+    await db
+      .update(workspaces)
+      .set({
+        name: newName,
+      })
+      .where(eq(workspaces.id, workspaceId));
+
+    return { success: true, message: "Name updated successfully", data: null };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to add cover image";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};

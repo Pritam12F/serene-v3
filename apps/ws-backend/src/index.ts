@@ -3,7 +3,6 @@ import WebSocket, { WebSocketServer } from "ws";
 import * as jose from "jose";
 import { createSecretKey } from "crypto";
 import dotenv from "dotenv";
-import { updateContent } from "./db.js";
 import url from "url";
 
 dotenv.config();
@@ -51,24 +50,36 @@ wss.on("connection", async function connection(ws, req) {
   ws.on("message", function message(data) {
     const { type, payload } = JSON.parse(data.toString());
 
-    if (type === "join") {
+    if (type === "JOIN") {
       const workspace = workspaces.find((x) => x.id === payload.workspaceId);
       if (!workspace) {
         workspaces.push({ id: payload.workspaceId, sockets: [] });
 
         workspaces.find((x) => x.id === payload.workspaceId)?.sockets?.push(ws);
-        ws.send(`Joined workspace ${payload.workspaceId}`);
+        ws.send(
+          JSON.stringify({
+            type: "JOINED",
+          })
+        );
         return;
       }
 
       workspace?.sockets?.push(ws);
 
-      ws.send(`Joined workspace ${payload.workspaceId}`);
-    } else if (type === "leave") {
+      ws.send(
+        JSON.stringify({
+          type: "JOINED",
+        })
+      );
+    } else if (type === "LEAVE") {
       const workspace = workspaces.find((x) => x.id === payload.workspaceId);
 
       if (!workspace) {
-        ws.send(`Workspace with id ${payload.workspaceId} doesn't exist`);
+        ws.send(
+          JSON.stringify({
+            type: "LEFT",
+          })
+        );
 
         return;
       }
@@ -77,32 +88,40 @@ wss.on("connection", async function connection(ws, req) {
 
       workspace.sockets = newSockets;
 
-      ws.send(`Left workspace with id ${payload.workspaceId}`);
-    } else if (type === "updateContent") {
-      const content = payload.content;
-      updateContent(payload.workspaceId, content);
+      ws.send(
+        JSON.stringify({
+          type: "LEFT",
+        })
+      );
+    } else if (
+      type === "UPDATE_COVER" ||
+      type === "UPDATE_NAME" ||
+      type === "UPDATE_EMOJI"
+    ) {
       const workspace = workspaces.find((x) => x.id === payload.workspaceId);
 
       if (!workspace) {
-        ws.send(`Workspace with id ${payload.workspaceId} doesn't exist`);
-
-        return;
+        ws.send(
+          JSON.stringify({
+            type: "WORKSPACE_DOESN'T_EXIST",
+          })
+        );
       }
 
-      workspace.sockets?.forEach((socket) => {
-        if (socket !== ws && socket.readyState === WebSocket.OPEN) {
-          socket.send(
-            JSON.stringify({
-              type: "updateContent",
-              payload: {
-                content,
-              },
-            })
-          );
-        }
+      workspace?.sockets?.map((socket) => {
+        socket.send(
+          JSON.stringify({
+            type,
+            payload,
+          })
+        );
       });
     }
   });
 
-  ws.send("Connected to server!!");
+  ws.send(
+    JSON.stringify({
+      type: "CONNECTED",
+    })
+  );
 });

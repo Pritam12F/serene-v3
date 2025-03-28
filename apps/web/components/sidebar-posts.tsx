@@ -60,12 +60,8 @@ export function SidebarPosts() {
       </SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu ref={workspaceRef}>
-          {postTree?.map((workspace, idx) => (
-            <Post
-              data={workspace}
-              parentUrl={`/documents/${workspace!.id}`}
-              key={idx}
-            />
+          {postTree?.map((post, idx) => (
+            <Post data={post} parentUrl={`/documents/${post!.id}`} key={idx} />
           ))}
         </SidebarMenu>
       </SidebarGroupContent>

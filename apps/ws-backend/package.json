@@ -3,9 +3,12 @@
   "version": "0.0.1",
   "type": "module",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "dev": "tsc -b && node dist/index.js"
+  },
   "dependencies": {
     "@workspace/db": "workspace:*",
+    "@workspace/common": "workspace:*",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.40.0",
     "express": "^4.21.2",

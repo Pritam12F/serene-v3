@@ -10,20 +10,16 @@ import {
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar";
 import { useWorkspace } from "@/hooks/use-workspaces";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { NewWorkspace } from "./create-workspace";
 import { JoinWorkspace } from "./join-workspace";
 import Link from "next/link";
-import useStore from "@workspace/store";
 
 export function SidebarWorkspaces() {
-  const session = useSession();
   const [isHovering, setIsHovering] = useState(false);
   const { mainWorkspaces, secondaryWorkspaces, mutator } = useWorkspace();
   const [IsNewDialogOpen, setIsNewDailogOpen] = useState(false);
-  const { getWorkspaceName, getWorkspaceEmoji } = useStore();
 
   return (
     <SidebarGroup>
@@ -53,8 +49,8 @@ export function SidebarWorkspaces() {
               <Link href={`/workspaces/${x?.id}`} key={x?.id}>
                 <SidebarMenuItem className="rounded-sm hover:bg-[#f4f4f5] dark:hover:bg-[#27272a]">
                   <SidebarMenuButton className="px-9">
-                    <span>{getWorkspaceEmoji(x?.id!) ?? "📓"}</span>
-                    <span>{getWorkspaceName(x?.id!)}</span>
+                    <span>{x?.emoji ?? "📓"}</span>
+                    <span>{x?.name}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </Link>

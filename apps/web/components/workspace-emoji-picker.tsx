@@ -5,17 +5,20 @@ import { Button } from "@workspace/ui/components/button";
 import { Smile } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
+import { MessageType } from "@workspace/common/types/ws";
 
 export function WorkspaceEmojiPicker({
   isPickerOpen,
   setIsPickerOpen,
   workspaceId,
   setChangeEmoji,
+  ws,
 }: {
   isPickerOpen: boolean;
   setIsPickerOpen: Dispatch<SetStateAction<boolean>>;
   workspaceId: string;
   setChangeEmoji: Dispatch<SetStateAction<string | null | undefined>>;
+  ws?: WebSocket;
 }) {
   const [lastSelectedEmoji, setLastSelectedEmoji] = useState<string | null>();
 
@@ -38,6 +41,16 @@ export function WorkspaceEmojiPicker({
         toast.info(`Emoji updated to ${lastSelectedEmoji}`, {
           style: { backgroundColor: "yellow", color: "black" },
         });
+
+        ws?.send(
+          JSON.stringify({
+            type: "UPDATE_EMOJI",
+            payload: {
+              emoji: lastSelectedEmoji,
+              workspaceId,
+            },
+          })
+        );
 
         setChangeEmoji(lastSelectedEmoji);
       } else {

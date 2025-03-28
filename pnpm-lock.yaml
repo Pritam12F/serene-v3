@@ -204,6 +204,9 @@ importers:
 
   apps/ws-backend:
     dependencies:
+      '@workspace/common':
+        specifier: workspace:*
+        version: link:../../packages/common
       '@workspace/db':
         specifier: workspace:*
         version: link:../../packages/db
