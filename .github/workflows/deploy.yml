@@ -17,7 +17,7 @@ jobs:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.8.0
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: "${{ secrets.SSH_PRIVATE_KEY }}"
 
       - name: Add host key
         run: ssh-keyscan -H 54.255.228.223 >> ~/.ssh/known_hosts
@@ -27,7 +27,7 @@ jobs:
         with:
           host: 54.255.228.223
           username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: "${{ secrets.SSH_PRIVATE_KEY }}"
           script: |
             cd ~
             rm -rf serene-v3/
