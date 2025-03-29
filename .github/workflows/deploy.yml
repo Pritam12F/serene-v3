@@ -60,3 +60,17 @@ jobs:
             else
               pm2 start npm --name "serene" -- start
             fi
+          env:
+            GH_ID: ${{ secrets.GH_ID }}
+            GH_SECRET: ${{ secrets.GH_SECRET }}
+            GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+            LIVEBLOCK_SECRET: ${{ secrets.LIVEBLOCK_SECRET }}
+            NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+            NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
+            NEXT_PUBLIC_DATABASE_URL: ${{ secrets.NEXT_PUBLIC_DATABASE_URL }}
+            NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
+            NEXT_PUBLIC_LIVEBLOCK_KEY: ${{ secrets.NEXT_PUBLIC_LIVEBLOCK_KEY }}
+            SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
+            SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
