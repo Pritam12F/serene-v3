@@ -17,17 +17,18 @@ jobs:
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
-          chmod 700 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          ssh-keyscan 54.255.228.223 >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+          ssh-keyscan -H 54.255.228.223 >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: 54.255.228.223
           username: ubuntu
-          key: "${{ secrets.SSH_PRIVATE_KEY }}"
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: GH_ID,GH_SECRET,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,LIVEBLOCK_SECRET,NEXTAUTH_SECRET,NEXT_PUBLIC_BACKEND_URL,NEXT_PUBLIC_DATABASE_URL,NEXT_PUBLIC_ENVIRONMENT,NEXT_PUBLIC_LIVEBLOCK_KEY,SIGNING_SECRET,UPLOADTHING_TOKEN
           script: |
             # Source profile to ensure all environment variables and paths are properly set
             source ~/.bashrc
@@ -39,7 +40,7 @@ jobs:
 
             cd ~
             rm -rf serene-v3/
-            git clone https://github.com/Pritam12F/serene-v3
+            git clone https://github.com/Pritam12F/serene-v3.git
             cd serene-v3/
 
             # Install global tools if needed
@@ -60,7 +61,7 @@ jobs:
             else
               pm2 start npm --name "serene" -- start
             fi
-          env:
+          environment:
             GH_ID: ${{ secrets.GH_ID }}
             GH_SECRET: ${{ secrets.GH_SECRET }}
             GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
@@ -72,5 +73,4 @@ jobs:
             NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
             NEXT_PUBLIC_LIVEBLOCK_KEY: ${{ secrets.NEXT_PUBLIC_LIVEBLOCK_KEY }}
             SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
-            SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
             UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
