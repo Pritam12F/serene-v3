@@ -14,13 +14,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: "${{ secrets.SSH_PRIVATE_KEY }}"
-
-      - name: Add host key
-        run: ssh-keyscan -H 54.255.228.223 >> ~/.ssh/known_hosts
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 700 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.0
