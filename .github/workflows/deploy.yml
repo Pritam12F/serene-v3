@@ -32,6 +32,8 @@ jobs:
             rm -rf serene-v3/
             git clone https://github.com/Pritam12F/serene-v3
             cd serene-v3/
+            npm i -g pnpm
+            npm i -g pm2
             pnpm install
             pnpm run build
 
