@@ -14,10 +14,12 @@ export const addOrUpdateCoverImage = async (
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
+    console.log("No user session found.");
     throw new Error("You must be signed in to change cover image");
   }
 
   try {
+    console.log("Fetching user:", session.user.id);
     const fetchedUser = await db.query.users.findFirst({
       where: eq(users.id, session.user.id),
       with: {
@@ -25,9 +27,12 @@ export const addOrUpdateCoverImage = async (
       },
     });
 
+    console.log("Fetched user:", fetchedUser);
+
     const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
 
     if (!hasAccessToPost) {
+      console.log("User has no access to this post.");
       return {
         success: false,
         message: "User doesn't have access to this post",
@@ -35,6 +40,7 @@ export const addOrUpdateCoverImage = async (
       };
     }
 
+    console.log("User has access. Inserting/updating cover image.");
     const insertedCoverImage = await db
       .insert(coverImages)
       .values({ url: coverUrl, postId })
@@ -44,19 +50,22 @@ export const addOrUpdateCoverImage = async (
       })
       .returning({ id: coverImages.id });
 
+    console.log("Inserted cover image:", insertedCoverImage);
+
     await db
       .update(posts)
       .set({
         coverImageId: insertedCoverImage[0]?.id,
       })
       .where(eq(posts.id, postId));
-
+    console.log("Updated post with new cover image.");
     return {
       success: true,
       message: "Successfully added cover image",
       data: null,
     };
   } catch (err) {
+    console.error("Error in addOrUpdateCoverImage:", err);
     const errorMessage =
       err instanceof Error
         ? err.message
