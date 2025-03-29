@@ -20,6 +20,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 700 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-keyscan 54.255.228.223 >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.0
@@ -28,12 +29,28 @@ jobs:
           username: ubuntu
           key: "${{ secrets.SSH_PRIVATE_KEY }}"
           script: |
+            # Source profile to ensure all environment variables and paths are properly set
+            source ~/.bashrc
+            source ~/.profile
+
+            # Use absolute paths to binaries or export correct PATH
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
             cd ~
             rm -rf serene-v3/
             git clone https://github.com/Pritam12F/serene-v3
             cd serene-v3/
-            npm i -g pnpm
-            npm i -g pm2
+
+            # Install global tools if needed
+            if ! command -v pnpm &> /dev/null; then
+              npm i -g pnpm
+            fi
+
+            if ! command -v pm2 &> /dev/null; then
+              npm i -g pm2
+            fi
+
             pnpm install
             pnpm run build
 
