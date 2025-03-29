@@ -50,7 +50,9 @@ export const PostCover = ({
   );
 
   const handleOnUpload = async (file: ClientUploadedFileData<any>[]) => {
+    console.log(file[0]?.ufsUrl);
     const { success } = await addOrUpdateCoverImage(file[0]!.ufsUrl, postId);
+    console.log(success);
 
     if (success) {
       setCoverLink(file[0]?.ufsUrl!);
