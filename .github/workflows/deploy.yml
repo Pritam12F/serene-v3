@@ -10,17 +10,16 @@ jobs:
     name: Deploying everything to production
     runs-on: ubuntu-latest
     steps:
-      - name: SSH Into server
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key && ssh -i ~/ssh_key ubuntu@54.255.228.223
-
-      - name: Update codebase
-        run: rm -rf serene-v3/ && git clone https://github.com/Pritam12F/serene-v3 && cd serene-v3/
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build the project
-        run: pnpm run build
-
-      - name: Start the project
-        run: pnpm run start
+      - name: Deploy to EC2
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
+          chmod 700 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@54.255.228.223 '
+            cd ~
+            rm -rf serene-v3/
+            git clone https://github.com/Pritam12F/serene-v3
+            cd serene-v3/
+            pnpm install
+            pnpm run build
+            pm2 start "pnpm start" --name serene-app
+          '
