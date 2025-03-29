@@ -17,10 +17,11 @@ jobs:
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H github.com >> ~/.ssh/known_hosts
           ssh-keyscan -H 54.255.228.223 >> ~/.ssh/known_hosts
+          export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.0
@@ -28,49 +29,51 @@ jobs:
           host: 54.255.228.223
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: GH_ID,GH_SECRET,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,LIVEBLOCK_SECRET,NEXTAUTH_SECRET,NEXT_PUBLIC_BACKEND_URL,NEXT_PUBLIC_DATABASE_URL,NEXT_PUBLIC_ENVIRONMENT,NEXT_PUBLIC_LIVEBLOCK_KEY,SIGNING_SECRET,UPLOADTHING_TOKEN
-          env:
-            GH_ID: ${{ secrets.GH_ID }}
-            GH_SECRET: ${{ secrets.GH_SECRET }}
-            GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-            GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-            LIVEBLOCK_SECRET: ${{ secrets.LIVEBLOCK_SECRET }}
-            NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-            NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
-            NEXT_PUBLIC_DATABASE_URL: ${{ secrets.NEXT_PUBLIC_DATABASE_URL }}
-            NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
-            NEXT_PUBLIC_LIVEBLOCK_KEY: ${{ secrets.NEXT_PUBLIC_LIVEBLOCK_KEY }}
-            SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
-            UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
           script: |
-            # Source profile to ensure all environment variables and paths are properly set
+            # Ensure correct environment setup
             source ~/.bashrc
             source ~/.profile
 
-            # Use absolute paths to binaries or export correct PATH
+            # Load NVM if installed
             export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
+            # Export environment variables for the application
+            export GH_ID=${{ secrets.GH_ID }}
+            export GH_SECRET=${{ secrets.GH_SECRET }}
+            export GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            export GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            export LIVEBLOCK_SECRET=${{ secrets.LIVEBLOCK_SECRET }}
+            export NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+            export NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
+            export NEXT_PUBLIC_DATABASE_URL=${{ secrets.NEXT_PUBLIC_DATABASE_URL }}
+            export NEXT_PUBLIC_ENVIRONMENT=${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
+            export NEXT_PUBLIC_LIVEBLOCK_KEY=${{ secrets.NEXT_PUBLIC_LIVEBLOCK_KEY }}
+            export SIGNING_SECRET=${{ secrets.SIGNING_SECRET }}
+            export UPLOADTHING_TOKEN=${{ secrets.UPLOADTHING_TOKEN }}
+
+            # Navigate to home and pull the latest code
             cd ~
             rm -rf serene-v3/
             git clone https://github.com/Pritam12F/serene-v3.git
             cd serene-v3/
 
-            # Install global tools if needed
+            # Ensure pnpm and pm2 are installed
             if ! command -v pnpm &> /dev/null; then
-              npm i -g pnpm
+              npm install -g pnpm
             fi
 
             if ! command -v pm2 &> /dev/null; then
-              npm i -g pm2
+              npm install -g pm2
             fi
 
+            # Install dependencies and build the project
             pnpm install
             pnpm run build
 
-            # Check if PM2 process exists and restart or start new
+            # Check if PM2 process exists and restart or start a new one
             if pm2 list | grep -q "serene"; then
               pm2 restart serene
             else
-              pm2 start npm --name "serene" -- start
+              pm2 start "pnpm start" --name "serene"
             fi
