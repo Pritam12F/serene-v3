@@ -21,4 +21,22 @@ jobs:
             rm -rf serene-v3/
             git clone https://github.com/Pritam12F/serene-v3
             cd serene-v3/
-            ls -la
+            pnpm install
+            pnpm run build
+            cd apps/web/
+            pm2 stop serene-app
+            pm2 start "pnpm start" --name serene-app
+        env:
+          UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
+          NEXT_PUBLIC_DATABASE_URL: ${{ secrets.NEXT_PUBLIC_DATABASE_URL }}
+          SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GH_ID: ${{ secrets.GH_ID }}
+          GH_SECRET: ${{ secrets.GH_SECRET }}
+          NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
+          NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
+          NEXT_PUBLIC_LIVEBLOCK_KEY: ${{ secrets.NEXT_PUBLIC_LIVEBLOCK_KEY }}
+          NEXT_PUBLIC_LIVEBLOCK_SECRET: ${{ secrets.NEXT_PUBLIC_LIVEBLOCK_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
