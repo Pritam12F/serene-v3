@@ -12,6 +12,7 @@ import useStore from "@workspace/store";
 import { ClientUploadedFileData } from "uploadthing/types";
 import { EmojiPicker } from "./emoji-picker";
 import useDebounce from "@/hooks/use-debounce";
+import Loading from "./loading";
 
 export const PostCover = ({
   postId,
@@ -26,6 +27,7 @@ export const PostCover = ({
   const [coverLink, setCoverLink] = useState<string | null>();
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<string | null>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchCover = useCallback(async () => {
     const { success, data } = await fetchSinglePostById(postId);
@@ -50,17 +52,17 @@ export const PostCover = ({
   );
 
   const handleOnUpload = async (file: ClientUploadedFileData<any>[]) => {
-    console.log(file[0]?.ufsUrl);
     const { success } = await addOrUpdateCoverImage(file[0]!.ufsUrl, postId);
-    console.log(success);
 
     if (success) {
       setCoverLink(file[0]?.ufsUrl!);
     }
+
+    setIsLoading(false);
   };
 
-  if (!isEditorReady) {
-    return null;
+  if (!isEditorReady && isLoading) {
+    return <Loading />;
   }
 
   return (
@@ -81,6 +83,7 @@ export const PostCover = ({
               },
               allowedContent: " ",
             }}
+            onUploadBegin={() => setIsLoading(true)}
             onClientUploadComplete={handleOnUpload}
           />
           <Image

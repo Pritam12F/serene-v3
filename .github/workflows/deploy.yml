@@ -1,0 +1,24 @@
+name: Deploy To EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.HOST }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          username: root
+          script: |
+            cd ~
+            rm -rf serene-v3/
+            git clone https://github.com/Pritam12F/serene-v3
+            cd serene-v3/
+            ls -la
