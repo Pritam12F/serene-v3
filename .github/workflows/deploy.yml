@@ -20,9 +20,9 @@ jobs:
             cd ~
             rm -rf serene-v3/
             git clone https://github.com/Pritam12F/serene-v3
-            cd serene-v3/
+            cd serene-v3/apps/web/
 
-            cat <<EOF > .env.local
+            cat <<EOF > .env
             UPLOADTHING_TOKEN=${{ secrets.UPLOADTHING_TOKEN }}
             NEXT_PUBLIC_DATABASE_URL=${{ secrets.NEXT_PUBLIC_DATABASE_URL }}
             SIGNING_SECRET=${{ secrets.SIGNING_SECRET }}
@@ -37,6 +37,8 @@ jobs:
             NEXT_PUBLIC_LIVEBLOCK_SECRET=${{ secrets.NEXT_PUBLIC_LIVEBLOCK_SECRET }}
             NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
             EOF
+
+            cd ../../
 
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
