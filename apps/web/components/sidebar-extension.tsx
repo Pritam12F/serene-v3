@@ -87,18 +87,30 @@ export const SidebarExtension = ({
           </Breadcrumb>
         </div>
         {lastUpdated && (
-          <div className="mx-8 text-sm">Last edited on {lastUpdated}</div>
+          <div className="hidden md:block mx-8 text-sm">
+            Last edited on {lastUpdated}
+          </div>
         )}
       </header>
-      {!documentList && (
+      {documentList && postList?.length === 0 && (
         <div className="h-screen w-full flex flex-col items-center">
-          <div className="text-4xl my-48">No post selected...</div>
+          <div className="text-2xl md:text-4xl my-48">
+            No such post exists...
+          </div>
           <Link href={"/documents/newPost"}>
             <Button>Create new post</Button>
           </Link>
         </div>
       )}
-      {documentList && (
+      {!documentList && (
+        <div className="h-screen w-full flex flex-col items-center">
+          <div className="text-2xl md:text-4xl my-48">No post selected...</div>
+          <Link href={"/documents/newPost"}>
+            <Button>Create new post</Button>
+          </Link>
+        </div>
+      )}
+      {documentList && postList?.length !== 0 && (
         <Editor
           editable={true}
           postId={postList ? postList[postList.length - 1]?.id : null}

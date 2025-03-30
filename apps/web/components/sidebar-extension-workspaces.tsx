@@ -45,12 +45,14 @@ export const SidebarExtensionWorkspaces = () => {
           </Breadcrumb>
         </div>
         {editedAt && (
-          <div className="mx-8 text-sm">Last edited on {editedAt}</div>
+          <div className="hidden md:block mx-8 text-sm">
+            Last edited on {editedAt}
+          </div>
         )}
       </header>
       {room && !userAccess && (
         <div className="h-screen w-full flex flex-col items-center">
-          <div className="text-4xl my-48">
+          <div className="text-2xl md:text-4xl my-48">
             You have not joined this workspace...
           </div>
           <div className="flex space-x-6">
@@ -61,7 +63,9 @@ export const SidebarExtensionWorkspaces = () => {
       )}
       {!workspace && !room && (
         <div className="h-screen w-full flex flex-col items-center">
-          <div className="text-4xl my-48">Workspace doesn't exist...</div>
+          <div className="text-2xl md:text-4xl my-48">
+            Workspace doesn't exist...
+          </div>
           <div className="flex space-x-6">
             <Button>Join workspace</Button>
             <Button>Create new workspace</Button>
