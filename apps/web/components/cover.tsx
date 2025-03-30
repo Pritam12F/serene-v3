@@ -118,6 +118,7 @@ export const PostCover = ({
               },
               allowedContent: " ",
             }}
+            onUploadBegin={() => setIsLoading(true)}
             onClientUploadComplete={handleOnUpload}
           />
         </div>

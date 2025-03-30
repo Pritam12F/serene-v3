@@ -13,6 +13,7 @@ import { WorkspaceEmojiPicker } from "./workspace-emoji-picker";
 import { useWebsocket } from "@/hooks/use-websocket";
 import useDebounce from "@/hooks/use-debounce";
 import { MessageType } from "@workspace/common/types/ws";
+import Loading from "./loading";
 
 export const WorkspaceCover = ({
   workspaceId,
@@ -27,6 +28,7 @@ export const WorkspaceCover = ({
   const [emoji, setEmoji] = useState<string | null>();
   const [name, setName] = useState("");
   const { ws } = useWebsocket(workspaceId, { setCoverLink, setEmoji, setName });
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchCover = useCallback(async () => {
     const { success, data } = await fetchSingleWorkspace(workspaceId?.trim());
@@ -60,6 +62,8 @@ export const WorkspaceCover = ({
         })
       );
     }
+
+    setIsLoading(false);
   };
 
   const debouncedRenameWorkspace = useDebounce(
@@ -82,8 +86,8 @@ export const WorkspaceCover = ({
   useEffect(() => {
     debouncedRenameWorkspace(workspaceId, name);
   }, [name]);
-  if (!isEditorReady) {
-    return null;
+  if (!isEditorReady && isLoading) {
+    return <Loading />;
   }
 
   return (
@@ -104,6 +108,7 @@ export const WorkspaceCover = ({
               },
               allowedContent: " ",
             }}
+            onUploadBegin={() => setIsLoading(true)}
             onClientUploadComplete={handleOnUpload}
           />
           <Image
@@ -139,6 +144,7 @@ export const WorkspaceCover = ({
               },
               allowedContent: " ",
             }}
+            onUploadBegin={() => setIsLoading(true)}
             onClientUploadComplete={handleOnUpload}
           />
         </div>

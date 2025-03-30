@@ -15,7 +15,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          username: root
+          username: ubuntu
           script: |
             cd ~
             rm -rf serene-v3/
