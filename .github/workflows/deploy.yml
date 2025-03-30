@@ -21,6 +21,8 @@ jobs:
             rm -rf serene-v3/
             git clone https://github.com/Pritam12F/serene-v3
             cd serene-v3/
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             pnpm install
             pnpm run build
             cd apps/web/
