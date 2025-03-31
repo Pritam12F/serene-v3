@@ -13,6 +13,7 @@ export const usePosts = (user_email: string, documentList?: string[]) => {
     useState<arrayToTree.Tree<SelectManyPostType>>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>();
+  const [allPosts, setAllPosts] = useState<SelectManyPostType>([]);
 
   const fetchPosts = useCallback(async () => {
     try {
@@ -54,7 +55,9 @@ export const usePosts = (user_email: string, documentList?: string[]) => {
 
       setPostList(filtered);
     }
+
+    setAllPosts(postData?.list!);
   }, [documentList, postData?.tree, postData?.list]);
 
-  return { postTree, postList, isLoading, error, mutate };
+  return { postTree, postList, allPosts, isLoading, error, mutate };
 };

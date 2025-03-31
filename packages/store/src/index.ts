@@ -27,7 +27,6 @@ export const store = create<StoreType>((set, get) => ({
 
   workSpaceMutator: null,
   changeWorkSpaceMutator: (myMutator) => set({ mutator: myMutator }),
-
   activePostId: null,
   changeActivePostId: (id) => set({ activePostId: id }),
 

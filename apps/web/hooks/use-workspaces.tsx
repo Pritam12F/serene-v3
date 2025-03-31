@@ -1,6 +1,5 @@
 import { fetchAllUserWorkspaces } from "@/server/workspace";
 import { SelectManyWorkspaceType } from "@workspace/common/types/db";
-import useStore from "@workspace/store";
 import { useCallback, useEffect, useState } from "react";
 
 export const useWorkspace = () => {

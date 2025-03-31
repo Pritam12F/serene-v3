@@ -15,7 +15,7 @@ const data = {
   navMain: [
     {
       title: "Search",
-      url: "/documents/search",
+      url: "/search",
       icon: Search,
     },
     {
