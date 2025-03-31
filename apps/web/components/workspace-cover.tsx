@@ -14,6 +14,7 @@ import { useWebsocket } from "@/hooks/use-websocket";
 import useDebounce from "@/hooks/use-debounce";
 import { MessageType } from "@workspace/common/types/ws";
 import Loading from "./loading";
+import { useIsMobile } from "@workspace/ui/hooks/use-mobile";
 
 export const WorkspaceCover = ({
   workspaceId,
@@ -29,6 +30,7 @@ export const WorkspaceCover = ({
   const [name, setName] = useState("");
   const { ws } = useWebsocket(workspaceId, { setCoverLink, setEmoji, setName });
   const [isLoading, setIsLoading] = useState(false);
+  const isMobile = useIsMobile();
 
   const fetchCover = useCallback(async () => {
     const { success, data } = await fetchSingleWorkspace(workspaceId?.trim());
@@ -153,7 +155,7 @@ export const WorkspaceCover = ({
         <TextareaAutosize
           className="w-fit mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
           placeholder="Untitled"
-          value={name}
+          value={isMobile ? name.substring(0, 8).concat("...") : name}
           onChange={(e) => {
             setName(e.target.value);
           }}

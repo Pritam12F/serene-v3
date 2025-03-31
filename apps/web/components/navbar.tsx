@@ -15,6 +15,7 @@ import { Button } from "@heroui/react";
 import ThemeSwitcherButton from "./theme-switcher";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 
 export const BrandLogo = ({ style }: { style?: string }) => {
   const { resolvedTheme } = useTheme();
@@ -41,6 +42,7 @@ export const BrandLogo = ({ style }: { style?: string }) => {
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   const menuItems = [
     { name: "Log in", href: "/sign-in" },
@@ -102,9 +104,11 @@ export default function App() {
           <NavbarMenuItem key={`${name}-${index}`}>
             <Button
               className="w-full"
-              href={`${href}`}
               size={"md"}
               color={"secondary"}
+              onPress={() => {
+                router.push(href);
+              }}
             >
               {name}
             </Button>

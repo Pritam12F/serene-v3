@@ -35,7 +35,7 @@ export default function SearchPage() {
         }
       }}
     >
-      <DialogContent className="sm:max-w-[650px] h-[350px] p-0 pb-5 overflow-y-scroll rounded-2xl border shadow-2xl bg-background/95">
+      <DialogContent className="max-w-96 sm:max-w-[500px] md:max-w-[650px] h-[350px] p-0 pb-5 overflow-y-scroll rounded-2xl border shadow-2xl bg-background/95">
         <DialogHeader className="sticky top-0 z-50 h-fit bg-background/95 backdrop-blur-2xl border-b px-8 py-6">
           <DialogTitle className="text-3xl font-bold tracking-tight mb-4">
             Search
@@ -46,7 +46,7 @@ export default function SearchPage() {
               placeholder="Search documents or workspaces..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="h-14 pl-12 pr-4 text-lg bg-background/80 border-2 rounded-xl focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary focus-visible:ring-offset-0 transition-all placeholder:text-muted-foreground/60"
+              className="h-10 pl-12 pr-4 text-lg bg-background/80 border-2 rounded-xl focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary focus-visible:ring-offset-0 transition-all placeholder:text-muted-foreground/60 placeholder:text-sm"
             />
           </div>
         </DialogHeader>
@@ -65,7 +65,7 @@ export default function SearchPage() {
                 key={index}
                 href={`${searchResult.content ? "/documents/" : "/workspaces/"}${searchResult.id}`}
               >
-                <Card className="rounded-sm mx-10">
+                <Card className="rounded-sm mx-10 hover:scale-105 duration-250 shadow-sm hover:shadow-2xl shadow-slate-400">
                   <CardHeader>
                     <CardTitle className="flex space-x-4">
                       <div>{searchResult?.emoji ?? "📓"}</div>
@@ -94,7 +94,7 @@ export default function SearchPage() {
                 key={index}
                 href={`${searchResult.content ? "/documents/" : "/workspaces/"}${searchResult.id}`}
               >
-                <Card className="rounded-sm mx-10">
+                <Card className="rounded-sm mx-10 hover:scale-105 duration-250 shadow-sm hover:shadow-2xl shadow-slate-400">
                   <CardHeader>
                     <CardTitle className="flex space-x-4">
                       <div>{searchResult?.emoji ?? "📓"}</div>

@@ -13,6 +13,7 @@ import { ClientUploadedFileData } from "uploadthing/types";
 import { EmojiPicker } from "./emoji-picker";
 import useDebounce from "@/hooks/use-debounce";
 import Loading from "./loading";
+import { useIsMobile } from "@workspace/ui/hooks/use-mobile";
 
 export const PostCover = ({
   postId,
@@ -28,6 +29,7 @@ export const PostCover = ({
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<string | null>();
   const [isLoading, setIsLoading] = useState(false);
+  const isMobile = useIsMobile();
 
   const fetchCover = useCallback(async () => {
     const { success, data } = await fetchSinglePostById(postId);
@@ -123,11 +125,15 @@ export const PostCover = ({
           />
         </div>
       )}
-      <div>
+      <div className="w-full">
         <TextareaAutosize
-          className="w-fit mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
+          className="w-full mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl text-left block"
           placeholder="Untitled"
-          value={postNames.get(postId)}
+          value={
+            isMobile
+              ? postNames.get(postId)?.substring(0, 8).concat("...")
+              : postNames.get(postId)
+          }
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             if (type === "new") {
               setPostName("0", e.target.value);
