@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import { usePosts } from "./use-posts";
 import { useWorkspace } from "./use-workspaces";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Fuse from "fuse.js";
 
 interface SearchResultType {
@@ -21,44 +21,56 @@ export const useSearch = (searchTerm?: string) => {
   const [searchResults, setSearchResults] = useState<SearchResultType[] | null>(
     null
   );
+  const existingIds = useMemo(() => new Set<string>(), []);
+
+  const fuse = useMemo(
+    () =>
+      new Fuse(initialResults ?? [], {
+        keys: ["name", "content"],
+      }),
+    [initialResults]
+  );
 
   useEffect(() => {
-    if (initialResults && searchTerm) {
-      const fuse = new Fuse(initialResults, {
-        keys: ["name", "content"],
-      });
-
-      const filtered = fuse.search(searchTerm).map((x) => x.item);
-
-      setSearchResults([...filtered]);
-    }
     allPosts?.forEach((post) => {
-      if (!initialResults?.find((x) => x.id === post?.id)) {
+      if (!existingIds.has(post?.id!)) {
         setInitialResults((prev) => [
           ...(prev ?? []),
           post as SearchResultType,
         ]);
+        existingIds.add(post?.id!);
       }
     });
 
     mainWorkspaces?.forEach((workspace) => {
-      if (!initialResults?.find((x) => x.id === workspace?.id)) {
+      if (!existingIds.has(workspace?.id!)) {
         setInitialResults((prev) => [
           ...(prev ?? []),
           workspace as SearchResultType,
         ]);
+        existingIds.add(workspace?.id!);
       }
     });
 
     secondaryWorkspaces?.forEach((workspace) => {
-      if (!initialResults?.find((x) => x.id === workspace?.id)) {
+      if (!existingIds.has(workspace?.id!)) {
         setInitialResults((prev) => [
           ...(prev ?? []),
           workspace as SearchResultType,
         ]);
+        existingIds.add(workspace?.id!);
       }
     });
-  }, [mainWorkspaces, secondaryWorkspaces, allPosts, searchTerm]);
+  }, [mainWorkspaces, secondaryWorkspaces, allPosts]);
+
+  useEffect(() => {
+    if (initialResults && searchTerm) {
+      const filtered = fuse.search(searchTerm).map((x) => x.item);
+
+      setSearchResults([...filtered]);
+      return;
+    }
+  }, [searchTerm]);
 
   return { initialResults, searchResults };
 };
