@@ -19,14 +19,13 @@ export default function PostDialog() {
     .at(-1);
 
   const getPostName = (id: string) => store.getState().getPostName(id);
-  const getWorkspaceContent = (id: string) =>
-    store.getState().getPostContent(id);
+  const getPostContent = (id: string) => store.getState().getPostContent(id);
 
   const createPostHandler = async () => {
-    const { success, message, data } = await createNewPost(
+    const { success, data } = await createNewPost(
       getPostName("0") ?? "Untitled",
-      getWorkspaceContent("0"),
-      parentId === "0" ? undefined : parentId
+      getPostContent("0"),
+      parentId === "0" ? null : parentId
     );
 
     if (success) {
@@ -40,11 +39,11 @@ export default function PostDialog() {
         decodeURIComponent(params ?? "/documents").concat(`/${data}`)
       );
       store.getState().mutator?.();
+      router.refresh();
       return;
     }
     router.push(decodeURIComponent(params ?? "/documents"));
     toast.error("Error adding post", { style: { backgroundColor: "red" } });
-    console.error(message);
   };
 
   return (

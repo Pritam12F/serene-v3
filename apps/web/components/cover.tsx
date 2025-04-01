@@ -69,65 +69,66 @@ export const PostCover = ({
 
   return (
     <div className="relative w-full h-[270px] min-h-[270px]">
-      {coverLink ? (
-        <>
-          <UploadButton
-            endpoint="coverImageUploader"
-            className="absolute ml-12 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
-            content={{
-              button: () => {
-                return (
-                  <div className="flex flex-row gap-x-1">
-                    <ImageIcon height={18} className="mt-0.5" />
-                    Change cover
-                  </div>
-                );
-              },
-              allowedContent: " ",
-            }}
-            onUploadBegin={() => setIsLoading(true)}
-            onClientUploadComplete={handleOnUpload}
-          />
-          <Image
-            src={coverLink}
-            alt="Example Image"
-            fill
-            className="object-cover absolute inset-0"
-            unoptimized
-            priority
-          />
-          <div className="text-8xl absolute left-14 top-16">{emoji}</div>
-          <EmojiPicker
-            isPickerOpen={isEmojiPickerOpen}
-            setIsPickerOpen={setIsEmojiPickerOpen}
-            postId={postId}
-            setChangeEmoji={setEmoji}
-          />
-        </>
-      ) : (
-        <div className="absolute inset-0 dark:bg-gray-950">
-          <UploadButton
-            endpoint="coverImageUploader"
-            className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
-            content={{
-              button: () => {
-                return (
-                  <div className="flex flex-row gap-x-1">
-                    <ImageIcon height={18} className="mt-0.5" />
-                    Add cover
-                  </div>
-                );
-              },
-              allowedContent: " ",
-            }}
-            onUploadBegin={() => setIsLoading(true)}
-            onClientUploadComplete={handleOnUpload}
-          />
-        </div>
-      )}
+      {type !== "new" &&
+        (coverLink ? (
+          <>
+            <UploadButton
+              endpoint="coverImageUploader"
+              className="absolute ml-12 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
+              content={{
+                button: () => {
+                  return (
+                    <div className="flex flex-row gap-x-1">
+                      <ImageIcon height={18} className="mt-0.5" />
+                      Change cover
+                    </div>
+                  );
+                },
+                allowedContent: " ",
+              }}
+              onUploadBegin={() => setIsLoading(true)}
+              onClientUploadComplete={handleOnUpload}
+            />
+            <Image
+              src={coverLink}
+              alt="Example Image"
+              fill
+              className="object-cover absolute inset-0"
+              unoptimized
+              priority
+            />
+            <div className="text-8xl absolute left-14 top-16">{emoji}</div>
+            <EmojiPicker
+              isPickerOpen={isEmojiPickerOpen}
+              setIsPickerOpen={setIsEmojiPickerOpen}
+              postId={postId}
+              setChangeEmoji={setEmoji}
+            />
+          </>
+        ) : (
+          <div className="absolute inset-0 dark:bg-gray-950">
+            <UploadButton
+              endpoint="coverImageUploader"
+              className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
+              content={{
+                button: () => {
+                  return (
+                    <div className="flex flex-row gap-x-1">
+                      <ImageIcon height={18} className="mt-0.5" />
+                      Add cover
+                    </div>
+                  );
+                },
+                allowedContent: " ",
+              }}
+              onUploadBegin={() => setIsLoading(true)}
+              onClientUploadComplete={handleOnUpload}
+            />
+          </div>
+        ))}
       <div className="w-full">
         <TextareaAutosize
-          className="w-full mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl text-left block"
+          className="w-full mx-8 md:mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl text-left block"
           placeholder="Untitled"
           value={
             isMobile

@@ -200,9 +200,11 @@ export const createNewPost = async (
         name: title,
         content,
         userId: session.user.id,
-        parentId,
+        parentId: parentId || null,
       })
       .returning({ id: posts.id });
+
+    revalidatePath("/");
 
     return {
       success: true,

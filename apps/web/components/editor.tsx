@@ -98,6 +98,7 @@ const Editor = ({
           setCurrentContent(editor.document);
         }}
         editable={editable}
+        className="-mx-5 md:mx-0"
         theme={resolvedTheme === "dark" ? blueTheme.dark : blueTheme.light}
       />
     </div>
