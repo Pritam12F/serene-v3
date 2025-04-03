@@ -69,7 +69,7 @@ export const ProfileDialog = ({
       }}
     >
       <DialogTrigger>{trigger}</DialogTrigger>
-      <DialogContent className="w-[400px] lg:w-[500px] rounded-lg p-10 border-none bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+      <DialogContent className="w-[360px] md:w-[400px] lg:w-[500px] rounded-lg border-none bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 [&>button:last-child]:hidden">
         <Tab userDetails={userDetails} />
       </DialogContent>
     </Dialog>
@@ -116,7 +116,7 @@ function Tab({
   const form1 = useForm<z.infer<typeof UpdateUserSchema>>({
     resolver: zodResolver(UpdateUserSchema),
     defaultValues: {
-      phone: userDetails.phone ?? 0,
+      phone: userDetails.phone ?? 1,
     },
   });
 
@@ -234,36 +234,28 @@ function Tab({
               </CardDescription>
             </CardHeader>
             <CardContent className="mt-5 space-y-4">
-              <div className="space-y-3">
-                <div className="group flex items-center gap-x-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-all duration-200 border border-border/5">
-                  <div className="flex-shrink-0 p-2.5 rounded-lg bg-primary/5 group-hover:bg-primary/10 transition-colors duration-200">
-                    <Mail className="w-5 h-5 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-muted-foreground/70">
-                      Email
-                    </p>
-                    <p className="mt-1 font-medium text-sm tracking-tight truncate">
+              <div className="grid gap-4">
+                <div className="flex items-center space-x-4 rounded-lg border p-4">
+                  <Mail className="h-5 w-5 text-muted-foreground" />
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium leading-none">Email</p>
+                    <p className="text-sm text-muted-foreground">
                       {userDetails.email}
                     </p>
                   </div>
                 </div>
-                <div className="group flex items-center gap-x-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-all duration-200 border border-border/5">
-                  <div className="flex-shrink-0 p-2.5 rounded-lg bg-primary/5 group-hover:bg-primary/10 transition-colors duration-200">
-                    <Phone className="w-5 h-5 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-muted-foreground/70">
-                      Phone
-                    </p>
-                    <p className="mt-1 font-medium tracking-tight truncate">
-                      {userDetails.phone || "Not set"}
+                <div className="flex items-center space-x-4 rounded-lg border p-4">
+                  <Phone className="h-5 w-5 text-muted-foreground" />
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium leading-none">Phone</p>
+                    <p className="text-sm text-muted-foreground">
+                      {userDetails.phone || "Not provided"}
                     </p>
                   </div>
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="pt-2">
+            <CardFooter className="pt-0">
               <Button
                 onClick={() => setIsEditProfileOpen(true)}
                 className="w-full"

@@ -8,7 +8,9 @@ export async function middleware(request: NextRequest) {
 
   if (
     !token &&
-    (pathname.startsWith("/documents") || pathname.startsWith("/workspaces"))
+    (pathname.startsWith("/documents") ||
+      pathname.startsWith("/workspaces") ||
+      pathname.startsWith("/search"))
   ) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   } else if (token && ["/sign-in", "/sign-up", "/"].includes(pathname)) {
@@ -25,5 +27,6 @@ export const config = {
     "/",
     "/documents/:path*",
     "/workspaces/:path*",
+    "/search/:path*",
   ],
 };
