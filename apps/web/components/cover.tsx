@@ -63,8 +63,8 @@ export const PostCover = ({
     setIsLoading(false);
   };
 
-  if (!isEditorReady && isLoading) {
-    return <Loading />;
+  if (!isEditorReady || isLoading) {
+    return <Loading height="h-[270px]" />;
   }
 
   return (

@@ -28,7 +28,11 @@ export const WorkspaceCover = ({
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<string | null>();
   const [name, setName] = useState("");
-  const { ws } = useWebsocket(workspaceId, { setCoverLink, setEmoji, setName });
+  const { ws, isReady } = useWebsocket(workspaceId, {
+    setCoverLink,
+    setEmoji,
+    setName,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const isMobile = useIsMobile();
 
@@ -88,12 +92,13 @@ export const WorkspaceCover = ({
   useEffect(() => {
     debouncedRenameWorkspace(workspaceId, name);
   }, [name]);
-  if (!isEditorReady && isLoading) {
-    return <Loading />;
+
+  if (!isEditorReady || isLoading || isReady) {
+    return <Loading height="h-[270px]" />;
   }
 
   return (
-    <div className="relative w-full h-[270px] min-h-[270px]">
+    <div className="relative w-full h-[270px]">
       {coverLink ? (
         <>
           <UploadButton
