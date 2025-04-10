@@ -10,6 +10,12 @@ dotenv.config();
 const app = express();
 const httpServer = app.listen(8080);
 
+app.get("/ping", (_, res) => {
+  res.json({
+    message: "pong",
+  });
+});
+
 const wss = new WebSocketServer({ server: httpServer });
 
 const verifyUser = async (tk: string) => {
