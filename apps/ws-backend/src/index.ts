@@ -20,7 +20,7 @@ const verifyUser = async (tk: string) => {
 
   try {
     await jose.jwtVerify(tk, secretKey);
-
+    console.log("Correct token");
     return true;
   } catch (e) {
     console.error(e);

@@ -93,7 +93,7 @@ export const WorkspaceCover = ({
     debouncedRenameWorkspace(workspaceId, name);
   }, [name]);
 
-  if (!isEditorReady || isLoading || isReady) {
+  if (!isEditorReady || isLoading || !isReady) {
     return <Loading height="h-[270px]" />;
   }
 
