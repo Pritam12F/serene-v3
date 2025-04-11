@@ -25,7 +25,7 @@ export function SearchDialog() {
       }}
     >
       <DialogContent
-        className="border-none w-[600px] -translate-y-44 bg-transparent shadow-none dark:bg-transparent backdrop-blur-none"
+        className="border-none w-[400px] md:w-[500px] lg:w-[600px] -translate-y-44 bg-transparent shadow-none dark:bg-transparent backdrop-blur-none"
         hidden={true}
       >
         <div className="relative flex items-center bg-white dark:bg-gray-900 rounded-md border-none">
