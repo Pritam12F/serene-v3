@@ -53,6 +53,6 @@ export const UpdatePasswordSchema = z
     },
     {
       message: "Passwords must match!",
-      path: ["confirmPassword"],
+      path: ["confirmNewPassword"],
     }
   );

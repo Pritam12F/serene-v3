@@ -1,18 +1,7 @@
 "use client";
 
 import { useSearch } from "@/hooks/use-search";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@workspace/ui/components/dialog";
+import { Dialog, DialogContent } from "@workspace/ui/components/dialog";
 import { Input } from "@workspace/ui/components/input";
 import { Newspaper, Search, Users } from "lucide-react";
 import Link from "next/link";
@@ -63,16 +52,20 @@ export function SearchDialog() {
                 href={`${x.content ? "/documents/" : "/workspaces/"}${x.id}`}
                 className="block bg-white dark:bg-background border-blue-500/50 border-[1px] p-4 rounded-md transform transition-all duration-200 hover:-translate-y-1"
               >
-                <div className="flex items-center space-x-3 py-2">
-                  <div className="flex items-center justify-center">
+                <div className="flex flex-col space-x-3 py-2">
+                  <div className="flex items-center space-x-3">
                     {x.content ? (
                       <Newspaper className="h-4 w-4" />
                     ) : (
                       <Users className="h-4 w-4" />
                     )}
+                    <div>{x.name}</div>
                   </div>
-                  <div>{x.name}</div>
-                  <div>{shortenedContent}</div>
+                  {shortenedContent && (
+                    <div className="w-fit mt-4 translate-x-4">
+                      {shortenedContent}
+                    </div>
+                  )}
                 </div>
               </Link>
             );
