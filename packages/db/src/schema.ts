@@ -60,6 +60,7 @@ export const workspaces = pgTable("workspaces", {
   name: text("name").notNull(),
   emoji: text("emoji"),
   coverImageId: integer("cover_id"),
+  isFavorite: boolean("is_favorite").default(false),
   inviteId: varchar("invite_id", { length: 5 }),
   ownerId: uuid("owner_id")
     .notNull()
