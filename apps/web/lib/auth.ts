@@ -7,6 +7,7 @@ import db from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { users } from "@workspace/db/schema";
 import { createInitialPosts } from "@workspace/db/seed";
+import { randomGradient } from "./random-gradient";
 
 export const authOptions = {
   providers: [
@@ -49,6 +50,8 @@ export const authOptions = {
               email: userDb.email,
               image: userDb.profilePic,
               phone: userDb.phone,
+              profileColor: userDb.profileColor,
+              coverColor: userDb.coverColor,
             };
           } catch (err) {
             return null;
@@ -76,6 +79,8 @@ export const authOptions = {
           image: user.image,
           email: user.email,
           phone: user.phone,
+          profileColor: user.profileColor,
+          coverColor: user.coverColor,
         };
       }
 
@@ -88,6 +93,8 @@ export const authOptions = {
         session.user.image = token.image;
         session.user.name = token.name;
         session.user.phone = token.phone;
+        session.user.profileColor = token.profileColor;
+        session.user.coverColor = token.coverColor;
       }
 
       return session;
@@ -105,6 +112,8 @@ export const authOptions = {
               name: user.name,
               email: user.email,
               accountType: account.provider,
+              profileColor: randomGradient(),
+              coverColor: randomGradient(),
             })
             .returning({ userId: users.id });
 

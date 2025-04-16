@@ -131,6 +131,8 @@ export function SidebarUser() {
           email: session?.user.email!,
           avatar: session?.user.image!,
           phone: session?.user.phone,
+          profileColor: session?.user.profileColor,
+          coverColor: session?.user.coverColor,
         }}
       />
     </SidebarMenu>

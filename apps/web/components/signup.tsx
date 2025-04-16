@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axios, { isAxiosError } from "axios";
+import { randomGradient } from "@/lib/random-gradient";
 
 export const SignUp = () => {
   const [isPasswordVisible1, setIsPasswordVisible1] = useState(false);
@@ -51,6 +52,8 @@ export const SignUp = () => {
         email: values.email,
         hashedPassword: values.password,
         accountType: "credentials",
+        profileColor: randomGradient(),
+        coverColor: randomGradient(),
       });
 
       if (res.status === 200) {

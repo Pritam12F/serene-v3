@@ -40,6 +40,8 @@ export const ProfileDialog = ({
     email: string;
     avatar?: string;
     phone?: number | null;
+    profileColor?: string | null;
+    coverColor?: string | null;
   };
 }) => {
   const [profileDialogContent, setProfileDialogContent] = useState<
@@ -52,20 +54,11 @@ export const ProfileDialog = ({
       if (success) {
         userDetails.phone = data?.phone;
       }
+
+      console.log(userDetails);
     };
     fetch();
   }, []);
-
-  const randomColor = () => {
-    const colors = [
-      "bg-gradient-to-br from-violet-500 to-purple-600",
-      "bg-gradient-to-br from-emerald-500 to-green-600",
-      "bg-gradient-to-br from-blue-500 to-indigo-600",
-      "bg-gradient-to-br from-rose-500 to-pink-600",
-      "bg-gradient-to-br from-amber-500 to-orange-600",
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
 
   return (
     <Dialog
@@ -76,7 +69,7 @@ export const ProfileDialog = ({
     >
       <DialogTrigger>{trigger}</DialogTrigger>
       <DialogContent className="w-11/12 md:w-[400px] lg:w-[470px] p-1 pb-4 rounded-2xl border-0 shadow-[0_0_1rem_rgba(0,0,0,0.1)] dark:shadow-[0_0_1rem_rgba(255,255,255,0.1)] bg-white dark:bg-black backdrop-blur-xl transition-all duration-500 ease-in-out">
-        <div className={`${randomColor() ?? ""} h-32 rounded-lg`}>
+        <div className={`${userDetails.coverColor ?? ""} h-32 rounded-lg`}>
           {userDetails.avatar ? (
             <img
               src={userDetails.avatar}
@@ -84,7 +77,7 @@ export const ProfileDialog = ({
             />
           ) : (
             <div
-              className={`flex relative justify-center font-semibold text-3xl items-center w-24 h-24 ${randomColor()} rounded-full mt-16 ml-6 border-2 border-slate-600`}
+              className={`flex relative justify-center font-semibold text-3xl items-center w-24 h-24 ${userDetails.profileColor ?? ""} rounded-full mt-16 ml-6 border-2 border-slate-600`}
             >
               {userDetails.name && userDetails.name[0]?.toUpperCase()}
               <div className="absolute top-[73px] left-14 rounded-full bg-blue-100 p-0.5">
@@ -202,7 +195,7 @@ const ProfileForm = ({ name, phone }: { name: string; phone: number }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 flex flex-col ml-7 mr-2"
+        className="space-y-6 flex flex-col mx-7"
       >
         <FormField
           control={form.control}
@@ -284,7 +277,7 @@ const PasswordForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-3 flex flex-col ml-7 mr-2"
+        className="space-y-3 flex flex-col mx-7"
       >
         <FormField
           control={form.control}
@@ -337,7 +330,7 @@ const PasswordForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-1/3 mx-auto">
+        <Button type="submit" className="w-1/2 mx-auto">
           Change password
         </Button>
       </form>

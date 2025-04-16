@@ -3,7 +3,7 @@
 import { getServerSession } from "next-auth";
 import { ActionResponse } from "../types";
 import { posts, users } from "@workspace/db/schema";
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import db from "@workspace/db";
 import { SelectManyPostType, SelectPostType } from "@workspace/common/types/db";
 import { authOptions } from "@/lib/auth";
@@ -218,6 +218,217 @@ export const createNewPost = async (
         ? err.message
         : "Something happened trying to create a new post";
 
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const addFavorites = async (
+  postId: string
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to add favorites");
+  }
+
+  try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      with: {
+        posts: true,
+      },
+    });
+
+    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
+
+    if (!hasAccessToPost) {
+      return {
+        success: false,
+        message: "User doesn't have access to this post",
+        data: null,
+      };
+    }
+
+    await db
+      .update(posts)
+      .set({ isFavorite: true })
+      .where(eq(posts.id, postId));
+
+    return {
+      success: true,
+      message: "Post added to favorites",
+      data: null,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to add post to favorites";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const removeFavorites = async (
+  postId: string
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to remove favorites");
+  }
+
+  try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      with: {
+        posts: true,
+      },
+    });
+
+    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
+
+    if (!hasAccessToPost) {
+      return {
+        success: false,
+        message: "User doesn't have access to this post",
+        data: null,
+      };
+    }
+
+    await db
+      .update(posts)
+      .set({ isFavorite: false })
+      .where(eq(posts.id, postId));
+
+    return {
+      success: true,
+      message: "Post removed from favorites",
+      data: null,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to remove post from favorites";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const fetchAllFavoritePostsByUserId = async (): Promise<
+  ActionResponse<SelectManyPostType | null>
+> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to fetch users from the db");
+  }
+
+  try {
+    const postsFetched = await db.query.posts.findMany({
+      where: and(eq(posts.userId, session.user.id), eq(posts.isFavorite, true)),
+      orderBy: [asc(posts.createdAt)],
+    });
+
+    return {
+      success: true,
+      message: "Successfully fetched all favorite posts!",
+      data: postsFetched,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to fetch favorite posts";
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const makePostPublic = async (
+  postId: string
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to fetch users from the db");
+  }
+
+  try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      with: {
+        posts: true,
+      },
+    });
+
+    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
+
+    if (!hasAccessToPost) {
+      return {
+        success: false,
+        message: "User doesn't have access to this post",
+        data: null,
+      };
+    }
+
+    await db.update(posts).set({ isPublic: true }).where(eq(posts.id, postId));
+    revalidatePath("/");
+
+    return {
+      success: true,
+      message: "Post made public successfully",
+      data: null,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to make post public";
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const makePostPrivate = async (
+  postId: string
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to fetch users from the db");
+  }
+
+  try {
+    const fetchedUser = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      with: {
+        posts: true,
+      },
+    });
+
+    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
+
+    if (!hasAccessToPost) {
+      return {
+        success: false,
+        message: "User doesn't have access to this post",
+        data: null,
+      };
+    }
+
+    await db.update(posts).set({ isPublic: false }).where(eq(posts.id, postId));
+    revalidatePath("/");
+
+    return {
+      success: true,
+      message: "Post made private successfully",
+      data: null,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to make post private";
     return { success: false, message: errorMessage, data: null };
   }
 };

@@ -11,6 +11,7 @@ import {
   pgEnum,
   bigint,
   primaryKey,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 export const accountTypeEnum = pgEnum("account_type", [
@@ -25,6 +26,8 @@ export const users = pgTable("users", {
   name: text("name").notNull(),
   profilePic: text("profile_pic"),
   email: text("email").unique().notNull(),
+  profileColor: text("profile_color"),
+  coverColor: text("cover_color"),
   phone: bigint({ mode: "number" }).unique(),
   accountType: accountTypeEnum("account_type").notNull(),
   hashedPassword: text("hashed_password"),
@@ -39,6 +42,8 @@ export const posts = pgTable("posts", {
   content: jsonb("content").notNull(),
   emoji: text("emoji"),
   coverImageId: integer("cover_id"),
+  isFavorite: boolean("is_favorite").default(false),
+  isPublic: boolean("is_public").default(false),
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),

@@ -316,6 +316,34 @@
       "when": 1742990897810,
       "tag": "0044_hot_marten_broadcloak",
       "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1744791414019,
+      "tag": "0045_hot_garia",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1744792128234,
+      "tag": "0046_spotty_barracuda",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1744792191830,
+      "tag": "0047_melodic_elektra",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1744799970062,
+      "tag": "0048_premium_forgotten_one",
+      "breakpoints": true
     }
   ]
 }
