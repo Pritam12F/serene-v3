@@ -86,7 +86,7 @@ export const ProfileDialog = ({
             <div
               className={`flex relative justify-center font-semibold text-3xl items-center w-24 h-24 ${randomColor()} rounded-full mt-16 ml-6 border-2 border-slate-600`}
             >
-              {userDetails.name[0]?.toUpperCase()}
+              {userDetails.name && userDetails.name[0]?.toUpperCase()}
               <div className="absolute top-[73px] left-14 rounded-full bg-blue-100 p-0.5">
                 <BadgeCheckIcon className="text-blue-500 w-5 h-5" />
               </div>
@@ -134,7 +134,7 @@ export const UserDetails = ({
 
   return (
     <div className="mt-10 ml-7 space-y-3">
-      <div className="space-x-2 translate-x-48 -translate-y-10">
+      <div className="flex justify-end mx-2 space-x-2 -translate-y-10">
         <Button variant={"outline"} onClick={() => changeDialogView("profile")}>
           <UserPen />
           Profile
