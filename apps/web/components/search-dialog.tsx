@@ -37,7 +37,7 @@ export function SearchDialog() {
             className="px-10 py-6 border-none outline-none ring-0 focus:outline-none focus:ring-0 focus:border-none focus-visible:outline-none focus-visible:ring-0 focus-visible:border-none focus:shadow-[0_0_15px_10px] focus:shadow-blue-500/50 transition-all duration-250"
           />
         </div>
-        <div className="overflow-y-scroll max-h-48 space-y-2 py-2 scrollbar-hide">
+        <div className="overflow-y-scroll rounded-sm max-h-56 space-y-2 py-2 scrollbar-hide">
           {(searchTerm ? searchResults : initialResults)?.map((x, index) => {
             const content = x.content?.find(
               (x: any) => x.type === "paragraph" && x.content.length

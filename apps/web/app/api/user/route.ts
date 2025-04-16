@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
       .update(users)
       .set({
         phone: data.phone,
+        name: data.name,
       })
       .where(eq(users.id, session.user.id));
 

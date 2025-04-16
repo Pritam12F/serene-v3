@@ -28,6 +28,7 @@ export const SignUpFormSchema = z
   );
 
 export const UpdateUserSchema = z.object({
+  name: z.string().min(5, { message: "Name too short" }),
   phone: z.coerce
     .number({ message: "Invalid phone number" })
     .int()
