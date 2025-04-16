@@ -446,3 +446,121 @@ export const addOrUpdateWorkspaceName = async (
     return { success: false, message: errorMessage, data: null };
   }
 };
+
+export const addWorkspaceToFavorites = async (
+  workspaceId: string
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to change cover image");
+  }
+
+  try {
+    const userFetched = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      columns: {
+        hashedPassword: false,
+      },
+      with: {
+        mainWorkspaces: true,
+        secondaryWorkspaces: {
+          with: {
+            workspace: true,
+          },
+        },
+      },
+    });
+
+    const isInMainWorkspaces = userFetched?.mainWorkspaces.find(
+      (x) => x.id === workspaceId
+    );
+
+    const isInSecondaryWorkspaces = userFetched?.secondaryWorkspaces.find(
+      (x) => x.workspaceId === workspaceId
+    );
+
+    if (!isInMainWorkspaces && !isInSecondaryWorkspaces) {
+      return {
+        success: false,
+        message: "User has not joined this workspace",
+        data: null,
+      };
+    }
+
+    await db
+      .update(workspaces)
+      .set({
+        isFavorite: true,
+      })
+      .where(eq(workspaces.id, workspaceId));
+
+    return { success: true, message: "Added to favorites", data: null };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to add workspace to favorites";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const removeWorkspaceFromFavorites = async (
+  workspaceId: string
+): Promise<ActionResponse<null>> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to change cover image");
+  }
+
+  try {
+    const userFetched = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      columns: {
+        hashedPassword: false,
+      },
+      with: {
+        mainWorkspaces: true,
+        secondaryWorkspaces: {
+          with: {
+            workspace: true,
+          },
+        },
+      },
+    });
+
+    const isInMainWorkspaces = userFetched?.mainWorkspaces.find(
+      (x) => x.id === workspaceId
+    );
+
+    const isInSecondaryWorkspaces = userFetched?.secondaryWorkspaces.find(
+      (x) => x.workspaceId === workspaceId
+    );
+
+    if (!isInMainWorkspaces && !isInSecondaryWorkspaces) {
+      return {
+        success: false,
+        message: "User has not joined this workspace",
+        data: null,
+      };
+    }
+
+    await db
+      .update(workspaces)
+      .set({
+        isFavorite: false,
+      })
+      .where(eq(workspaces.id, workspaceId));
+
+    return { success: true, message: "Removed from favorites", data: null };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to remove workspace from favorites";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};

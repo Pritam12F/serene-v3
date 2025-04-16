@@ -1,0 +1,1 @@
+ALTER TABLE "workspaces" ADD COLUMN "is_favorite" boolean DEFAULT false;
