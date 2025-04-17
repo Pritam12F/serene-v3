@@ -564,3 +564,35 @@ export const removeWorkspaceFromFavorites = async (
     return { success: false, message: errorMessage, data: null };
   }
 };
+
+export const fetchFavoriteWorkspaces = async (): Promise<
+  ActionResponse<SelectWorkspaceType[] | null>
+> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to change cover image");
+  }
+
+  try {
+    const { data } = await fetchAllUserWorkspaces();
+
+    const favoriteWorkspaces = [
+      ...(data?.mainWorkspaces?.filter((x) => x?.isFavorite) ?? []),
+      ...(data?.secondaryWorkspaces?.filter((x) => x?.isFavorite) ?? []),
+    ];
+
+    return {
+      success: true,
+      data: favoriteWorkspaces,
+      message: "Successfully fetched favorite workspaces",
+    };
+  } catch (e) {
+    const errorMessage =
+      e instanceof Error
+        ? e.message
+        : "Something happened trying to fetch favorite workspaces";
+
+    return { success: false, message: errorMessage, data: null };
+  }
+};

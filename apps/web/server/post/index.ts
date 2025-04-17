@@ -222,7 +222,7 @@ export const createNewPost = async (
   }
 };
 
-export const addFavorites = async (
+export const addToFavorite = async (
   postId: string
 ): Promise<ActionResponse<null>> => {
   const session = await getServerSession(authOptions);
@@ -269,7 +269,7 @@ export const addFavorites = async (
   }
 };
 
-export const removeFavorites = async (
+export const removeFromFavorite = async (
   postId: string
 ): Promise<ActionResponse<null>> => {
   const session = await getServerSession(authOptions);

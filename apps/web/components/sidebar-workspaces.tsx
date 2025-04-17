@@ -11,15 +11,31 @@ import {
 } from "@workspace/ui/components/sidebar";
 import { useWorkspace } from "@/hooks/use-workspaces";
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import {
+  ArrowUpRight,
+  LinkIcon,
+  MoreHorizontal,
+  Plus,
+  StarOff,
+} from "lucide-react";
 import { NewWorkspace } from "./create-workspace";
 import { JoinWorkspace } from "./join-workspace";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
+import { useIsMobile } from "@workspace/ui/hooks/use-mobile";
+import { toast } from "sonner";
 
 export function SidebarWorkspaces() {
   const [isHovering, setIsHovering] = useState(false);
   const { mainWorkspaces, secondaryWorkspaces, mutator } = useWorkspace();
   const [IsNewDialogOpen, setIsNewDailogOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <SidebarGroup>
@@ -52,6 +68,54 @@ export function SidebarWorkspaces() {
                     <span>{x?.emoji ?? "📓"}</span>
                     <span>{x?.name}</span>
                   </SidebarMenuButton>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <SidebarMenuAction showOnHover>
+                        <MoreHorizontal />
+                        <span className="sr-only">More</span>
+                      </SidebarMenuAction>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      className="w-56 rounded-lg"
+                      side={isMobile ? "bottom" : "right"}
+                      align={isMobile ? "end" : "start"}
+                    >
+                      <DropdownMenuItem className="cursor-pointer">
+                        <StarOff className="text-orange-500 dark:text-orange-300" />
+                        <span>Add to Favorites</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={async (e) => {
+                          e.preventDefault();
+
+                          await navigator.clipboard.writeText(
+                            `${window.origin}/workspaces/${x?.id}`
+                          );
+
+                          toast("Copied link!");
+                        }}
+                      >
+                        <LinkIcon className="text-muted-foreground" />
+                        <span>Copy Link</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.open(
+                            `/workspaces/${x?.id}`,
+                            "_blank",
+                            "noopener"
+                          );
+                        }}
+                        className="cursor-pointer"
+                      >
+                        <ArrowUpRight className="text-muted-foreground" />
+                        <span>Open in New Tab</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </SidebarMenuItem>
               </Link>
             );

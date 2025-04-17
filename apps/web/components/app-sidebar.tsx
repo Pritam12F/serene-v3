@@ -10,6 +10,7 @@ import { SidebarMain } from "./sidebar-main";
 import { SidebarWorkspaces } from "./sidebar-workspaces";
 import { SidebarPosts } from "./sidebar-posts";
 import { SidebarUser } from "./sidebar-user";
+import { SidebarFavorites } from "./sidebar-favorites";
 
 const data = {
   navMain: [
@@ -41,6 +42,7 @@ export async function AppSidebar({
         <SidebarMain items={data.navMain} />
       </SidebarHeader>
       <SidebarContent className="overflow-x-hidden">
+        <SidebarFavorites />
         <SidebarPosts />
         <SidebarWorkspaces />
       </SidebarContent>

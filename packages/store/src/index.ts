@@ -4,6 +4,9 @@ interface StoreType {
   mutator: (() => void) | null;
   changeMutator: (myMutator: () => void) => void;
 
+  favoriteMutator: (() => void) | null;
+  changeFavoriteMutator: (myMutator: () => void) => void;
+
   workSpaceMutator: (() => void) | null;
   changeWorkSpaceMutator: (myMutator: () => void) => void;
 
@@ -24,6 +27,9 @@ interface StoreType {
 export const store = create<StoreType>((set, get) => ({
   mutator: null,
   changeMutator: (myMutator) => set({ mutator: myMutator }),
+
+  favoriteMutator: null,
+  changeFavoriteMutator: (myMutator) => set({ favoriteMutator: myMutator }),
 
   workSpaceMutator: null,
   changeWorkSpaceMutator: (myMutator) => set({ mutator: myMutator }),

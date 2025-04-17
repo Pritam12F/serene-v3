@@ -12,7 +12,7 @@ import { ChevronRight } from "lucide-react";
 import { type SelectPostType } from "@workspace/common/types/db";
 import Link from "next/link";
 import useStore from "@workspace/store";
-import { ChangeEvent, useEffect, useMemo, useRef } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@workspace/ui/components/input";
 import { changePostNameById } from "@/server";
 import useDebounce from "@/hooks/use-debounce";
@@ -26,13 +26,22 @@ interface PostProps {
 }
 
 export const Post = ({ data, level = 0, parentUrl }: PostProps) => {
-  const { activePostId, postNames, mutator, changeActivePostId, setPostName } =
-    useStore();
+  const {
+    activePostId,
+    postNames,
+    mutator,
+    favoriteMutator,
+    changeActivePostId,
+    setPostName,
+  } = useStore();
   const ref = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   const debouncedRenamePost = useDebounce(
     async (postId: string, newName: string) => {
       await changePostNameById(postId, newName);
+      mutator?.();
+      favoriteMutator?.();
     },
     5000
   );
@@ -55,6 +64,7 @@ export const Post = ({ data, level = 0, parentUrl }: PostProps) => {
       }
       data!.name = postNames.get(data!.id) ?? "Unknown";
       mutator?.();
+      favoriteMutator?.();
       changeActivePostId(null);
     }
   };
@@ -79,6 +89,8 @@ export const Post = ({ data, level = 0, parentUrl }: PostProps) => {
       <div
         className="relative h-8 transition-all"
         style={{ marginLeft: `${level * 5}px` }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
         <div
           className={`absolute inset-0 transition-opacity duration-400 hover:bg-[#f4f4f5] dark:hover:bg-[#27272a] hover:not(:has(*:hover)) group rounded-sm ${
@@ -108,7 +120,11 @@ export const Post = ({ data, level = 0, parentUrl }: PostProps) => {
               </SidebarMenuAction>
             </CollapsibleTrigger>
             <div className="transition-all hover:bg-[#27272a] duration-250">
-              <PostActions documentId={data!.id} parentId={currentPath} />
+              <PostActions
+                documentId={data!.id}
+                parentId={currentPath}
+                isHovered={isHovered}
+              />
             </div>
           </SidebarMenuItem>
         </div>

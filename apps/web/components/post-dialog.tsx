@@ -1,7 +1,7 @@
 "use client";
 
 import { createNewPost } from "@/server";
-import { store } from "@workspace/store";
+import useStore, { store } from "@workspace/store";
 import { Dialog, DialogContent } from "@workspace/ui/components/dialog";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -32,6 +32,8 @@ export default function PostDialog() {
       toast.success("Post created successfully!", {
         style: { backgroundColor: "#38b000" },
       });
+
+      store.getState().mutator?.();
 
       store.getState().setPostName("0", "");
       store.getState().setPostContent("0", {});

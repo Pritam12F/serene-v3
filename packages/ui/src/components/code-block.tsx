@@ -38,7 +38,7 @@ export const CodeBlock = ({ filename, code, tabs = [] }: CodeBlockProps) => {
   };
 
   return (
-    <div className="relative w-full rounded-lg bg-slate-900 p-4 font-mono text-sm">
+    <div className="relative w-full rounded-lg bg-slate-200 dark:bg-slate-900 p-4 font-mono text-sm">
       <div className="flex flex-col gap-2">
         {tabsExist && (
           <div className="flex  overflow-x-auto">
