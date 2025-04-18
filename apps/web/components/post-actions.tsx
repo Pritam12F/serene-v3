@@ -113,7 +113,9 @@ export const PostActions = ({
                 `${window.origin}/documents/${documentId}`
               );
 
-              toast("Copied link!");
+              if (!isMobile) {
+                toast("Copied link!");
+              }
             }}
           >
             <LinkIcon className="text-muted-foreground" />
@@ -134,7 +136,7 @@ export const PostActions = ({
             onClick={handleAddFavorite}
           >
             <StarIcon className="text-orange-600 dark:text-orange-300" />
-            <span>Add favorite</span>
+            <span>Add to Favorites</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

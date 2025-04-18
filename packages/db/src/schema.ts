@@ -44,6 +44,7 @@ export const posts = pgTable("posts", {
   coverImageId: integer("cover_id"),
   isFavorite: boolean("is_favorite").default(false),
   isPublic: boolean("is_public").default(false),
+  shortenedId: varchar("post_shortened_url"),
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),

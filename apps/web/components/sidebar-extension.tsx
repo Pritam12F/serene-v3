@@ -18,6 +18,7 @@ import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
 import Loading from "./loading";
 import { useJWT } from "@/hooks/useJWT";
+import { NavActions } from "./nav-actions";
 
 export const SidebarExtension = ({
   documentList,
@@ -37,7 +38,8 @@ export const SidebarExtension = ({
     ?.filter((el) => {
       return el?.id === documentList![documentList!.length - 1];
     })[0]
-    ?.updatedAt?.toDateString();
+    ?.updatedAt?.toDateString()
+    .split(" ");
 
   return (
     <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-gray-950">
@@ -86,10 +88,12 @@ export const SidebarExtension = ({
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        {lastUpdated && (
-          <div className="hidden md:block mx-8 text-sm">
-            Last edited on {lastUpdated}
-          </div>
+        {documentList && (
+          <NavActions
+            month={lastUpdated?.[2]!}
+            day={lastUpdated?.[1]!}
+            postId={postList ? postList[postList.length - 1]?.id : null}
+          />
         )}
       </header>
       {documentList && postList?.length === 0 && (

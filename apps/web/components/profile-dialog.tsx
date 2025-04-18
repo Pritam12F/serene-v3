@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
+import { cn } from "@workspace/ui/lib/utils";
 
 export const ProfileDialog = ({
   trigger,
@@ -47,6 +48,10 @@ export const ProfileDialog = ({
   const [profileDialogContent, setProfileDialogContent] = useState<
     "profile" | "password"
   >("profile");
+  const [color, setColor] = useState<{
+    coverColor: string;
+    profileColor: string;
+  }>({ coverColor: "bg-green-500", profileColor: "bg-green-500" });
 
   useEffect(() => {
     const fetch = async () => {
@@ -55,10 +60,15 @@ export const ProfileDialog = ({
         userDetails.phone = data?.phone;
       }
 
-      console.log(userDetails);
+      setColor((prev) => ({
+        ...prev,
+        coverColor: data?.coverColor!,
+        profileColor: data?.profileColor!,
+      }));
     };
+
     fetch();
-  }, []);
+  }, [userDetails]);
 
   return (
     <Dialog
@@ -69,7 +79,7 @@ export const ProfileDialog = ({
     >
       <DialogTrigger>{trigger}</DialogTrigger>
       <DialogContent className="w-11/12 md:w-[400px] lg:w-[470px] p-1 pb-4 rounded-2xl border-0 shadow-[0_0_1rem_rgba(0,0,0,0.1)] dark:shadow-[0_0_1rem_rgba(255,255,255,0.1)] bg-white dark:bg-black backdrop-blur-xl transition-all duration-500 ease-in-out">
-        <div className={`${userDetails.coverColor ?? ""} h-32 rounded-lg`}>
+        <div className={cn("h-32 rounded-lg", color.coverColor)}>
           {userDetails.avatar ? (
             <img
               src={userDetails.avatar}
@@ -77,7 +87,10 @@ export const ProfileDialog = ({
             />
           ) : (
             <div
-              className={`flex relative justify-center font-semibold text-3xl items-center w-24 h-24 ${userDetails.profileColor ?? ""} rounded-full mt-16 ml-6 border-2 border-slate-600`}
+              className={cn(
+                "flex relative justify-center font-semibold text-3xl items-center w-24 h-24 rounded-full mt-16 ml-6 border-2 border-slate-600",
+                color.profileColor
+              )}
             >
               {userDetails.name && userDetails.name[0]?.toUpperCase()}
               <div className="absolute top-[73px] left-14 rounded-full bg-blue-100 p-0.5">
@@ -100,6 +113,7 @@ export const ProfileDialog = ({
           />
         )}
         {profileDialogContent === "password" && <PasswordForm />}
+        <Button onClick={() => console.log(color)}>click</Button>
       </DialogContent>
     </Dialog>
   );

@@ -105,8 +105,8 @@ export const Post = ({ data, level = 0, parentUrl }: PostProps) => {
                 {data?.emoji ? <span>{data.emoji}</span> : <span>📝</span>}
                 <span>
                   {postNames.get(data!.id) &&
-                  postNames.get(data!.id)!.length > 11
-                    ? postNames.get(data!.id)?.substring(0, 11) + "..."
+                  postNames.get(data!.id)!.length > 13
+                    ? postNames.get(data!.id)?.substring(0, 13) + "..."
                     : postNames.get(data!.id)!}
                 </span>
               </Link>

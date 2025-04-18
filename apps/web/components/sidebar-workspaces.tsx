@@ -16,7 +16,7 @@ import {
   LinkIcon,
   MoreHorizontal,
   Plus,
-  StarOff,
+  Star,
 } from "lucide-react";
 import { NewWorkspace } from "./create-workspace";
 import { JoinWorkspace } from "./join-workspace";
@@ -81,7 +81,7 @@ export function SidebarWorkspaces() {
                       align={isMobile ? "end" : "start"}
                     >
                       <DropdownMenuItem className="cursor-pointer">
-                        <StarOff className="text-orange-500 dark:text-orange-300" />
+                        <Star className="text-orange-500 dark:text-orange-300" />
                         <span>Add to Favorites</span>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
@@ -94,7 +94,9 @@ export function SidebarWorkspaces() {
                             `${window.origin}/workspaces/${x?.id}`
                           );
 
-                          toast("Copied link!");
+                          if (!isMobile) {
+                            toast("Copied link!");
+                          }
                         }}
                       >
                         <LinkIcon className="text-muted-foreground" />

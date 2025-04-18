@@ -4,7 +4,6 @@ import {
   ArrowUpRight,
   MoreHorizontal,
   StarOff,
-  Trash2,
   Link as LinkIcon,
 } from "lucide-react";
 
@@ -26,7 +25,7 @@ import {
 } from "@workspace/ui/components/sidebar";
 import { useFavorites } from "@/hooks/use-favorites";
 import Link from "next/link";
-import { createContext, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import useStore from "@workspace/store";
 import { removeFromFavorite } from "@/server";
 import { toast } from "sonner";
@@ -35,10 +34,11 @@ import {
   SelectWorkspaceType,
 } from "@workspace/common/types/db";
 import { removeWorkspaceFromFavorites } from "@/server/workspace";
-import { json } from "stream/consumers";
+import { useIsMobile } from "@workspace/ui/hooks/use-mobile";
 
 export function SidebarFavorites() {
   const { changeFavoriteMutator } = useStore();
+  const isMobile = useIsMobile();
 
   const { postFavorites, workspaceFavorites, fetchFavorites } = useFavorites();
   const { favoriteMutator } = useStore();
@@ -91,25 +91,24 @@ export function SidebarFavorites() {
     changeFavoriteMutator(fetchFavorites);
   }, [fetchFavorites]);
 
-  return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      {(postFavorites?.length! > 0 || workspaceFavorites?.length! > 0) && (
-        <>
-          <SidebarGroupLabel>Favorites</SidebarGroupLabel>
-          <SidebarMenu>
-            <PostFavorites
-              postFavorites={postFavorites ?? []}
-              handleRemoveAction={handleRemovePostFavorite}
-            />
-            <WorkspaceFavorites
-              workspaceFavorites={workspaceFavorites ?? []}
-              handleRemoveAction={handleRemoveWorkspaceFavorite}
-            />
-          </SidebarMenu>
-        </>
-      )}
-    </SidebarGroup>
-  );
+  if (postFavorites?.length! > 0 || workspaceFavorites?.length! > 0) {
+    return null;
+  }
+  <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <>
+      <SidebarGroupLabel>Favorites</SidebarGroupLabel>
+      <SidebarMenu>
+        <PostFavorites
+          postFavorites={postFavorites ?? []}
+          handleRemoveAction={handleRemovePostFavorite}
+        />
+        <WorkspaceFavorites
+          workspaceFavorites={workspaceFavorites ?? []}
+          handleRemoveAction={handleRemoveWorkspaceFavorite}
+        />
+      </SidebarMenu>
+    </>
+  </SidebarGroup>;
 }
 
 export const PostFavorites = ({
@@ -163,7 +162,9 @@ export const PostFavorites = ({
                   `${window.origin}/documents/${item?.id}`
                 );
 
-                toast("Copied link!");
+                if (!isMobile) {
+                  toast("Copied link!");
+                }
               }}
             >
               <LinkIcon className="text-muted-foreground" />
