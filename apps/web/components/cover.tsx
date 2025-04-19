@@ -89,7 +89,7 @@ export const PostCover = ({
                 content={{
                   button: () => {
                     return (
-                      <div className="flex flex-row gap-x-1">
+                      <div className="flex flex-row gap-x-1 cover-btn">
                         <ImageIcon height={18} className="mt-0.5" />
                         Change cover
                       </div>
@@ -129,7 +129,7 @@ export const PostCover = ({
                   content={{
                     button: () => {
                       return (
-                        <div className="flex flex-row gap-x-1">
+                        <div className="flex flex-row gap-x-1 cover-btn">
                           <ImageIcon height={18} className="mt-0.5" />
                           Add cover
                         </div>
