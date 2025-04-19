@@ -92,9 +92,9 @@ export const PostCover = ({
                       <div className="flex flex-row gap-x-1 cover-btn">
                         <ImageIcon
                           height={18}
-                          className="mt-0.5 mix-blend-difference text-slate-800"
+                          className="mt-0.5 mix-blend-difference text-slate-700"
                         />
-                        <p className="mix-blend-difference text-slate-900 font-medium">
+                        <p className="mix-blend-difference text-slate-700 font-medium">
                           Change cover
                         </p>
                       </div>
@@ -152,7 +152,7 @@ export const PostCover = ({
         ))}
       <div className="w-full">
         <TextareaAutosize
-          className="w-full mx-8 md:mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl text-left block mix-blend-difference"
+          className="w-full mx-8 md:mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl text-left block mix-blend-luminosity"
           placeholder="Untitled"
           value={
             isMobile
