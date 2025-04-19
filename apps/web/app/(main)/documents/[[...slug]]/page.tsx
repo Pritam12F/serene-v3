@@ -1,5 +1,6 @@
 import PostDialog from "@/components/post-dialog";
 import { SidebarExtension } from "@/components/sidebar-extension";
+import { notFound } from "next/navigation";
 
 export default async function Documents({
   params,

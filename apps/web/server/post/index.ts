@@ -316,18 +316,22 @@ export const removeFromFavorite = async (
   }
 };
 
-export const fetchAllFavoritePostsByUserId = async (): Promise<
-  ActionResponse<SelectManyPostType | null>
-> => {
+export const fetchAllFavoritePostsByUserId = async (
+  postId?: string
+): Promise<ActionResponse<SelectPostType | null>> => {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     throw new Error("You must be signed in to fetch users from the db");
   }
 
+  if (!postId) {
+    throw new Error("No post ID provided!");
+  }
+
   try {
-    const postsFetched = await db.query.posts.findMany({
-      where: and(eq(posts.userId, session.user.id), eq(posts.isFavorite, true)),
+    const postsFetched = await db.query.posts.findFirst({
+      where: and(eq(posts.id, postId), eq(posts.isPublic, true)),
       orderBy: [asc(posts.createdAt)],
     });
 
@@ -429,66 +433,6 @@ export const makePostPrivate = async (
       err instanceof Error
         ? err.message
         : "Something happened trying to make post private";
-    return { success: false, message: errorMessage, data: null };
-  }
-};
-
-export const hasAccessToPost = async (
-  postId: string
-): Promise<ActionResponse<null>> => {
-  const post = await db.query.posts.findFirst({
-    where: eq(posts.id, postId),
-  });
-
-  if (!post) {
-    return {
-      success: false,
-      message: "This post doesn't exist",
-      data: null,
-    };
-  }
-
-  if (post.isPublic) {
-    return {
-      success: true,
-      message: "Post is public",
-      data: null,
-    };
-  }
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user) {
-    throw new Error("You must be signed in to fetch users from the db");
-  }
-
-  try {
-    const fetchedUser = await db.query.users.findFirst({
-      where: eq(users.id, session.user.id),
-      with: {
-        posts: true,
-      },
-    });
-
-    const hasAccessToPost = fetchedUser?.posts.find((x) => x.id === postId);
-
-    if (!hasAccessToPost) {
-      return {
-        success: false,
-        message: "User doesn't have access to this post",
-        data: null,
-      };
-    }
-
-    return {
-      success: true,
-      message: "User owns this post",
-      data: null,
-    };
-  } catch (err) {
-    const errorMessage =
-      err instanceof Error
-        ? err.message
-        : "Something happened trying to fetch post data";
     return { success: false, message: errorMessage, data: null };
   }
 };

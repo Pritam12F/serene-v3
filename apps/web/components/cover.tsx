@@ -6,6 +6,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import {
   addOrUpdateCoverImage,
   changePostNameById,
+  fetchAllFavoritePostsByUserId,
   fetchSinglePostById,
 } from "@/server";
 import useStore from "@workspace/store";
@@ -30,17 +31,26 @@ export const PostCover = ({
   const [emoji, setEmoji] = useState<string | null>();
   const [isLoading, setIsLoading] = useState(false);
   const isMobile = useIsMobile();
+  const [isSharedPost, setIsSharedPost] = useState(false);
 
   const fetchCover = useCallback(async () => {
     const { success, data } = await fetchSinglePostById(postId);
+    console.log(postId);
+    const { data: data2 } = await fetchAllFavoritePostsByUserId(postId);
 
     if (success) {
       setCoverLink(data?.coverImage?.url!);
       setEmoji(data?.emoji);
+      if (!postNames.get(postId)) {
+        postNames.set(postId, data?.name!);
+      }
+
+      return;
     }
-    if (!postNames.get(postId)) {
-      postNames.set(postId, data?.name!);
-    }
+    setCoverLink(data2?.coverImage?.url!);
+    setIsSharedPost(true);
+    setEmoji(data2?.emoji);
+    postNames.set(postId, data2?.name!);
   }, [postId]);
 
   useEffect(() => {
@@ -72,23 +82,25 @@ export const PostCover = ({
       {type !== "new" &&
         (coverLink ? (
           <>
-            <UploadButton
-              endpoint="coverImageUploader"
-              className="absolute ml-12 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
-              content={{
-                button: () => {
-                  return (
-                    <div className="flex flex-row gap-x-1">
-                      <ImageIcon height={18} className="mt-0.5" />
-                      Change cover
-                    </div>
-                  );
-                },
-                allowedContent: " ",
-              }}
-              onUploadBegin={() => setIsLoading(true)}
-              onClientUploadComplete={handleOnUpload}
-            />
+            {!isSharedPost && (
+              <UploadButton
+                endpoint="coverImageUploader"
+                className="absolute ml-12 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
+                content={{
+                  button: () => {
+                    return (
+                      <div className="flex flex-row gap-x-1">
+                        <ImageIcon height={18} className="mt-0.5" />
+                        Change cover
+                      </div>
+                    );
+                  },
+                  allowedContent: " ",
+                }}
+                onUploadBegin={() => setIsLoading(true)}
+                onClientUploadComplete={handleOnUpload}
+              />
+            )}
             <Image
               src={coverLink}
               alt="Example Image"
@@ -98,33 +110,39 @@ export const PostCover = ({
               priority
             />
             <div className="text-8xl absolute left-14 top-16">{emoji}</div>
-            <EmojiPicker
-              isPickerOpen={isEmojiPickerOpen}
-              setIsPickerOpen={setIsEmojiPickerOpen}
-              postId={postId}
-              setChangeEmoji={setEmoji}
-            />
+            {!isSharedPost && (
+              <EmojiPicker
+                isPickerOpen={isEmojiPickerOpen}
+                setIsPickerOpen={setIsEmojiPickerOpen}
+                postId={postId}
+                setChangeEmoji={setEmoji}
+              />
+            )}
           </>
         ) : (
-          <div className="absolute inset-0 dark:bg-gray-950">
-            <UploadButton
-              endpoint="coverImageUploader"
-              className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
-              content={{
-                button: () => {
-                  return (
-                    <div className="flex flex-row gap-x-1">
-                      <ImageIcon height={18} className="mt-0.5" />
-                      Add cover
-                    </div>
-                  );
-                },
-                allowedContent: " ",
-              }}
-              onUploadBegin={() => setIsLoading(true)}
-              onClientUploadComplete={handleOnUpload}
-            />
-          </div>
+          <>
+            {!isSharedPost && (
+              <div className="absolute inset-0 dark:bg-gray-950">
+                <UploadButton
+                  endpoint="coverImageUploader"
+                  className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
+                  content={{
+                    button: () => {
+                      return (
+                        <div className="flex flex-row gap-x-1">
+                          <ImageIcon height={18} className="mt-0.5" />
+                          Add cover
+                        </div>
+                      );
+                    },
+                    allowedContent: " ",
+                  }}
+                  onUploadBegin={() => setIsLoading(true)}
+                  onClientUploadComplete={handleOnUpload}
+                />
+              </div>
+            )}
+          </>
         ))}
       <div className="w-full">
         <TextareaAutosize
@@ -141,7 +159,7 @@ export const PostCover = ({
               return;
             }
             setPostName(postId, e.target.value);
-            debouncedRenamePost(postId, postNames.get(postId)!);
+            debouncedRenamePost(postId, e.target.value);
           }}
         />
       </div>

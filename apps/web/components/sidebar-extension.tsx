@@ -12,13 +12,15 @@ import { Separator } from "@workspace/ui/components/separator";
 import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
 import dynamic from "next/dynamic";
 import { usePosts } from "@/hooks/use-posts";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
 import Loading from "./loading";
 import { useJWT } from "@/hooks/useJWT";
 import { NavActions } from "./nav-actions";
+import { SelectPostType } from "@workspace/common/types/db";
+import { fetchAllFavoritePostsByUserId } from "@/server";
 
 export const SidebarExtension = ({
   documentList,
@@ -30,6 +32,7 @@ export const SidebarExtension = ({
   });
   useJWT();
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
+  const [sharedPost, setSharedPost] = useState<SelectPostType>();
   const postType =
     !documentList || documentList[0] === "newPost" ? "new" : "existing";
   const { data: session } = useSession();
@@ -40,6 +43,18 @@ export const SidebarExtension = ({
     })[0]
     ?.updatedAt?.toDateString()
     .split(" ");
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { data } = await fetchAllFavoritePostsByUserId(
+        documentList![documentList!.length - 1]
+      );
+
+      setSharedPost(data!);
+    };
+
+    fetch();
+  }, []);
 
   return (
     <SidebarInset className="bg-white h-screen overflow-y-hidden dark:bg-gray-950">
@@ -88,7 +103,7 @@ export const SidebarExtension = ({
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-        {documentList && (
+        {documentList && postList?.length! > 0 && (
           <NavActions
             month={lastUpdated?.[2]!}
             day={lastUpdated?.[1]!}
@@ -96,7 +111,7 @@ export const SidebarExtension = ({
           />
         )}
       </header>
-      {documentList && postList?.length === 0 && (
+      {documentList && postList?.length === 0 && !sharedPost && (
         <div className="h-screen w-full flex flex-col items-center">
           <div className="text-2xl md:text-4xl my-48">
             No such post exists...
@@ -114,18 +129,25 @@ export const SidebarExtension = ({
           </Link>
         </div>
       )}
-      {documentList && postList?.length !== 0 && (
+      {documentList && (postList?.length !== 0 || sharedPost) && (
         <Editor
-          editable={true}
-          postId={postList ? postList[postList.length - 1]?.id : null}
+          editable={postList?.length ? true : false}
+          postId={
+            postList?.length
+              ? postList[postList.length - 1]?.id
+              : sharedPost?.id
+          }
           initialContent={
-            postList ? postList[postList.length - 1]?.content : null
+            postList?.length
+              ? postList[postList.length - 1]?.content
+              : sharedPost?.content
           }
           onReady={setIsEditorReady}
           isReady={isEditorReady}
           type={postType}
         />
       )}
+
       {(!isEditorReady || isLoading) && documentList && <Loading />}
     </SidebarInset>
   );
