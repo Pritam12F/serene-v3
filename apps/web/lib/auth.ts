@@ -105,6 +105,8 @@ export const authOptions = {
           where: eq(users.email, user.email),
         });
 
+        user.id = isUserInDB?.id!;
+
         if (!isUserInDB) {
           const userId = await db
             .insert(users)

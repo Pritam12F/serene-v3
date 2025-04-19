@@ -22,7 +22,6 @@ export function SidebarPosts() {
   const workspaceRef = useRef(null);
   const session = useSession();
   const user_email = session.data?.user.email;
-  console.log(user_email);
   const { postTree, mutate } = usePosts(user_email!);
   const router = useRouter();
   const [isHovering, setIsHovering] = useState(false);
