@@ -36,7 +36,7 @@ export function SidebarPosts() {
     if (mutator) {
       return;
     }
-
+    console.log(postTree);
     changeMutator(mutate);
   }, [mutate]);
 
