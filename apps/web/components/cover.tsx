@@ -85,13 +85,13 @@ export const PostCover = ({
             {!isSharedPost && (
               <UploadButton
                 endpoint="coverImageUploader"
-                className="absolute ml-12 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
+                className="absolute ml-12 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0"
                 content={{
                   button: () => {
                     return (
                       <div className="flex flex-row gap-x-1 cover-btn">
-                        <ImageIcon height={18} className="mt-0.5" />
-                        Change cover
+                        <ImageIcon height={18} className="mt-0.5 text-black" />
+                        <p className="text-black">Change cover</p>
                       </div>
                     );
                   },
@@ -108,6 +108,7 @@ export const PostCover = ({
               className="object-cover absolute inset-0"
               unoptimized
               priority
+              id="cover"
             />
             <div className="text-8xl absolute left-14 top-16">{emoji}</div>
             {!isSharedPost && (
@@ -125,7 +126,7 @@ export const PostCover = ({
               <div className="absolute inset-0 dark:bg-gray-950">
                 <UploadButton
                   endpoint="coverImageUploader"
-                  className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
+                  className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0"
                   content={{
                     button: () => {
                       return (

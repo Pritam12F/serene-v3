@@ -113,7 +113,6 @@ export const ProfileDialog = ({
           />
         )}
         {profileDialogContent === "password" && <PasswordForm />}
-        <Button onClick={() => console.log(color)}>click</Button>
       </DialogContent>
     </Dialog>
   );
