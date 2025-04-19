@@ -92,9 +92,11 @@ export const PostCover = ({
                       <div className="flex flex-row gap-x-1 cover-btn">
                         <ImageIcon
                           height={18}
-                          className="mt-0.5 mix-blend-difference"
+                          className="mt-0.5 mix-blend-difference text-slate-800"
                         />
-                        <p className="mix-blend-difference">Change cover</p>
+                        <p className="mix-blend-difference text-slate-900 font-medium">
+                          Change cover
+                        </p>
                       </div>
                     );
                   },
