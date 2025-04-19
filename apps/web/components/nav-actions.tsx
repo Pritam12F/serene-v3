@@ -17,8 +17,8 @@ import {
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar";
 import { Switch } from "@workspace/ui/components/switch";
-import { useState } from "react";
-import { makePostPrivate, makePostPublic } from "@/server";
+import { useEffect, useState } from "react";
+import { fetchSinglePostById, makePostPrivate, makePostPublic } from "@/server";
 import { toast } from "sonner";
 import { useIsMobile } from "@workspace/ui/hooks/use-mobile";
 
@@ -33,6 +33,7 @@ export function NavActions({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
+  const [isPublic, setIsPublic] = useState(false);
 
   const handleMakePublic = async () => {
     const { success, message } = await makePostPublic(postId!);
@@ -55,6 +56,16 @@ export function NavActions({
 
     toast.error(message);
   };
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { data } = await fetchSinglePostById(postId!);
+
+      setIsPublic(data?.isPublic!);
+    };
+
+    fetch();
+  }, []);
 
   return (
     <div className="flex items-center gap-2 mx-4 text-sm">
@@ -89,12 +100,15 @@ export function NavActions({
                         <span>Make Public</span>
                         <Switch
                           className="ml-11"
+                          checked={isPublic}
                           onCheckedChange={async (state) => {
                             if (state) {
+                              setIsPublic(true);
                               await handleMakePublic();
                               return;
                             }
 
+                            setIsPublic(false);
                             await handleMakePrivate();
                           }}
                         />
