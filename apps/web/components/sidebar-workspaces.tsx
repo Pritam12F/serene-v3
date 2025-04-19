@@ -30,6 +30,7 @@ import {
 } from "@workspace/ui/components/dropdown-menu";
 import { useIsMobile } from "@workspace/ui/hooks/use-mobile";
 import { toast } from "sonner";
+import { addWorkspaceToFavorites } from "@/server/workspace";
 
 export function SidebarWorkspaces() {
   const [isHovering, setIsHovering] = useState(false);
@@ -80,7 +81,25 @@ export function SidebarWorkspaces() {
                       side={isMobile ? "bottom" : "right"}
                       align={isMobile ? "end" : "start"}
                     >
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={async () => {
+                          const { success, message } =
+                            await addWorkspaceToFavorites(x?.id!);
+
+                          if (success) {
+                            toast.success(message, {
+                              style: { backgroundColor: "#38b000" },
+                            });
+                          } else {
+                            toast.error(message, {
+                              style: {
+                                backgroundColor: "red",
+                              },
+                            });
+                          }
+                        }}
+                      >
                         <Star className="text-orange-500 dark:text-orange-300" />
                         <span>Add to Favorites</span>
                       </DropdownMenuItem>

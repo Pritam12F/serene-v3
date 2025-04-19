@@ -327,7 +327,7 @@ export const fetchAllFavoritePostsByUserId = async (): Promise<
 
   try {
     const postsFetched = await db.query.posts.findMany({
-      where: eq(posts.isFavorite, true),
+      where: and(eq(posts.isFavorite, true), eq(posts.userId, session.user.id)),
       orderBy: [asc(posts.createdAt)],
     });
 

@@ -89,26 +89,28 @@ export function SidebarFavorites() {
 
   useEffect(() => {
     changeFavoriteMutator(fetchFavorites);
-  }, [fetchFavorites]);
+  }, [fetchFavorites, postFavorites, workspaceFavorites]);
 
-  if (postFavorites?.length! > 0 || workspaceFavorites?.length! > 0) {
+  if (!postFavorites?.length && !workspaceFavorites?.length) {
     return null;
   }
-  <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-    <>
-      <SidebarGroupLabel>Favorites</SidebarGroupLabel>
-      <SidebarMenu>
-        <PostFavorites
-          postFavorites={postFavorites ?? []}
-          handleRemoveAction={handleRemovePostFavorite}
-        />
-        <WorkspaceFavorites
-          workspaceFavorites={workspaceFavorites ?? []}
-          handleRemoveAction={handleRemoveWorkspaceFavorite}
-        />
-      </SidebarMenu>
-    </>
-  </SidebarGroup>;
+  return (
+    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      <>
+        <SidebarGroupLabel>Favorites</SidebarGroupLabel>
+        <SidebarMenu>
+          <PostFavorites
+            postFavorites={postFavorites ?? []}
+            handleRemoveAction={handleRemovePostFavorite}
+          />
+          <WorkspaceFavorites
+            workspaceFavorites={workspaceFavorites ?? []}
+            handleRemoveAction={handleRemoveWorkspaceFavorite}
+          />
+        </SidebarMenu>
+      </>
+    </SidebarGroup>
+  );
 }
 
 export const PostFavorites = ({
