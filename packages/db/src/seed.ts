@@ -608,6 +608,7 @@ export async function createInitialPosts(userId: string) {
     userId,
     content: quickNote,
     emoji: "📓",
+    isFavorite: true,
   });
 
   await db.insert(posts).values({
@@ -615,6 +616,7 @@ export async function createInitialPosts(userId: string) {
     userId,
     content: personalHome,
     emoji: "🏠",
+    isFavorite: true,
   });
 
   await db.insert(posts).values({
@@ -622,5 +624,6 @@ export async function createInitialPosts(userId: string) {
     userId,
     content: readingList,
     emoji: "📖",
+    isFavorite: true,
   });
 }
