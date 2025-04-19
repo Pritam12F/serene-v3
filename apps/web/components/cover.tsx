@@ -6,7 +6,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import {
   addOrUpdateCoverImage,
   changePostNameById,
-  fetchAllFavoritePostsByUserId,
+  fetchAllPublicPosts,
   fetchSinglePostById,
 } from "@/server";
 import useStore from "@workspace/store";
@@ -35,8 +35,8 @@ export const PostCover = ({
 
   const fetchCover = useCallback(async () => {
     const { success, data } = await fetchSinglePostById(postId);
-    console.log(postId);
-    const { data: data2 } = await fetchAllFavoritePostsByUserId(postId);
+    const { data: data2 } = await fetchAllPublicPosts();
+    const sharedPost = data2?.filter((x) => x?.id === postId)[0];
 
     if (success) {
       setCoverLink(data?.coverImage?.url!);
@@ -47,10 +47,10 @@ export const PostCover = ({
 
       return;
     }
-    setCoverLink(data2?.coverImage?.url!);
+    setCoverLink(sharedPost?.coverImage?.url!);
     setIsSharedPost(true);
-    setEmoji(data2?.emoji);
-    postNames.set(postId, data2?.name!);
+    setEmoji(sharedPost?.emoji);
+    postNames.set(postId, sharedPost?.name!);
   }, [postId]);
 
   useEffect(() => {

@@ -20,7 +20,7 @@ import Loading from "./loading";
 import { useJWT } from "@/hooks/useJWT";
 import { NavActions } from "./nav-actions";
 import { SelectPostType } from "@workspace/common/types/db";
-import { fetchAllFavoritePostsByUserId } from "@/server";
+import { fetchAllPublicPosts } from "@/server";
 
 export const SidebarExtension = ({
   documentList,
@@ -46,11 +46,13 @@ export const SidebarExtension = ({
 
   useEffect(() => {
     const fetch = async () => {
-      const { data } = await fetchAllFavoritePostsByUserId(
-        documentList![documentList!.length - 1]
-      );
+      const { data } = await fetchAllPublicPosts();
 
-      setSharedPost(data!);
+      setSharedPost(
+        data?.filter(
+          (x) => x?.id === documentList![documentList!.length - 1]
+        )[0]
+      );
     };
 
     fetch();

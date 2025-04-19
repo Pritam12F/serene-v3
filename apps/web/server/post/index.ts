@@ -316,22 +316,18 @@ export const removeFromFavorite = async (
   }
 };
 
-export const fetchAllFavoritePostsByUserId = async (
-  postId?: string
-): Promise<ActionResponse<SelectPostType | null>> => {
+export const fetchAllFavoritePostsByUserId = async (): Promise<
+  ActionResponse<SelectManyPostType | null>
+> => {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     throw new Error("You must be signed in to fetch users from the db");
   }
 
-  if (!postId) {
-    throw new Error("No post ID provided!");
-  }
-
   try {
-    const postsFetched = await db.query.posts.findFirst({
-      where: and(eq(posts.id, postId), eq(posts.isPublic, true)),
+    const postsFetched = await db.query.posts.findMany({
+      where: eq(posts.isFavorite, true),
       orderBy: [asc(posts.createdAt)],
     });
 
@@ -433,6 +429,35 @@ export const makePostPrivate = async (
       err instanceof Error
         ? err.message
         : "Something happened trying to make post private";
+    return { success: false, message: errorMessage, data: null };
+  }
+};
+
+export const fetchAllPublicPosts = async (): Promise<
+  ActionResponse<SelectManyPostType | null>
+> => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("You must be signed in to fetch users from the db");
+  }
+
+  try {
+    const postsFetched = await db.query.posts.findMany({
+      where: eq(posts.isPublic, true),
+      orderBy: [asc(posts.createdAt)],
+    });
+
+    return {
+      success: true,
+      message: "Successfully fetched all public posts!",
+      data: postsFetched,
+    };
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "Something happened trying to fetch public posts";
     return { success: false, message: errorMessage, data: null };
   }
 };
