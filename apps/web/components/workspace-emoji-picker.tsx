@@ -85,7 +85,7 @@ export function WorkspaceEmojiPicker({
   ) : (
     <Button
       variant={"link"}
-      className="flex items-center justify-center absolute top-[162px] left-44 text-gray1-400 hover:no-underline opacity-50 hover:opacity-80 transition-all duration-500"
+      className="flex items-center justify-center absolute top-[162px] left-36 md:left-44 text-gray1-400 hover:no-underline opacity-50 hover:opacity-80 transition-all duration-500"
       onClick={() => {
         setIsPickerOpen(true);
       }}

@@ -103,7 +103,7 @@ export const WorkspaceCover = ({
         <>
           <UploadButton
             endpoint="coverImageUploader"
-            className="absolute ml-12 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
+            className="absolute left-5 md:left-11 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
             content={{
               button: () => {
                 return (
@@ -126,7 +126,9 @@ export const WorkspaceCover = ({
             unoptimized
             priority
           />
-          <div className="text-8xl absolute left-14 top-16">{emoji}</div>
+          <div className="text-8xl absolute left-7 md:left-12 lg:left-13 top-16">
+            {emoji}
+          </div>
           <WorkspaceEmojiPicker
             isPickerOpen={isEmojiPickerOpen}
             setIsPickerOpen={setIsEmojiPickerOpen}
@@ -139,7 +141,7 @@ export const WorkspaceCover = ({
         <div className="absolute inset-0 dark:bg-gray-950">
           <UploadButton
             endpoint="coverImageUploader"
-            className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
+            className="absolute left-3 md:ml-5 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
             content={{
               button: () => {
                 return (

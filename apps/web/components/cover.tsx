@@ -85,7 +85,7 @@ export const PostCover = ({
             {!isSharedPost && (
               <UploadButton
                 endpoint="coverImageUploader"
-                className="absolute ml-12 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0"
+                className="absolute left-5 md:left-11 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0"
                 content={{
                   button: () => {
                     return (
@@ -106,16 +106,20 @@ export const PostCover = ({
                 onClientUploadComplete={handleOnUpload}
               />
             )}
-            <Image
-              src={coverLink}
-              alt="Example Image"
-              fill
-              className="object-cover absolute inset-0"
-              unoptimized
-              priority
-              id="cover"
-            />
-            <div className="text-8xl absolute left-14 top-16">{emoji}</div>
+            <div>
+              <Image
+                src={coverLink}
+                alt="Example Image"
+                fill
+                className="object-cover absolute inset-0"
+                unoptimized
+                priority
+                id="cover"
+              />
+            </div>
+            <div className="text-8xl absolute left-7 md:left-12 lg:left-13 top-16">
+              {emoji}
+            </div>
             {!isSharedPost && (
               <EmojiPicker
                 isPickerOpen={isEmojiPickerOpen}
@@ -131,7 +135,7 @@ export const PostCover = ({
               <div className="absolute inset-0 dark:bg-gray-950">
                 <UploadButton
                   endpoint="coverImageUploader"
-                  className="absolute ml-8 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0"
+                  className="absolute left-3 md:ml-5 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0"
                   content={{
                     button: () => {
                       return (
@@ -156,7 +160,7 @@ export const PostCover = ({
           placeholder="Untitled"
           value={
             isMobile
-              ? postNames.get(postId)?.substring(0, 8).concat("...")
+              ? postNames.get(postId)?.substring(0, 11).concat("...")
               : postNames.get(postId)
           }
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {

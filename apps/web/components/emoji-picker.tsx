@@ -72,7 +72,7 @@ export function EmojiPicker({
   ) : (
     <Button
       variant={"link"}
-      className="flex items-center justify-center absolute top-[162px] left-44 text-gray1-400 hover:no-underline opacity-50 hover:opacity-80 transition-all duration-500 mix-blend-difference"
+      className="flex items-center justify-center absolute top-[162px] left-36 md:left-44 text-slate-700 hover:no-underline opacity-70 hover:opacity-100 transition-all duration-500 mix-blend-difference"
       onClick={() => {
         setIsPickerOpen(true);
       }}
