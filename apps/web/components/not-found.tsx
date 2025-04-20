@@ -13,7 +13,7 @@ const NotFound = ({
   status?: number;
 }) => {
   return (
-    <div className="min-h-screen flex items-center w-full justify-center bg-white dark:bg-black">
+    <div className="min-h-screen flex items-center w-full justify-center bg-white dark:bg-gray-950">
       <div className="w-full max-w-md mx-auto px-4">
         <div className="text-center space-y-8 animate-fade-in">
           {status && (
