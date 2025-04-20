@@ -118,6 +118,7 @@ export const SidebarExtension = ({
         <NotFound
           title="No such post exists"
           btnContent="Create a New Post"
+          status={404}
           btnAction={() => {
             router.push("/documents/newPost");
           }}

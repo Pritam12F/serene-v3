@@ -9,14 +9,16 @@ import { SidebarInset, SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { useEffect, useState } from "react";
 import { Button } from "@workspace/ui/components/button";
 import { useWorkspace } from "@/hooks/use-workspaces";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CollaborativeRoom } from "./room";
 import Loading from "./loading";
 import { client } from "@/lib/liveblocks";
+import NotFound from "./not-found";
 
 export const SidebarExtensionWorkspaces = () => {
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
   const path = usePathname();
+  const router = useRouter();
 
   const { mainWorkspaces, secondaryWorkspaces } = useWorkspace();
   const workspace =
@@ -51,26 +53,13 @@ export const SidebarExtensionWorkspaces = () => {
         )}
       </header>
       {room && !userAccess && (
-        <div className="h-screen w-full flex flex-col items-center">
-          <div className="text-2xl md:text-4xl my-48">
-            You have not joined this workspace...
-          </div>
-          <div className="flex space-x-6">
-            <Button>Join workspace</Button>
-            <Button>Create new workspace</Button>
-          </div>
-        </div>
+        <NotFound
+          title="You don't have access to this workspace"
+          status={404}
+        />
       )}
       {!workspace && !room && (
-        <div className="h-screen w-full flex flex-col items-center">
-          <div className="text-2xl md:text-4xl my-48">
-            Workspace doesn't exist...
-          </div>
-          <div className="flex space-x-6">
-            <Button>Join workspace</Button>
-            <Button>Create new workspace</Button>
-          </div>
-        </div>
+        <NotFound title="Workspace doesn't exist" status={404} />
       )}
       {workspace && (
         <CollaborativeRoom
