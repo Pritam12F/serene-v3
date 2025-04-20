@@ -14,13 +14,13 @@ import dynamic from "next/dynamic";
 import { usePosts } from "@/hooks/use-posts";
 import { Fragment, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { Button } from "@workspace/ui/components/button";
 import Loading from "./loading";
 import { useJWT } from "@/hooks/useJWT";
 import { NavActions } from "./nav-actions";
 import { SelectPostType } from "@workspace/common/types/db";
 import { fetchAllPublicPosts } from "@/server";
+import NotFound from "./not-found";
+import { useRouter } from "next/navigation";
 
 export const SidebarExtension = ({
   documentList,
@@ -31,6 +31,7 @@ export const SidebarExtension = ({
     ssr: false,
   });
   useJWT();
+  const router = useRouter();
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
   const [sharedPost, setSharedPost] = useState<SelectPostType>();
   const postType =
@@ -114,22 +115,22 @@ export const SidebarExtension = ({
         )}
       </header>
       {documentList && postList?.length === 0 && !sharedPost && (
-        <div className="h-screen w-full flex flex-col items-center">
-          <div className="text-2xl md:text-4xl my-48">
-            No such post exists...
-          </div>
-          <Link href={"/documents/newPost"}>
-            <Button>Create new post</Button>
-          </Link>
-        </div>
+        <NotFound
+          title="No such post exists"
+          btnContent="Create a New Post"
+          btnAction={() => {
+            router.push("/documents/newPost");
+          }}
+        />
       )}
       {!documentList && (
-        <div className="h-screen w-full flex flex-col items-center">
-          <div className="text-2xl md:text-4xl my-48">No post selected...</div>
-          <Link href={"/documents/newPost"}>
-            <Button>Create new post</Button>
-          </Link>
-        </div>
+        <NotFound
+          title="No post selected"
+          btnContent="Create a New Post"
+          btnAction={() => {
+            router.push("/documents/newPost");
+          }}
+        />
       )}
       {documentList && (postList?.length !== 0 || sharedPost) && (
         <Editor

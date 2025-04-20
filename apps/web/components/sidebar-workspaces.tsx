@@ -31,12 +31,29 @@ import {
 import { useIsMobile } from "@workspace/ui/hooks/use-mobile";
 import { toast } from "sonner";
 import { addWorkspaceToFavorites } from "@/server/workspace";
+import { SelectManyWorkspaceType } from "@workspace/common/types/db";
 
 export function SidebarWorkspaces() {
   const [isHovering, setIsHovering] = useState(false);
   const { mainWorkspaces, secondaryWorkspaces, mutator } = useWorkspace();
   const [IsNewDialogOpen, setIsNewDailogOpen] = useState(false);
   const isMobile = useIsMobile();
+
+  const addToFavoritesHandler = async (workspaceId: string) => {
+    const { success, message } = await addWorkspaceToFavorites(workspaceId);
+
+    if (success) {
+      toast.success(message, {
+        style: { backgroundColor: "#38b000" },
+      });
+    } else {
+      toast.error(message, {
+        style: {
+          backgroundColor: "red",
+        },
+      });
+    }
+  };
 
   return (
     <SidebarGroup>
@@ -59,90 +76,12 @@ export function SidebarWorkspaces() {
           </div>
         </SidebarMenuAction>
       </SidebarGroupLabel>
-      <SidebarGroupContent>
-        <SidebarMenu className="max-h-36 overflow-y-scroll">
-          {[...mainWorkspaces, ...secondaryWorkspaces].map((x) => {
-            return (
-              <Link href={`/workspaces/${x?.id}`} key={x?.id}>
-                <SidebarMenuItem className="rounded-sm hover:bg-[#f4f4f5] dark:hover:bg-[#27272a]">
-                  <SidebarMenuButton className="px-9">
-                    <span>{x?.emoji ?? "📓"}</span>
-                    <span>{x?.name}</span>
-                  </SidebarMenuButton>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <SidebarMenuAction showOnHover>
-                        <MoreHorizontal />
-                        <span className="sr-only">More</span>
-                      </SidebarMenuAction>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      className="w-56 rounded-lg"
-                      side={isMobile ? "bottom" : "right"}
-                      align={isMobile ? "end" : "start"}
-                    >
-                      <DropdownMenuItem
-                        className="cursor-pointer"
-                        onClick={async () => {
-                          const { success, message } =
-                            await addWorkspaceToFavorites(x?.id!);
-
-                          if (success) {
-                            toast.success(message, {
-                              style: { backgroundColor: "#38b000" },
-                            });
-                          } else {
-                            toast.error(message, {
-                              style: {
-                                backgroundColor: "red",
-                              },
-                            });
-                          }
-                        }}
-                      >
-                        <Star className="text-orange-500 dark:text-orange-300" />
-                        <span>Add to Favorites</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        className="cursor-pointer"
-                        onClick={async (e) => {
-                          e.preventDefault();
-
-                          await navigator.clipboard.writeText(
-                            `${window.origin}/workspaces/${x?.id}`
-                          );
-
-                          if (!isMobile) {
-                            toast("Copied link!");
-                          }
-                        }}
-                      >
-                        <LinkIcon className="text-muted-foreground" />
-                        <span>Copy Link</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={(e) => {
-                          e.preventDefault();
-                          window.open(
-                            `/workspaces/${x?.id}`,
-                            "_blank",
-                            "noopener"
-                          );
-                        }}
-                        className="cursor-pointer"
-                      >
-                        <ArrowUpRight className="text-muted-foreground" />
-                        <span>Open in New Tab</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </SidebarMenuItem>
-              </Link>
-            );
-          })}
-        </SidebarMenu>
-      </SidebarGroupContent>
+      <WorkspaceContent
+        isMobile
+        mainWorkspaces={mainWorkspaces}
+        secondaryWorkspaces={secondaryWorkspaces}
+        addToFavoritesHandler={addToFavoritesHandler}
+      />
       <NewWorkspace
         isOpen={IsNewDialogOpen}
         setIsOpen={setIsNewDailogOpen}
@@ -151,3 +90,87 @@ export function SidebarWorkspaces() {
     </SidebarGroup>
   );
 }
+
+const WorkspaceContent = ({
+  isMobile,
+  mainWorkspaces,
+  secondaryWorkspaces,
+  addToFavoritesHandler,
+}: {
+  isMobile: boolean;
+  mainWorkspaces: SelectManyWorkspaceType;
+  secondaryWorkspaces: SelectManyWorkspaceType;
+  addToFavoritesHandler: (workspaceId: string) => Promise<void>;
+}) => {
+  return (
+    <SidebarGroupContent>
+      <SidebarMenu className="max-h-36 overflow-y-scroll">
+        {[...mainWorkspaces, ...secondaryWorkspaces].map((x) => {
+          return (
+            <Link href={`/workspaces/${x?.id}`} key={x?.id}>
+              <SidebarMenuItem className="rounded-sm hover:bg-[#f4f4f5] dark:hover:bg-[#27272a]">
+                <SidebarMenuButton className="px-9">
+                  <span>{x?.emoji ?? "📓"}</span>
+                  <span>{x?.name}</span>
+                </SidebarMenuButton>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarMenuAction showOnHover>
+                      <MoreHorizontal />
+                      <span className="sr-only">More</span>
+                    </SidebarMenuAction>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="w-56 rounded-lg"
+                    side={isMobile ? "bottom" : "right"}
+                    align={isMobile ? "end" : "start"}
+                  >
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={() => addToFavoritesHandler(x?.id!)}
+                    >
+                      <Star className="text-orange-500 dark:text-orange-300" />
+                      <span>Add to Favorites</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={async (e) => {
+                        e.preventDefault();
+
+                        await navigator.clipboard.writeText(
+                          `${window.origin}/workspaces/${x?.id}`
+                        );
+
+                        if (!isMobile) {
+                          toast("Copied link!");
+                        }
+                      }}
+                    >
+                      <LinkIcon className="text-muted-foreground" />
+                      <span>Copy Link</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.open(
+                          `/workspaces/${x?.id}`,
+                          "_blank",
+                          "noopener"
+                        );
+                      }}
+                      className="cursor-pointer"
+                    >
+                      <ArrowUpRight className="text-muted-foreground" />
+                      <span>Open in New Tab</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </SidebarMenuItem>
+            </Link>
+          );
+        })}
+      </SidebarMenu>
+    </SidebarGroupContent>
+  );
+};

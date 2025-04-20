@@ -57,7 +57,7 @@ export default function PostDialog() {
         await createPostHandler();
       }}
     >
-      <DialogContent className="w-5/6 h-5/6 dark:bg-gray-950 rounded-md">
+      <DialogContent className="w-5/6 h-5/6 px-2 dark:bg-gray-950 rounded-md">
         <Editor
           editable={true}
           onReady={setIsEditorReady}

@@ -117,7 +117,7 @@ export const PostCover = ({
                 id="cover"
               />
             </div>
-            <div className="text-8xl absolute left-7 md:left-12 lg:left-13 top-16">
+            <div className="text-8xl absolute left-7 md:left-14 top-16">
               {emoji}
             </div>
             {!isSharedPost && (
