@@ -62,7 +62,7 @@ export function SearchDialog() {
                     <div>{x.name}</div>
                   </div>
                   {shortenedContent && (
-                    <div className="w-fit mt-4 translate-x-4">
+                    <div className="w-fit mt-4 pr-5 translate-x-4">
                       {shortenedContent}
                     </div>
                   )}
