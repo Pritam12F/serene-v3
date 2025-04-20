@@ -45,8 +45,8 @@ export const SidebarExtensionWorkspaces = () => {
           </Breadcrumb>
         </div>
         {editedAt && (
-          <div className="hidden md:block mx-8 text-sm">
-            Last edited on {editedAt}
+          <div className="hidden mx-5 font-medium text-sm text-muted-foreground md:inline-block">
+            Edit {editedAt.split(" ")[2]} {editedAt.split(" ")[1]}
           </div>
         )}
       </header>
