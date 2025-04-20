@@ -104,7 +104,7 @@ const WorkspaceContent = ({
 }) => {
   return (
     <SidebarGroupContent>
-      <SidebarMenu className="max-h-36 overflow-y-scroll">
+      <SidebarMenu className="max-h-36 overflow-y-scroll overflow-x-hidden scrollbar-hide">
         {[...mainWorkspaces, ...secondaryWorkspaces].map((x) => {
           return (
             <Link href={`/workspaces/${x?.id}`} key={x?.id}>
