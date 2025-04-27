@@ -37,6 +37,8 @@ export const SignIn = () => {
 
   useEffect(() => {
     setIsMounted(true);
+
+    setTimeout(() => localStorage.removeItem("ws.backend"), 1500);
   }, []);
 
   useEffect(() => {

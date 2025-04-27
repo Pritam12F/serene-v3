@@ -30,6 +30,7 @@ export const SidebarExtension = ({
   const Editor = dynamic(() => import("./editor"), {
     ssr: false,
   });
+
   useJWT();
   const router = useRouter();
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false);
