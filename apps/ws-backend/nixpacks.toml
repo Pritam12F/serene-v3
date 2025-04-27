@@ -1,0 +1,11 @@
+[phases.setup]
+nixpkgs = ["nodejs_20", "pnpm"]
+
+[phases.install]
+cmds = ["pnpm install"]
+
+[phases.build]
+cmds = ["pnpm run build"]
+
+[phases.start]
+cmds = ["pnpm run start"]
