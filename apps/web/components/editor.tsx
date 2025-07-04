@@ -83,7 +83,7 @@ const Editor = ({
   return (
     <div
       className={cn(
-        `${!isReady ? "hidden" : "block"} overflow-x-hidden max-w-[1500px] h-full flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`,
+        `${!isReady ? "hidden" : "block"} overflow-x-hidden max-w-screen h-full flex flex-col gap-4 pb-5 ${resolvedTheme}-block-note`,
         styles
       )}
     >
