@@ -98,18 +98,18 @@ export const WorkspaceCover = ({
   }
 
   return (
-    <div className="relative w-full h-[270px]">
+    <div className="relative w-full space-y-3 h-[270px]">
       {coverLink ? (
-        <>
+        <div>
           <UploadButton
             endpoint="coverImageUploader"
-            className="absolute left-5 md:left-11 mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
+            className="absolute left-10 md:left-[39px] mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
             content={{
               button: () => {
                 return (
-                  <div className="flex flex-row gap-x-1">
+                  <div className="flex flex-row gap-x-1 text-black bg-gray-200 hover:bg-gray-200 dark:hover:text-black p-[5px] px-2 rounded-lg transition-all duration-300">
                     <ImageIcon height={18} className="mt-0.5" />
-                    Change cover
+                    Add cover
                   </div>
                 );
               },
@@ -126,7 +126,7 @@ export const WorkspaceCover = ({
             unoptimized
             priority
           />
-          <div className="text-8xl absolute left-7 md:left-12 lg:left-13 top-16">
+          <div className="text-8xl absolute left-12 md:left-[53px] lg:left-[58px] top-16">
             {emoji}
           </div>
           <WorkspaceEmojiPicker
@@ -136,22 +136,22 @@ export const WorkspaceCover = ({
             setChangeEmoji={setEmoji}
             ws={ws}
           />
-        </>
+        </div>
       ) : (
         <div className="absolute inset-0 dark:bg-gray-950">
           <UploadButton
             endpoint="coverImageUploader"
-            className="absolute left-3 md:ml-5 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-300"
+            className="absolute left-9 md:left-3 mb-10 md:ml-7 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0"
             content={{
               button: () => {
                 return (
-                  <div className="flex flex-row gap-x-1">
+                  <div className="flex flex-row gap-x-1 text-sm text-black bg-gray-200 hover:bg-gray-200 dark:hover:text-black py-[6px] px-2 rounded-lg transition-all duration-300">
                     <ImageIcon height={18} className="mt-0.5" />
                     Add cover
                   </div>
                 );
               },
-              allowedContent: " ",
+              allowedContent: "",
             }}
             onUploadBegin={() => setIsLoading(true)}
             onClientUploadComplete={handleOnUpload}

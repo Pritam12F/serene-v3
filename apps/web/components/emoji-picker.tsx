@@ -70,15 +70,14 @@ export function EmojiPicker({
       </div>
     </div>
   ) : (
-    <Button
-      variant={"link"}
-      className="flex items-center justify-center absolute top-[162px] left-36 md:left-44 text-slate-700 hover:no-underline opacity-70 hover:opacity-100 transition-all duration-500 mix-blend-difference"
+    <button
+      className="flex items-center space-x-1 justify-center absolute top-[164px] left-40 md:left-44 hover:no-underline opacity-50 hover:opacity-80 h-[31px] transition-all text-black bg-gray-200 hover:bg-gray-200 dark:hover:text-black px-[7px] pt-[6.9px] pb-[5px] rounded-lg duration-300"
       onClick={() => {
         setIsPickerOpen(true);
       }}
     >
       <Smile height={18} className="" />
-      <p className="font-medium">Change icon</p>
-    </Button>
+      <p className="font-medium text-[13px]">Change icon</p>
+    </button>
   );
 }
