@@ -167,7 +167,3 @@
 .bn-block-content {
   max-width: fit-content;
 }
-
-.mantine-focus-auto {
-  display: none !important;
-}

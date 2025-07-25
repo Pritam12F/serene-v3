@@ -78,8 +78,8 @@ export const ProfileDialog = ({
       }}
     >
       <DialogTrigger>{trigger}</DialogTrigger>
-      <DialogContent className="w-11/12 md:w-[400px] lg:w-[470px] p-1 pb-4 rounded-2xl border-0 shadow-[0_0_1rem_rgba(0,0,0,0.1)] dark:shadow-[0_0_1rem_rgba(255,255,255,0.1)] bg-white dark:bg-black backdrop-blur-xl transition-all duration-500 ease-in-out">
-        <div className={cn("h-32 rounded-lg", color.coverColor)}>
+      <DialogContent className="w-11/12 md:w-[400px] lg:w-[470px] p-1 pb-7 rounded-2xl border-0 shadow-[0_0_1rem_rgba(0,0,0,0.1)] dark:shadow-[0_0_1rem_rgba(255,255,255,0.1)] bg-white dark:bg-black backdrop-blur-xl transition-all duration-500 ease-in-out">
+        <div className={cn("h-36 rounded-lg", color.coverColor)}>
           {userDetails.avatar ? (
             <>
               <img
@@ -295,7 +295,7 @@ const PasswordForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-3 flex flex-col mx-7"
+        className="space-y-6 flex flex-col mx-7"
       >
         <FormField
           control={form.control}
