@@ -84,13 +84,13 @@ export function WorkspaceEmojiPicker({
     </div>
   ) : (
     <button
-      className="flex items-center space-x-1 justify-center absolute top-[164px] -translate-y-[0.5px] left-40 md:left-44 hover:no-underline opacity-50 hover:opacity-80 h-7.5 transition-all text-black bg-gray-200 hover:bg-gray-200 dark:hover:text-black px-[7px] pt-[6.9px] pb-[5px] rounded-lg duration-300"
+      className="flex items-center space-x-1 justify-center absolute top-[164px] translate-y-[0.8x] left-40 md:left-44 hover:no-underline opacity-50 hover:opacity-80 h-[31.5px] transition-all text-black bg-gray-200 hover:bg-gray-200 dark:hover:text-black px-[7px] pt-[6.2px] pb-[5px] rounded-lg duration-300"
       onClick={() => {
         setIsPickerOpen(true);
       }}
     >
       <Smile height={18} className="mt-[0.5px]" />
-      <p className="font-normal text-[13px]">Change icon</p>
+      <p className="font-normal text-[14px]">Change icon</p>
     </button>
   );
 }

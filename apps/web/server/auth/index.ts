@@ -15,7 +15,7 @@ export async function getJWT(email?: string) {
   const token = await new SignJWT({ email: email })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("1h")
+    .setExpirationTime("365d")
     .sign(secretKey);
 
   return token;
