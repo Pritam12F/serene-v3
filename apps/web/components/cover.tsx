@@ -112,7 +112,7 @@ export const PostCover = ({
                 id="cover"
               />
             </div>
-            <div className="text-8xl absolute left-7 md:left-14 top-16">
+            <div className="text-8xl absolute left-7 md:left-14 top-12">
               {emoji}
             </div>
             {!isSharedPost && (
@@ -130,7 +130,7 @@ export const PostCover = ({
               <div className="absolute inset-0 dark:bg-gray-950">
                 <UploadButton
                   endpoint="coverImageUploader"
-                  className="absolute left-9 md:left-3 mb-10 md:ml-7 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0"
+                  className="absolute left-[13.5px] md:left-3 mb-10 md:ml-7 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 ut-allowed-content:hidden"
                   content={{
                     button: () => {
                       return (

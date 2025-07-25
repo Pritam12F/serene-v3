@@ -50,7 +50,7 @@ export function SearchDialog() {
               <Link
                 key={index}
                 href={`${x.content ? "/documents/" : "/workspaces/"}${x.id}`}
-                className="block bg-white dark:bg-background border-blue-500/50 border-[1px] p-4 rounded-md transform transition-all duration-200 hover:-translate-y-1"
+                className="block opacity-100 bg-white dark:bg-background border-blue-500/50 border-[1px] p-4 rounded-md transform transition-all duration-200 hover:-translate-y-1"
               >
                 <div className="flex flex-col space-x-3 py-2">
                   <div className="flex items-center space-x-3">

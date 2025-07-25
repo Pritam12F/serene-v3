@@ -126,7 +126,7 @@ export const WorkspaceCover = ({
             unoptimized
             priority
           />
-          <div className="text-8xl absolute left-12 md:left-[53px] lg:left-[58px] top-16">
+          <div className="text-8xl absolute left-12 md:left-[53px] lg:left-[58px] top-12">
             {emoji}
           </div>
           <WorkspaceEmojiPicker
@@ -141,7 +141,7 @@ export const WorkspaceCover = ({
         <div className="absolute inset-0 dark:bg-gray-950">
           <UploadButton
             endpoint="coverImageUploader"
-            className="absolute left-9 md:left-3 mb-10 md:ml-7 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0"
+            className="absolute left-9 md:left-3 mb-10 md:ml-7 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 ut-allowed-content:hidden"
             content={{
               button: () => {
                 return (

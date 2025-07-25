@@ -77,7 +77,7 @@ export function EmojiPicker({
       }}
     >
       <Smile height={18} className="" />
-      <p className="font-medium text-[13px]">Change icon</p>
+      <p className="font-normal text-[13px]">Change icon</p>
     </button>
   );
 }
