@@ -3,3 +3,7 @@
   max-width: 500px;
   padding-bottom: 100px;
 }
+
+.blocknote-button-menu-trigger {
+  display: none !important;
+}

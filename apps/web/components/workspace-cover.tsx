@@ -103,7 +103,7 @@ export const WorkspaceCover = ({
         <div>
           <UploadButton
             endpoint="coverImageUploader"
-            className="absolute left-10 md:left-[39px] mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
+            className="absolute left-5 md:left-[39px] mt-40 text-[14px] opacity-50 hover:opacity-80 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 text-slate-gray1-400"
             content={{
               button: () => {
                 return (
@@ -126,7 +126,7 @@ export const WorkspaceCover = ({
             unoptimized
             priority
           />
-          <div className="text-8xl absolute left-12 md:left-[53px] lg:left-[58px] top-12">
+          <div className="text-8xl absolute left-8 md:left-[53px] lg:left-[58px] top-12">
             {emoji}
           </div>
           <WorkspaceEmojiPicker
@@ -141,7 +141,7 @@ export const WorkspaceCover = ({
         <div className="absolute inset-0 dark:bg-gray-950">
           <UploadButton
             endpoint="coverImageUploader"
-            className="absolute left-9 md:left-3 mb-10 md:ml-7 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 ut-allowed-content:hidden"
+            className="absolute left-4 md:left-3 mb-10 md:ml-7 mt-40 opacity-30 hover:opacity-70 z-50 duration-500 ut-button:bg-transparent ut-button:focus-within:ring-0 ut-button:focus-within:ring-offset-0 ut-allowed-content:hidden"
             content={{
               button: () => {
                 return (
@@ -160,7 +160,7 @@ export const WorkspaceCover = ({
       )}
       <div>
         <TextareaAutosize
-          className="w-fit mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
+          className="w-fit mx-8 md:mx-14 absolute mt-48 appearance-none focus:outline-none overflow-hidden font-semibold resize-none bg-transparent text-5xl"
           placeholder="Untitled"
           value={isMobile ? name.substring(0, 8).concat("...") : name}
           onChange={(e) => {
