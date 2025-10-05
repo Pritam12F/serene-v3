@@ -6,7 +6,7 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["UPLOADTHING_TOKEN", "DATABASE_URL", "SIGNING_SECRET"]
+      "env": ["UPLOADTHING_TOKEN", "DATABASE_URL", "SIGNING_SECRET","NEXTAUTH_SECRET ","GOOGLE_CLIENT_ID ","GOOGLE_CLIENT_SECRET ","GH_ID ","GH_SECRET "]
     },
     "lint": {
       "dependsOn": ["^lint"]
